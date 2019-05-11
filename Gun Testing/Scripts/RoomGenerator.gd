@@ -7,14 +7,34 @@ var Rect = load("res://Scripts/Rect.gd")
 
 export var cell_countw:int
 export var cell_counth:int
-onready var rooms:Array
-onready var edge_set = UnsortedSet.new()
+onready var rooms = []
+onready var edgeSet = UnsortedSet.new()
+const ROOM_ATTEMPTS = 1000
+const MIN_WIDTH = 5
+const MIN_HEIGHT = 5
+const MAX_WIDTH = 15
+const MAX_HEIGHT = 10
 
 func _ready():
 	pass # Replace with function body.
 
 # Generate non-overlapping rooms and add them to the TileMap
 func generate_rooms():
+	var w
+	var h 
+	var p
+	# Generate rooms along grid
+	for i in range(ROOM_ATTEMPTS):
+    	w = int(rand_range(MIN_WIDTH,MAX_WIDTH))
+    	h = int(rand_range(MIN_HEIGHT,MAX_HEIGHT))
+    	p =  Point.new(int(rand_range(0,cell_countw-w)), 
+				 int(rand_range(0,cell_counth-h)))
+    	rooms.append(Rect.new(w,h,p))
+	# Mark rooms that overlap with rooms not marked as overlapping
+	var overlap = []
+	for i in range(rooms.size()):
+		rooms[i] = false
+	# Remove rooms from the set that are marked as overlapping
 	pass
 
 # Generate a minimal spanning tree of the generate rooms
