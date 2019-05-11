@@ -31,11 +31,20 @@ func generate_rooms():
 				 int(rand_range(0,cell_counth-h)))
     	rooms.append(Rect.new(w,h,p))
 	# Mark rooms that overlap with rooms not marked as overlapping
-	var overlap = []
 	for i in range(rooms.size()):
-		rooms[i] = false
+		var current = rooms[i]
+		for j in range(rooms.size()):
+			if i == j:
+				continue
+			if !rooms[j].overlap and current.is_inside(rooms[j]):
+				rooms[i].overlap = true
+				break
 	# Remove rooms from the set that are marked as overlapping
-	pass
+	# Goes in reverse order to avoid screwing up things
+	for i in range(1,rooms.size()+1):
+		if rooms[-i].overlap:
+			rooms.remove(-i)
+		
 
 # Generate a minimal spanning tree of the generate rooms
 func connect_rooms():
