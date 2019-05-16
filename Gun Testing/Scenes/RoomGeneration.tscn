@@ -4,7 +4,6 @@
 [ext_resource path="res://Tiles/mytiles.tres" type="TileSet" id=2]
 [ext_resource path="res://Scripts/RoomGenerator.gd" type="Script" id=3]
 
-
 [node name="RoomGeneration" type="Node2D"]
 
 [node name="ScrollingCamera" parent="." instance=ExtResource( 1 )]

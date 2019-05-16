@@ -3,7 +3,9 @@ extends Gun
 # signal shoot(bul, dir, pos, speed)
 func _ready():
 	var GunSpriteFrames = preload("res://Gun Sprites/Shotgun.tres")
+	position.y+=4
 	set_sprite_frames(GunSpriteFrames)
+	emit_signal("weaponSwap",self)
 
 func craft():
 	rateOfFire = 0.5
@@ -12,6 +14,7 @@ func craft():
 	pellets = 1
 	degreeSpread = 15
 	bulletVelocity = 600
+	gunName = "Pistol"
 	#var GunSpriteFrames = preload("res://Gun Sprites/GodotGun.tres")
 	#set_sprite_frames(GunSpriteFrames)
 	

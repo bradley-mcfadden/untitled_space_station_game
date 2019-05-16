@@ -3,10 +3,10 @@ extends RigidBody2D
 var speed
 var count = 0
 func _ready():
-	print("am alive")
+	#print("am alive")
 	linear_velocity.x = speed * cos(rotation)
 	linear_velocity.y = speed * sin(rotation)
-	visible = false
+	#visible = false
 	
 func _process(delta):
 	if (count >= 600):

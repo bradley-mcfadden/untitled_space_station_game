@@ -1,6 +1,8 @@
 extends AnimatedSprite
 class_name Gun, "res://Gun Sprites/Pistol.png"
 signal shoot(bullet, direction, origin, speed)
+signal weaponSwap(weapon)
+signal updateUI(weapon)
 var Bullet = preload("res://Scenes/Bullet.tscn")
 export var rateOfFire:float
 export var reloadTime:float
@@ -13,6 +15,7 @@ onready var canFire
 onready var ReloadTimer
 onready var RateOfFireTimer
 onready var radianSpread
+onready var gunName
 
 func _ready():
 	position.y += 12
@@ -35,6 +38,9 @@ func _ready():
 	actualBullets = clipSize
 	canFire = true
 	radianSpread = deg2rad(degreeSpread)
+	self.connect("weaponSwap",get_parent().get_node("HUD"),"_on_weaponSwap")
+	self.connect("updateUI",get_parent().get_node("HUD"),"_on_updateUI")
+	#emit_signal("weaponSwap",self)
 	
 func _process(delta):
 	look_at(get_global_mouse_position())
@@ -46,10 +52,11 @@ func _process(delta):
 		flip_v = true
 		
 	if canFire and Input.is_action_pressed("ui_lmbd"):
-		print(canFire, clipSize)
-		print("pew pew")
+		#print(canFire, clipSize)
+		#print("pew pew")
 		canFire = false
 		actualBullets -= 1
+		emit_signal("updateUI",self)
 		for i in range(pellets):
 			var spread = rand_range(-radianSpread/2,radianSpread/2)
 			var rot2 = atan2(rot.y, rot.x)
@@ -68,6 +75,7 @@ func adjust_pos(rot:Vector2):
 func on_ReloadTimer_timeout():
 	actualBullets = clipSize
 	canFire = true
+	emit_signal("updateUI",self)
 	
 func on_RateOfFireTimer_timeout():
 	canFire = true

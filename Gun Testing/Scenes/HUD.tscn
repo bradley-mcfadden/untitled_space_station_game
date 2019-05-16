@@ -1,8 +1,8 @@
 [gd_scene load_steps=8 format=2]
 
-[ext_resource path="res://Fonts/CourierBoldItalic.tres" type="DynamicFont" id=1]
-[ext_resource path="res://UI Sprites/coins.png" type="Texture" id=2]
-[ext_resource path="res://Gun Sprites/SMG.png" type="Texture" id=3]
+[ext_resource path="res://Scripts/HUD.gd" type="Script" id=1]
+[ext_resource path="res://Fonts/CourierBoldItalic.tres" type="DynamicFont" id=2]
+[ext_resource path="res://UISprites/coins.png" type="Texture" id=3]
 [ext_resource path="res://Fonts/CourierBoldSmaller.tres" type="DynamicFont" id=4]
 
 [sub_resource type="StyleBoxFlat" id=1]
@@ -1058,7 +1058,7 @@ TextEdit/constants/completion_lines = 7
 TextEdit/constants/completion_max_width = 50
 TextEdit/constants/completion_scroll_width = 3
 TextEdit/constants/line_spacing = 4
-TextEdit/fonts/font = ExtResource( 1 )
+TextEdit/fonts/font = ExtResource( 2 )
 TextEdit/icons/tab = null
 TextEdit/styles/completion = null
 TextEdit/styles/focus = null
@@ -1158,13 +1158,14 @@ WindowDialog/icons/close_highlight = null
 WindowDialog/styles/panel = null
 
 [node name="HUD" type="CanvasLayer"]
+script = ExtResource( 1 )
 
 [node name="LifeLabel" type="Label" parent="."]
 margin_left = 70.0
 margin_top = 10.0
 margin_right = 266.0
 margin_bottom = 88.0
-custom_fonts/font = ExtResource( 1 )
+custom_fonts/font = ExtResource( 2 )
 text = "LIFE"
 align = 1
 
@@ -1173,7 +1174,7 @@ margin_left = 90.0
 margin_top = 640.0
 margin_right = 240.0
 margin_bottom = 683.0
-custom_fonts/font = ExtResource( 1 )
+custom_fonts/font = ExtResource( 2 )
 text = "ACTIVE"
 align = 1
 
@@ -1182,7 +1183,7 @@ margin_left = 680.0
 margin_top = 10.0
 margin_right = 805.0
 margin_bottom = 139.0
-custom_fonts/font = ExtResource( 1 )
+custom_fonts/font = ExtResource( 2 )
 text = "ITEMS
 "
 align = 1
@@ -1192,7 +1193,7 @@ margin_left = 1270.0
 margin_top = 10.0
 margin_right = 1395.0
 margin_bottom = 99.0
-custom_fonts/font = ExtResource( 1 )
+custom_fonts/font = ExtResource( 2 )
 text = "COINS"
 align = 1
 
@@ -1201,10 +1202,13 @@ margin_left = 1250.0
 margin_top = 640.0
 margin_right = 1400.0
 margin_bottom = 729.0
-custom_fonts/font = ExtResource( 1 )
+grow_horizontal = 0
+grow_vertical = 2
+custom_fonts/font = ExtResource( 2 )
 text = "WEAPON
 "
 align = 1
+uppercase = true
 
 [node name="HealthBar" type="ProgressBar" parent="."]
 margin_left = 110.0
@@ -1214,7 +1218,7 @@ margin_bottom = 80.0
 hint_tooltip = "lkkkkk
 "
 theme = SubResource( 3 )
-custom_fonts/font = ExtResource( 1 )
+custom_fonts/font = ExtResource( 2 )
 custom_colors/font_color = Color( 1, 0, 0, 1 )
 value = 80.0
 percent_visible = false
@@ -1224,7 +1228,7 @@ margin_left = 1280.0
 margin_top = 40.0
 margin_right = 1320.0
 margin_bottom = 80.0
-texture = ExtResource( 2 )
+texture = ExtResource( 3 )
 
 [node name="CoinCountLabel" type="Label" parent="."]
 margin_left = 1310.0
@@ -1232,17 +1236,16 @@ margin_top = 45.0
 margin_right = 1360.0
 margin_bottom = 88.0
 rect_rotation = 0.703427
-custom_fonts/font = ExtResource( 1 )
+custom_fonts/font = ExtResource( 2 )
 text = "52"
 align = 1
 
-[node name="TextureRect" type="TextureRect" parent="."]
+[node name="WeaponRect" type="TextureRect" parent="."]
 margin_left = 1260.0
 margin_top = 670.0
 margin_right = 1310.0
 margin_bottom = 715.0
 rect_scale = Vector2( 2, 2 )
-texture = ExtResource( 3 )
 stretch_mode = 5
 
 [node name="AmmoLabel" type="Label" parent="."]
