@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://Scripts/Main.gd" type="Script" id=1]
 [ext_resource path="res://Tiles/mytiles.tres" type="TileSet" id=2]
@@ -7,6 +7,7 @@
 [ext_resource path="res://Scenes/Player.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Scenes/Shotgun.tscn" type="PackedScene" id=6]
 [ext_resource path="res://Scenes/HUD.tscn" type="PackedScene" id=7]
+[ext_resource path="res://Scenes/Robot.tscn" type="PackedScene" id=8]
 
 [node name="Main" type="Node"]
 script = ExtResource( 1 )
@@ -27,4 +28,7 @@ position = Vector2( 129.397, 33.8243 )
 [node name="Shotgun" parent="Player" instance=ExtResource( 6 )]
 
 [node name="HUD" parent="Player" instance=ExtResource( 7 )]
+
+[node name="Robot" parent="." instance=ExtResource( 8 )]
+position = Vector2( 86.3936, -43.5914 )
 

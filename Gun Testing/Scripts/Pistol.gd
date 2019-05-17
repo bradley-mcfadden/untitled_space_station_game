@@ -2,7 +2,7 @@ extends Gun
 
 # signal shoot(bul, dir, pos, speed)
 func _ready():
-	var GunSpriteFrames = preload("res://Gun Sprites/Shotgun.tres")
+	var GunSpriteFrames = preload("res://GunSprites/Pistol.tres")
 	position.y+=4
 	set_sprite_frames(GunSpriteFrames)
 	emit_signal("weaponSwap",self)
@@ -19,8 +19,8 @@ func craft():
 	#set_sprite_frames(GunSpriteFrames)
 	
 func adjust_pos(rot:Vector2):
-	print("in here")
+	#print("in here")
 	if rot.x > 0:
-		position.x = 12
+		position.x = 8
 	else:
-		position.x = -6
+		position.x = -10

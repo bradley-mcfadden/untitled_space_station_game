@@ -1,6 +1,6 @@
 extends Gun
 func _ready():
-	var GunSpriteFrames = preload("res://Gun Sprites/SMG.tres")
+	var GunSpriteFrames = preload("res://GunSprites/SMG.tres")
 	set_sprite_frames(GunSpriteFrames)
 	position.y += 3
 	position.x += 2

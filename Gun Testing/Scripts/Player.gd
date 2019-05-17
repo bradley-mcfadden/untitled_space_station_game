@@ -2,16 +2,24 @@ extends KinematicBody2D
 export var movespeed = 24
 const JUMP_POWER = 300
 const GRAVITY = 450
-var screen_size 
-var velocity = Vector2()
-var jumping = false
-var SMG = preload("res://Scripts/TileMap.gd")
-var Shotgun = preload("res://Scripts/Shotgun.gd")
-var Pistol = preload("res://Scripts/Pistol.gd")
-var gunList = [SMG,Shotgun,Pistol]
+const MAX_HEALTH = 100
+onready var screen_size 
+onready var velocity = Vector2()
+onready var jumping = false
+onready var SMG = preload("res://Scripts/SMG.gd")
+onready var Shotgun = preload("res://Scripts/Shotgun.gd")
+onready var Pistol = preload("res://Scripts/Pistol.gd")
+onready var gunList = [SMG,Shotgun,Pistol]
+onready var gunRef = [preload("res://Scenes/SMG.tscn"),
+					  preload("res://Scenes/Shotgun.tscn"),
+					  preload("res://Scenes/Pistol.tscn")]
+onready var coins:int
+onready var health:int 
 
 func _ready():
 	screen_size = get_viewport_rect().size
+	coins = 0
+	health = MAX_HEALTH
 	
 func _physics_process(delta):
 	if (!is_on_floor()):
@@ -33,6 +41,8 @@ func _physics_process(delta):
 		#velocity.y += -1
 	if (Input.is_action_pressed("ui_down")):
 		pass
+	if (Input.is_action_just_released("ui_x")):
+		rotate_gun_list()
 		#velocity.y += 1
 	move_and_slide(velocity, Vector2(0, -1))
 	#position += velocity * delta
@@ -51,13 +61,23 @@ func rotate_gun_list():
 	var cGun 
 	for child in get_children():
 		if child is Gun:
-			cGun = Gun
-	var cPos
+			cGun = child
+	var cPos = 0
 	for i in range(gunList.size()):
 		if cGun is gunList[i]:
 			cPos = i
-			gunList[i].queue_free()
+			cGun.queue_free()
+	print("CPOS"+str(cPos))
+	var tempGun
 	if cPos == gunList.size()-1:
-		add_child(gunList[0].new())
+		tempGun = gunRef[0].instance()
 	else:
-		add_child(gunList[cPos+1].new())
+		tempGun = gunRef[cPos+1].instance()
+	add_child(tempGun)
+
+func _on_take_Damage(damage:int):
+	if health - damage <= 0:
+		health = 0
+	else:
+		health -= damage
+	$HUD.healthUpdate(health)
