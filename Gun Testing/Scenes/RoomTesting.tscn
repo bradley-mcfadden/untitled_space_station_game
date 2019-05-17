@@ -1,8 +1,9 @@
 [gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://Scenes/RoomTesting.gd" type="Script" id=1]
+[ext_resource path="res://Scripts/RoomTesting.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/ScrollingCamera.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Tiles/mytiles.tres" type="TileSet" id=3]
+
 
 
 [node name="MapGenerator" type="Node2D"]

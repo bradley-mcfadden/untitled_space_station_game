@@ -5,6 +5,9 @@
 [node name="Shotgun" type="AnimatedSprite"]
 centered = false
 script = ExtResource( 1 )
+__meta__ = {
+"_edit_group_": true
+}
 
 [node name="ReloadTimer" type="Timer" parent="."]
 

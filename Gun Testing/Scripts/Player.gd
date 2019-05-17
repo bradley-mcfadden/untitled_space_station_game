@@ -1,11 +1,14 @@
 extends KinematicBody2D
-
 export var movespeed = 24
 const JUMP_POWER = 300
 const GRAVITY = 450
 var screen_size 
 var velocity = Vector2()
 var jumping = false
+var SMG = preload("res://Scripts/TileMap.gd")
+var Shotgun = preload("res://Scripts/Shotgun.gd")
+var Pistol = preload("res://Scripts/Pistol.gd")
+var gunList = [SMG,Shotgun,Pistol]
 
 func _ready():
 	screen_size = get_viewport_rect().size
@@ -43,5 +46,18 @@ func _physics_process(delta):
 		$AnimatedSprite.flip_h = false
 	else:
 		$AnimatedSprite.flip_h = true
-	#$Camera2D.position = position
-	#print($Camera2D.position, position)
+
+func rotate_gun_list():
+	var cGun 
+	for child in get_children():
+		if child is Gun:
+			cGun = Gun
+	var cPos
+	for i in range(gunList.size()):
+		if cGun is gunList[i]:
+			cPos = i
+			gunList[i].queue_free()
+	if cPos == gunList.size()-1:
+		add_child(gunList[0].new())
+	else:
+		add_child(gunList[cPos+1].new())

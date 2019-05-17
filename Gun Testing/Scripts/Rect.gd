@@ -6,6 +6,7 @@ var low
 var high
 var xsize
 var ysize
+var overlap = false
 
 func _init(xsize,ysize,low):
 	self.low = low.copy()

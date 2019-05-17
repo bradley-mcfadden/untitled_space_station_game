@@ -1,7 +1,10 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Tiles/Tile1.png" type="Texture" id=1]
 [ext_resource path="res://Tiles/Tile2.png" type="Texture" id=2]
+[ext_resource path="res://Tiles/Tile3.png" type="Texture" id=3]
+[ext_resource path="res://Tiles/Tile5.png" type="Texture" id=4]
+[ext_resource path="res://Tiles/Tile4.png" type="Texture" id=5]
 
 [node name="TileMap" type="Node"]
 
@@ -17,4 +20,26 @@ polygon = PoolVector2Array( -16, -16, 16, -16, 16, 16, -16, 16 )
 [node name="DarkGrayBrick" type="Sprite" parent="."]
 position = Vector2( 79, 16 )
 texture = ExtResource( 2 )
+
+[node name="DarkPurpleBrick" type="Sprite" parent="."]
+position = Vector2( 142.769, 17.064 )
+texture = ExtResource( 3 )
+
+[node name="CloseWoodDoorUpper" type="Sprite" parent="."]
+position = Vector2( 262.217, 16.4952 )
+texture = ExtResource( 4 )
+
+[node name="StaticBody2D" type="StaticBody2D" parent="CloseWoodDoorUpper"]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="CloseWoodDoorUpper/StaticBody2D"]
+polygon = PoolVector2Array( -16.1825, 15.9641, 15.3924, 15.9641, 15.3924, -16.7731, -16.1825, -16.7731 )
+
+[node name="CloseWoodDoorLower" type="Sprite" parent="."]
+position = Vector2( 205.906, 16.4952 )
+texture = ExtResource( 5 )
+
+[node name="StaticBody2D" type="StaticBody2D" parent="CloseWoodDoorLower"]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="CloseWoodDoorLower/StaticBody2D"]
+polygon = PoolVector2Array( -15.854, 14.9956, 15.3336, 14.9956, 15.3336, -16.3857, -15.4666, -16.3857 )
 
