@@ -1,7 +1,7 @@
 extends Gun
 # signal shoot(bul, dir, pos, speed)
 func _ready():
-	var GunSpriteFrames = preload("res://Gun Sprites/Shotgun.tres")
+	var GunSpriteFrames = preload("res://GunSprites/Shotgun.tres")
 	position.y += 4
 	set_sprite_frames(GunSpriteFrames)
 	emit_signal("weaponSwap",self)

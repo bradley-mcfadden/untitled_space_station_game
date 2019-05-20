@@ -1,14 +1,14 @@
 [gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://Scripts/Player.gd" type="Script" id=1]
-[ext_resource path="res://SpaceMan Sprites/Spaceman-SpritesA1.png" type="Texture" id=2]
-[ext_resource path="res://SpaceMan Sprites/Spaceman-SpritesA2.png" type="Texture" id=3]
-[ext_resource path="res://SpaceMan Sprites/Spaceman-SpritesA3.png" type="Texture" id=4]
-[ext_resource path="res://SpaceMan Sprites/Spaceman-SpritesA4.png" type="Texture" id=5]
-[ext_resource path="res://SpaceMan Sprites/Spaceman-SpritesA5.png" type="Texture" id=6]
-[ext_resource path="res://SpaceMan Sprites/Spaceman-SpritesA6.png" type="Texture" id=7]
-[ext_resource path="res://SpaceMan Sprites/Spaceman-SpritesA7.png" type="Texture" id=8]
-[ext_resource path="res://SpaceMan Sprites/Spaceman-SpritesA8.png" type="Texture" id=9]
+[ext_resource path="res://SpaceManSprites/Spaceman-SpritesA1.png" type="Texture" id=2]
+[ext_resource path="res://SpaceManSprites/Spaceman-SpritesA2.png" type="Texture" id=3]
+[ext_resource path="res://SpaceManSprites/Spaceman-SpritesA3.png" type="Texture" id=4]
+[ext_resource path="res://SpaceManSprites/Spaceman-SpritesA4.png" type="Texture" id=5]
+[ext_resource path="res://SpaceManSprites/Spaceman-SpritesA5.png" type="Texture" id=6]
+[ext_resource path="res://SpaceManSprites/Spaceman-SpritesA6.png" type="Texture" id=7]
+[ext_resource path="res://SpaceManSprites/Spaceman-SpritesA7.png" type="Texture" id=8]
+[ext_resource path="res://SpaceManSprites/Spaceman-SpritesA8.png" type="Texture" id=9]
 
 [sub_resource type="StreamTexture" id=1]
 flags = 4
@@ -41,15 +41,15 @@ animation = "idle"
 speed_scale = 2.0
 playing = true
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2( 6, 8 )
-scale = Vector2( 0.65, 0.83 )
-shape = SubResource( 3 )
-
 [node name="Camera2D" type="Camera2D" parent="."]
 current = true
 drag_margin_left = 0.0
 drag_margin_top = 0.0
 drag_margin_right = 0.0
 drag_margin_bottom = 0.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( 6, 8 )
+scale = Vector2( 0.65, 0.83 )
+shape = SubResource( 3 )
 
