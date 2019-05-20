@@ -1,4 +1,6 @@
 extends KinematicBody2D
+class_name Player
+
 export var movespeed = 24
 const JUMP_POWER = 300
 const GRAVITY = 450
@@ -6,15 +8,16 @@ const MAX_HEALTH = 100
 onready var screen_size 
 onready var velocity = Vector2()
 onready var jumping = false
-onready var SMG = preload("res://Scripts/SMG.gd")
-onready var Shotgun = preload("res://Scripts/Shotgun.gd")
-onready var Pistol = preload("res://Scripts/Pistol.gd")
+onready var SMG = load("res://Scripts/SMG.gd")
+onready var Shotgun = load("res://Scripts/Shotgun.gd")
+onready var Pistol = load("res://Scripts/Pistol.gd")
 onready var gunList = [SMG,Shotgun,Pistol]
-onready var gunRef = [preload("res://Scenes/SMG.tscn"),
-					  preload("res://Scenes/Shotgun.tscn"),
-					  preload("res://Scenes/Pistol.tscn")]
+onready var gunRef = [load("res://Scenes/SMG.tscn"),
+					  load("res://Scenes/Shotgun.tscn"),
+					  load("res://Scenes/Pistol.tscn")]
 onready var coins:int
 onready var health:int 
+#class_name Player
 
 func _ready():
 	screen_size = get_viewport_rect().size
@@ -44,7 +47,7 @@ func _physics_process(delta):
 	if (Input.is_action_just_released("ui_x")):
 		rotate_gun_list()
 		#velocity.y += 1
-	move_and_slide(velocity, Vector2(0, -1))
+	velocity = move_and_slide(velocity, Vector2(0, -1))
 	#position += velocity * delta
 	#position.x = clamp(position.x, 8, screen_size.x-20)
 	#position.y = clamp(position.y, 12, screen_size.y-20)

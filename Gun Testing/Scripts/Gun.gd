@@ -1,9 +1,9 @@
 extends AnimatedSprite
-class_name Gun, "res://Gun Sprites/Pistol.png"
+class_name Gun
 signal shoot(bullet, direction, origin, speed)
 signal weaponSwap(weapon)
 signal updateGun(weapon)
-var Bullet = preload("res://Scenes/Bullet.tscn")
+var Bullet = load("res://Scenes/Bullet.tscn")
 export var rateOfFire:float
 export var reloadTime:float
 export var clipSize:int

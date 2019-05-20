@@ -2,7 +2,7 @@
 
 [ext_resource path="res://Scripts/Robot.gd" type="Script" id=1]
 
-[node name="Robot" type="RigidBody2D"]
+[node name="Robot" type="KinematicBody2D"]
 position = Vector2( 89.4737, 64.2105 )
 script = ExtResource( 1 )
 
