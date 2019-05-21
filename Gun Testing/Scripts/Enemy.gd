@@ -17,7 +17,14 @@ class_name Enemy
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass
+	
+func take_damage(dmg:int):
+	health -= dmg
+	if health <= 0:
+		print("I have died")
+		queue_free()
+	print("Me has taken damage"+str(health))
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
+func _process(delta):
+	pass
