@@ -35,7 +35,7 @@ func _physics_process(delta):
 		direction *= -1
 		scale.x *= -1
 	elif coll is Player:
-		coll.take_damage(damage)
+		coll.take_damage(damage,Vector2(direction*movespeed*damage,0))
 	if !is_on_floor():
 		move_and_slide(Vector2(0,GRAVITY),Vector2(0,-1))
 	else:

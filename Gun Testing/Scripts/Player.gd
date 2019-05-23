@@ -78,7 +78,7 @@ func rotate_gun_list():
 		tempGun = gunRef[cPos+1].instance()
 	add_child(tempGun)
 
-func take_damage(damage:int):
+func take_damage(damage:int, norm:Vector2):
 	if !hitShield:
 		hitShield = true
 		$DamageTimer.start()
@@ -87,6 +87,7 @@ func take_damage(damage:int):
 		else:
 			health -= damage
 		$HUD.healthUpdate(health)
+		move_and_slide(norm)
 
 func _on_DamageTimer_timeout():
 	hitShield = false
