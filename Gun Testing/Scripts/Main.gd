@@ -3,6 +3,12 @@ extends Node
 var tilemap
 func _ready():
 	pass
+	
+func new_game():
+	pass
+	
+func game_over():
+	pass
 
 func on_Gun_shoot(bullet, direction, location, vel):
 	var child = bullet.instance()
@@ -10,6 +16,3 @@ func on_Gun_shoot(bullet, direction, location, vel):
 	child.position = location
 	child.speed = vel
 	add_child(child)
-	
-func _on_Shotgun_shoot(bul, dir, pos, speed):
-	pass # Replace with function body.

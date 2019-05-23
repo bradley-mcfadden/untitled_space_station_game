@@ -20,11 +20,24 @@ func _ready():
 	frontCast.enabled = true
 	add_child(frontCast)
 	
+	frontFloorCast = RayCast2D.new()
+	frontFloorCast.position = Vector2(-5,0)
+	frontFloorCast.cast_to = Vector2(-5,30)
+	frontFloorCast.enabled = true
+	add_child(frontFloorCast)
+	
 	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta):
-	if frontCast.is_colliding():
-		print("front collision")
-	pass
+	var coll = frontCast.get_collider()
+	if (frontCast.is_colliding() && coll is TileMap) || !frontFloorCast.is_colliding():
+		direction *= -1
+		scale.x *= -1
+	elif coll is Player:
+		coll.take_damage(damage)
+	if !is_on_floor():
+		move_and_slide(Vector2(0,GRAVITY),Vector2(0,-1))
+	else:
+		move_and_slide(Vector2(direction*movespeed,0),Vector2(0,-1))
 	#print(collisionShape.position.y)
