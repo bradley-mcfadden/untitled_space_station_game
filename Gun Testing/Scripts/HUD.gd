@@ -3,7 +3,7 @@ extends CanvasLayer
 func _ready():
 	$HealthBar.value = get_parent().MAX_HEALTH
 	$CoinCountLabel.text = str(get_parent().coins)
-	pass # Replace with function body.
+	$RestartButton.connect("pressed", get_parent().get_parent(),"new_game")
 
 func healthUpdate(health:int):
 	$HealthBar.value = health

@@ -1,11 +1,13 @@
 extends Node
 #var Dungeon = preload("res://Scenes/TileMap.gd")
-var tilemap
+#var tilemap
 func _ready():
 	pass
 	
 func new_game():
-	pass
+	$Player/HUD/DeathLabel.visible = false
+	$Player/HUD/RestartButton.visible = false
+	$Player.start()
 	
 func game_over():
 	pass

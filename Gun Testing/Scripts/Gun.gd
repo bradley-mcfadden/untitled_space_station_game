@@ -43,31 +43,33 @@ func _ready():
 	#emit_signal("weaponSwap",self)
 	
 func _process(delta):
-	look_at(get_global_mouse_position())
-	var rot = get_global_mouse_position() - global_position
-	adjust_pos(rot) 
-	if rot.x > 0:
-		flip_v = false
-	else:
-		flip_v = true
-		
-	if canFire and Input.is_action_pressed("ui_lmbd"):
-		#print(canFire, clipSize)
-		#print("pew pew")
-		canFire = false
-		actualBullets -= 1
-		emit_signal("updateGun",self)
-		for i in range(pellets):
-			var spread = rand_range(-radianSpread/2,radianSpread/2)
-			var rot2 = atan2(rot.y, rot.x)
-			emit_signal("shoot", Bullet,rot2+spread, self.global_position, bulletVelocity) 
-		if actualBullets == 0:
-			ReloadTimer.start()
+	if get_parent().health > 0:
+		look_at(get_global_mouse_position())
+		var rot = get_global_mouse_position() - global_position
+		adjust_pos(rot) 
+		if rot.x > 0:
+			flip_v = false
 		else:
-			RateOfFireTimer.start()
+			flip_v = true
+			
+		if canFire and Input.is_action_pressed("ui_lmbd"):
+			fire_gun(rot)
 	
 func craft():
 	pass
+
+func fire_gun(rot):
+	canFire = false
+	actualBullets -= 1
+	emit_signal("updateGun",self)
+	for i in range(pellets):
+		var spread = rand_range(-radianSpread/2,radianSpread/2)
+		var rot2 = atan2(rot.y, rot.x)
+		emit_signal("shoot", Bullet,rot2+spread, self.global_position, bulletVelocity) 
+	if actualBullets == 0:
+		ReloadTimer.start()
+	else:
+		RateOfFireTimer.start()
 
 func adjust_pos(rot:Vector2):
 	pass
