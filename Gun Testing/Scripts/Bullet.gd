@@ -2,7 +2,8 @@ extends RigidBody2D
 
 var speed
 var count = 0
-var velocity 
+var velocity
+var damage = 10
 #var Player = load("res://Scenes/Player.gd")
 func _ready():
 	linear_velocity.x = speed * cos(rotation)
@@ -24,12 +25,14 @@ func _physics_process(delta):
 	if result:
 		print(result.collider)
 		if result.collider is Enemy:
-			print("Got em fellas")
-		if result.collider is Gun:
+			result.collider.take_damage(damage)
+			queue_free()
+		elif result.collider is Gun:
 			print("Not good")
-		if result.collider is Player:
+		elif result.collider is Player:
 			print("Fucking kill me")
-		queue_free()
+		else:
+			queue_free()
 	
 
 func _on_VisibilityNotifier2D_screen_exited():

@@ -27,6 +27,8 @@ func _ready():
 func _physics_process(delta):
 	if (!is_on_floor()):
 		velocity.y += delta * GRAVITY
+	if (is_on_floor() and Input.is_action_just_pressed("ui_up")):
+		velocity.y = -JUMP_POWER*1.15
 	if (Input.is_action_pressed("ui_left") and velocity.x-movespeed > -200):
 		velocity.x -= movespeed
 		$AnimatedSprite.play("walk")
@@ -39,15 +41,12 @@ func _physics_process(delta):
 		$AnimatedSprite.play("idle")
 	elif abs(velocity.x) < 10:
 		velocity.x = 0
-	if (is_on_floor() and Input.is_action_just_pressed("ui_up")):
-		velocity.y = -JUMP_POWER*1.15
-		#velocity.y += -1
 	if (Input.is_action_pressed("ui_down")):
 		pass
 	if (Input.is_action_just_released("ui_x")):
 		rotate_gun_list()
 		#velocity.y += 1
-	velocity = move_and_slide(velocity, Vector2(0, -1))
+	velocity = move_and_slide(velocity,Vector2(0,-1))
 	#position += velocity * delta
 	#position.x = clamp(position.x, 8, screen_size.x-20)
 	#position.y = clamp(position.y, 12, screen_size.y-20)
