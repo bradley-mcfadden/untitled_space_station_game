@@ -17,6 +17,7 @@ onready var gunRef = [load("res://Scenes/SMG.tscn"),
 					  load("res://Scenes/Pistol.tscn")]
 onready var coins:int
 onready var health:int 
+onready var hitShield = false
 #class_name Player
 
 func _ready():
@@ -77,9 +78,16 @@ func rotate_gun_list():
 		tempGun = gunRef[cPos+1].instance()
 	add_child(tempGun)
 
-func _on_take_Damage(damage:int):
-	if health - damage <= 0:
-		health = 0
-	else:
-		health -= damage
-	$HUD.healthUpdate(health)
+func take_damage(damage:int, norm:Vector2):
+	if !hitShield:
+		hitShield = true
+		$DamageTimer.start()
+		if health - damage <= 0:
+			health = 0
+		else:
+			health -= damage
+		$HUD.healthUpdate(health)
+		move_and_slide(norm)
+
+func _on_DamageTimer_timeout():
+	hitShield = false
