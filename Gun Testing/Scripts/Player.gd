@@ -24,10 +24,12 @@ func _ready():
 	
 func start():
 	coins = 0
-	health = MAX_HEALTH
 	jumping = false
 	hitShield = false
 	position = Vector2(130,34)
+	health = MAX_HEALTH
+	$HUD.healthUpdate(health)
+	$DamageTimer.start()
 	$Shotgun.craft()
 	
 func _physics_process(delta):
@@ -89,6 +91,7 @@ func take_damage(damage:int, norm:Vector2):
 		hitShield = true
 		$DamageTimer.start()
 		if health - damage <= 0:
+			hitShield = true
 			health = 0
 			get_parent().game_over()
 			$HUD/DeathLabel.visible = true
