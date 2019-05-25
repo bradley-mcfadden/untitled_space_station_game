@@ -1,7 +1,7 @@
 extends Node
 
 class_name Rect
-var Point = load("res//Scripts/Point.gd")
+#var Point = load("res//Scripts/Point.gd")
 var low
 var high
 var xsize
@@ -14,10 +14,11 @@ func _init(xsize,ysize,low):
 	self.ysize = ysize
 	high = Point.new(low.x+xsize,low.y+ysize)
 	
-func copy() -> Rect:
-	return Rect.new(xsize,ysize,low)
+func copy():
+	var copy = get_script().new(xsize,ysize,low)
+	return copy
 	
-func equals(r:Rect) -> bool:
+func equals(r) -> bool:
 	if low.equals(r.low) and high.equals(r.high):
 		return true
 	return false
@@ -27,12 +28,12 @@ func dist_origin() -> float:
 	var deltay = low.y+(ysize/2)
 	return sqrt((deltax*deltax)+(deltay*deltay))
 	
-func dist(r:Rect) -> float:
+func dist(r) -> float:
 	var deltax = (r.low.x + (r.xsize/2)) - (low.x+(xsize/2))
 	var deltay = (r.low.y + (r.ysize/2)) - (low.y+(ysize/2))
 	return sqrt((deltax*deltax)+(deltay*deltay))
 	
-func is_inside(r:Rect) -> bool:
+func is_inside(r) -> bool:
 	if ( 
     !(!(low.x >= r.low.x && high.y <= r.high.y && low.x <= r.high.x && low.y >= r.high.y) 
     && !(low.x >= r.low.x && high.y <= r.high.y && high.x <= r.high.x && low.y >= r.low.y)
@@ -47,6 +48,9 @@ func to_string() -> String:
 	return "Corner: ("+low.x+", "+low.y+") Size: ("+xsize+", "+ysize+")"
 
 func image(tm:TileMap):
-	for i in range(low.x+1,high.x):
-		for j in range(low.y+1,high.y):
-			tm.set_cell(i,j,1)
+	for i in range(low.x,high.x+1):
+		for j in range(low.y,high.y+1):
+			if i > low.x and i < high.x and j > low.y and j < high.y:
+				tm.set_cell(i,j,1)
+			else:
+				tm.set_cell(i,j,0)

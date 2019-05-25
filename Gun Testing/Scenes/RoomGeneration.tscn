@@ -10,6 +10,9 @@
 
 [node name="RoomGenerator" type="TileMap" parent="."]
 tile_set = ExtResource( 2 )
+cell_size = Vector2( 32, 32 )
 format = 1
 script = ExtResource( 3 )
+cell_countw = 100
+cell_counth = 100
 

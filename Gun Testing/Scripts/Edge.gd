@@ -14,10 +14,11 @@ func _init(a, b):
     	self.a = a.copy()
     	self.b = b.copy()
 
-func copy() -> Edge:
-	return Edge.new(self.a, self.b)
+func copy():
+	var copy = get_script().new(a,b)
+	return copy
 	
-func equals(e:Edge) -> bool:
+func equals(e) -> bool:
 	if e.a == a && e.b == b:
 		return true
 	return false

@@ -16,7 +16,10 @@ const MAX_WIDTH = 15
 const MAX_HEIGHT = 10
 
 func _ready():
-	pass # Replace with function body.
+	randomize()
+	generate_rooms()
+	display()
+	print(rooms.size())
 
 # Generate non-overlapping rooms and add them to the TileMap
 func generate_rooms():
@@ -38,12 +41,20 @@ func generate_rooms():
 				continue
 			if !rooms[j].overlap and current.is_inside(rooms[j]):
 				rooms[i].overlap = true
+				current.overlap = true
+				#print(rooms[i].overlap)
 				break
 	# Remove rooms from the set that are marked as overlapping
 	# Goes in reverse order to avoid screwing up things
-	for i in range(1,rooms.size()+1):
-		if rooms[-i].overlap:
-			rooms.remove(-i)
+	var rs = rooms.size()
+	#print("Starting rooms:")
+	for i in range(1,rs+1):
+		#print(rooms[rs-i].overlap)
+		if rooms[rs-i].overlap:
+			rooms.remove(rs-i)
+	#print("Rooms Remaining:")
+	#for i in range(rooms.size()):
+	#	print(rooms[i].overlap)
 		
 
 # Generate a minimal spanning tree of the generate rooms
@@ -77,3 +88,8 @@ func kruskal():
 #		   indices marked.	
 func kth_min_array():
 	pass
+	
+
+func display():
+	for room in rooms:
+		room.image(self)

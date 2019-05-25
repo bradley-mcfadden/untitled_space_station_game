@@ -10,10 +10,11 @@ func _init(x:int,y:int):
 	self.x = x
 	self.y = y
 	
-func copy(p:Point) -> Point:
-	return Point.new(p.x,p.y)
+func copy():
+	var copy = get_script().new(x,y)
+	return copy
 	
-func equals(p:Point) -> bool:
+func equals(p) -> bool:
 	if x == p.x and y == p.y:
 		return true
 	return false
