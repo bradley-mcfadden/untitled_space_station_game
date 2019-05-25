@@ -1,6 +1,10 @@
 extends Node2D
 var speed = 200
 var velocity
+# Controls: WASD or arrows to scroll camera
+#			R to zoom in
+#			T to zoom out
+
 func _process(delta):
 	velocity = Vector2()
 	if (Input.is_action_pressed("ui_left")):
