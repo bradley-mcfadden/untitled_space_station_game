@@ -21,10 +21,8 @@ func _ready():
 	generate_rooms()
 	connect_rooms()
 	display()
-	#print("Number of Edges:",edgeSet.data.size())
-	#print("Number of Rooms:",rooms.size())
 
-# Generate non-overlapping rooms and add them to the TileMap
+# Generate non-overlapping rooms
 func generate_rooms():
 	var w
 	var h 
@@ -50,15 +48,9 @@ func generate_rooms():
 	# Remove rooms from the set that are marked as overlapping
 	# Goes in reverse order to avoid screwing up things
 	var rs = rooms.size()
-	#print("Starting rooms:")
 	for i in range(1,rs+1):
-		#print(rooms[rs-i].overlap)
 		if rooms[rs-i].overlap:
 			rooms.remove(rs-i)
-	#print("Rooms Remaining:")
-	#for i in range(rooms.size()):
-	#	print(rooms[i].overlap)
-		
 
 # Generate a minimal spanning tree of the generate rooms
 func connect_rooms():
@@ -81,16 +73,13 @@ func connect_rooms():
 		adjMatrix.append([])
 		for j in range(rooms.size()):
 			adjMatrix[i].append(0)
-	#print(adjMatrix.size())
 
 	for i in range(rooms.size()-1):
 		while true:
 			var minPos = kruskal(adjMatrix,weightMatrix)
 			adjMatrix[minPos[0]][minPos[1]] = 1
 			adjMatrix[minPos[1]][minPos[0]] = 1
-			# print(has_cycle(adjMatrix))
 			if !has_cycle(adjMatrix):
-				#print("Im here")
 				var e = Edge.new(rooms[minPos[0]], rooms[minPos[1]])
 				edgeSet.add(e)
 				break
@@ -145,16 +134,17 @@ func kruskal(adj:Array, weight:Array) -> Array:
 	mp.append(minJ)	
 	return mp
 	
+# Displays the image of each room and edge on the TileMap
 func display():
 	for edge in edgeSet.data:
 		edge.image_walls(self)
 	for room in rooms:
 		room.image(self)
-	#print(edgeSet.data.size())
 	for edge in edgeSet.data:
-		#print(edge.to_string())
 		edge.image_empty(self)
-		
+
+# Returns the midpoint of some arbitrary room
+# return - Vector2 spawn point
 func arbitrary_room() -> Vector2:
 	var t = int(rand_range(0,rooms.size()))
 	var spawn = Vector2((rooms[t].xsize/2)+rooms[t].low.x,
@@ -162,5 +152,6 @@ func arbitrary_room() -> Vector2:
 	spawn *= 32
 	return spawn
 	
+# Generate platforms in each room, so that the room can be traversed
 func generate_platforms():
 	pass
