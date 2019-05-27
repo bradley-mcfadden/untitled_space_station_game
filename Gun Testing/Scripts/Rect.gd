@@ -45,7 +45,7 @@ func is_inside(r) -> bool:
 	return false
 
 func to_string() -> String:
-	return "Corner: ("+low.x+", "+low.y+") Size: ("+xsize+", "+ysize+")"
+	return "Corner: ("+str(low.x)+", "+str(low.y)+") Size: ("+str(xsize)+", "+str(ysize)+")"
 
 func image(tm:TileMap):
 	for i in range(low.x,high.x+1):

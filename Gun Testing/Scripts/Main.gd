@@ -4,7 +4,7 @@ extends Node
 var rob = preload("res://Scenes/Robot.tscn")
 onready var Robot = $Robot
 func _ready():
-	pass
+	$Player.position = $RoomGenerator.arbitrary_room()
 	
 func new_game():
 	$Player.start()
