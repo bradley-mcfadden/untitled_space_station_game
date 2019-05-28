@@ -1,8 +1,11 @@
 extends Node
 class_name Edge
-var a # Rect
-var b # Rect
+var a:Rect
+var b:Rect
 
+# Create a new edge between two rects
+#	a1 - First rect
+#	a2 - Second rect
 func _init(a1:Rect, b2:Rect): 
 	var magA = sqrt((a1.low.x*a1.low.x)+(a1.low.y*a1.low.y))  
 	var magB = sqrt((b2.low.x*b2.low.x)+(b2.low.y*b2.low.y))  
@@ -13,37 +16,47 @@ func _init(a1:Rect, b2:Rect):
       self.a = a1.copy()
       self.b = b2.copy()
 
-func copy(): # Returns an edge
+# Returns a copy
+#	return - Copy of self
+func copy():
 	var copy = get_script().new(a,b)
 	return copy
 	
+# Compares two edges
+# e - Edge to compare to
+# return - Are these edges equal?
 func equals(e) -> bool:
 	if e.a == a && e.b == b:
 		return true
 	return false
 
+# Prints the states of the two rects
+# return - Description of edge
 func to_string() -> String:
 	return "Edge "+a.to_string() +" "+ b.to_string()
 
-# Sets edges of the tile map to a dark tile which is passable
+# Sets interior of the edges of the tile map to a dark tile which is passable
+# tm - TileMap to project on
 func image_empty(tm:TileMap):
 	if a.low.x - b.low.x < 0:
 		for i in range(a.low.x+(a.xsize/2),b.low.x+(b.xsize/2)+1):
-			tm.set_cell(i,b.low.y+(b.ysize/2),1)
-			tm.set_cell(i,b.low.y+(b.ysize/2)+1,1)
+			tm.set_cell(i,b.low.y+(b.ysize/2),2)
+			tm.set_cell(i,b.low.y+(b.ysize/2)+1,2)
 	else:
 		for i in range(b.low.x+(b.xsize/2),a.low.x+(a.xsize/2)+1):
-			tm.set_cell(i,b.low.y+(b.ysize/2),1)
-			tm.set_cell(i,b.low.y+(b.ysize/2)+1,1)
+			tm.set_cell(i,b.low.y+(b.ysize/2),2)
+			tm.set_cell(i,b.low.y+(b.ysize/2)+1,2)
 	if a.low.y - b.low.y < 0:
 		for i in range(a.low.y+(a.ysize/2),b.low.y+(b.ysize/2)+2):
-			tm.set_cell(a.low.x+(a.xsize/2),i,1)
-			tm.set_cell(a.low.x+(a.xsize/2)+1,i,1)
+			tm.set_cell(a.low.x+(a.xsize/2),i,2)
+			tm.set_cell(a.low.x+(a.xsize/2)+1,i,2)
 	else: 
 		for i in range(b.low.y+(b.ysize/2),a.low.y+(a.ysize/2)+2):
-			tm.set_cell(a.low.x+(a.xsize/2),i,1)
-			tm.set_cell(a.low.x+(a.xsize/2)+1,i,1)
+			tm.set_cell(a.low.x+(a.xsize/2),i,2)
+			tm.set_cell(a.low.x+(a.xsize/2)+1,i,2)
 
+# Draws the walls of the edges to an impassable tile
+# tm - TileMap to project on
 func image_walls(tm:TileMap):
 	if a.low.x - b.low.x < 0:
 		for i in range(a.low.x+(a.xsize/2)-1,b.low.x+(b.xsize/2)+2):

@@ -17,6 +17,7 @@ onready var RateOfFireTimer
 onready var radianSpread
 onready var gunName
 
+# Init
 func _ready():
 	position.y += 12
 	flip_h = true
@@ -42,6 +43,8 @@ func _ready():
 	self.connect("updateGun",get_parent().get_node("HUD"),"_on_updateGun")
 	#emit_signal("weaponSwap",self)
 	
+# Update sprite and handle firing input
+#	delta - Time since last frame
 func _process(delta):
 	if get_parent().health > 0:
 		look_at(get_global_mouse_position())
@@ -55,9 +58,12 @@ func _process(delta):
 		if canFire and Input.is_action_pressed("ui_lmbd"):
 			fire_gun(rot)
 	
+# Placeholder function to be replaced by child classes
 func craft():
 	pass
 
+# Spawn a bullet
+#	rot - Rotation of gun
 func fire_gun(rot):
 	canFire = false
 	actualBullets -= 1
@@ -71,13 +77,18 @@ func fire_gun(rot):
 	else:
 		RateOfFireTimer.start()
 
+# Meant to adjust position of gun in character's
+# hand when sprite flips.
+#	rot - Rotation of gun
 func adjust_pos(rot:Vector2):
 	pass
-	
+
+# Event handler when reload timer is up	
 func on_ReloadTimer_timeout():
 	actualBullets = clipSize
 	canFire = true
 	emit_signal("updateGun",self)
 	
+# Event handler for when rate of fire timer is up
 func on_RateOfFireTimer_timeout():
 	canFire = true

@@ -5,6 +5,8 @@ var velocity
 #			R to zoom in
 #			T to zoom out
 
+# Called each frame, handles input
+#	delta - Time since previous frame
 func _process(delta):
 	velocity = Vector2()
 	if (Input.is_action_pressed("ui_left")):

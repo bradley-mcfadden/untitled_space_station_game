@@ -8,4 +8,6 @@
 [node name="ScrollingCamera" parent="." instance=ExtResource( 1 )]
 
 [node name="RoomGenerator" parent="." instance=ExtResource( 2 )]
+cell_countw = 500
+cell_counth = 200
 

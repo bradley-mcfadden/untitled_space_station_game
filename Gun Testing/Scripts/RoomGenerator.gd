@@ -10,16 +10,18 @@ export var cell_counth:int
 onready var rooms = []
 onready var edgeSet = UnsortedSet.new()
 onready var platforms = []
-const ROOM_ATTEMPTS = 1000
+const ROOM_ATTEMPTS = 2000
 const MIN_WIDTH = 15
 const MIN_HEIGHT = 15
-const MAX_WIDTH = 25
+const MAX_WIDTH = 45
 const MAX_HEIGHT = 20
 
+# Init
 func _ready():
 	randomize()
 	generate_rooms()
 	connect_rooms()
+	generate_platforms()
 	display()
 
 # Generate non-overlapping rooms
@@ -87,8 +89,19 @@ func connect_rooms():
 			adjMatrix[minPos[1]][minPos[0]] = 0
 			weightMatrix[minPos[0]][minPos[1]] = 1000000
 			weightMatrix[minPos[1]][minPos[0]] = 1000000
+	
+	for i in range(10):
+		var minPos = kruskal(adjMatrix,weightMatrix)
+		var e = Edge.new(rooms[minPos[0]], rooms[minPos[1]])
+		while !edgeSet.add(e):
+			minPos = kruskal(adjMatrix,weightMatrix)
+			e = Edge.new(rooms[minPos[0]], rooms[minPos[1]])
+		adjMatrix[minPos[0]][minPos[1]] = 0
+		adjMatrix[minPos[1]][minPos[0]] = 0
+		weightMatrix[minPos[0]][minPos[1]] = 1000000
+		weightMatrix[minPos[1]][minPos[0]] = 1000000
 			
-			
+					
 # Checks an adjacency matrix for existence of cycles.
 #	adj - Adjacency matrix to check
 #	return - Does the matrix have a cycle? 
@@ -142,6 +155,8 @@ func display():
 		room.image(self)
 	for edge in edgeSet.data:
 		edge.image_empty(self)
+	for plat in platforms:
+		plat.image(self)
 
 # Returns the midpoint of some arbitrary room
 # return - Vector2 spawn point
@@ -154,4 +169,20 @@ func arbitrary_room() -> Vector2:
 	
 # Generate platforms in each room, so that the room can be traversed
 func generate_platforms():
-	pass
+	randomize()
+	var w 
+	var h = 0
+	var p
+	for room in rooms:
+		var rand = room.ysize/4
+		var split = room.ysize/rand
+		for i in range(1,rand):
+			w = int(rand_range(room.xsize/3,room.xsize-4))
+			if i < rand-1:
+				p = Point.new(int(rand_range(room.low.x+2, room.high.x-w-2)),
+					  1+room.low.y+(i*split))
+			else:
+				p = Point.new(int(rand_range(room.low.x+2, room.high.x-w)),
+					  1+room.low.y+i*split)
+			var plat = Rect.new(w,h,p)
+			platforms.append(plat)

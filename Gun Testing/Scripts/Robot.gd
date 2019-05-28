@@ -26,9 +26,8 @@ func _ready():
 	frontFloorCast.enabled = true
 	add_child(frontFloorCast)
 	
-	
-
 # Called every frame. 'delta' is the elapsed time since the previous frame.
+#	delta - Time elapsed since previous frame
 func _physics_process(delta):
 	var coll = frontCast.get_collider()
 	if (frontCast.is_colliding() && coll is TileMap) || !frontFloorCast.is_colliding():

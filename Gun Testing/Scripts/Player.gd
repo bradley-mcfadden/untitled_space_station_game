@@ -19,9 +19,12 @@ onready var health:int
 onready var hitShield = false
 #class_name Player
 
+# Init
 func _ready():
 	start()
-	
+
+# CURRENTLY DEPRECATED
+# Reset player position on death	
 func start():
 	coins = 0
 	jumping = false
@@ -32,11 +35,13 @@ func start():
 	$DamageTimer.start()
 	$Shotgun.craft()
 	
+# Handles input and movement of player
+#	delta - Time since last frame
 func _physics_process(delta):
 	if health > 0:
 		if (!is_on_floor()):
 			velocity.y += delta * GRAVITY
-		if (is_on_floor() and Input.is_action_just_pressed("ui_up")):
+		if (is_on_floor() and Input.is_action_pressed("ui_up")):
 			velocity.y = -JUMP_POWER*1.15
 		if (Input.is_action_pressed("ui_left") and velocity.x-movespeed > -200):
 			velocity.x -= movespeed
@@ -68,6 +73,8 @@ func _physics_process(delta):
 		else:
 			$AnimatedSprite.flip_h = true
 
+# Switches between absolute roster of guns,
+# for testing purposes
 func rotate_gun_list():
 	var cGun 
 	for child in get_children():
@@ -86,6 +93,9 @@ func rotate_gun_list():
 		tempGun = gunRef[cPos+1].instance()
 	add_child(tempGun)
 
+# Updates player health and HUD
+#	damage - Amount of damage to take
+#	norm - Direction of incoming damage
 func take_damage(damage:int, norm:Vector2):
 	if !hitShield:
 		hitShield = true
@@ -102,5 +112,6 @@ func take_damage(damage:int, norm:Vector2):
 		$HUD.healthUpdate(health)
 		move_and_slide(norm)
 
+# Event handler for expiry of damage timer
 func _on_DamageTimer_timeout():
 	hitShield = false
