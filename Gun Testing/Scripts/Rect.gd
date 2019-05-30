@@ -65,6 +65,7 @@ func is_inside(r) -> bool:
 func to_string() -> String:
 	return "Corner: ("+str(low.x)+", "+str(low.y)+") Size: ("+str(xsize)+", "+str(ysize)+")"
 
+# DEPRECATED
 # Draw the walls and interior of the room
 #	tm - TileMap to project on, min of two defined tiles
 func image(tm:TileMap):

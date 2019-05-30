@@ -42,18 +42,42 @@ func image_empty(tm:TileMap):
 		for i in range(a.low.x+(a.xsize/2),b.low.x+(b.xsize/2)+1):
 			tm.set_cell(i,b.low.y+(b.ysize/2),2)
 			tm.set_cell(i,b.low.y+(b.ysize/2)+1,2)
+			if i == b.low.x:
+				tm.set_cell(i,b.low.y+(b.ysize/2),5)
+				tm.set_cell(i,b.low.y+(b.ysize/2)+1,6)
+			elif i == a.high.x && b.low.y+b.ysize/2 < a.high.y && b.low.y+b.ysize/2 > a.low.y:
+				tm.set_cell(i,b.low.y+(b.ysize/2),5)
+				tm.set_cell(i,b.low.y+(b.ysize/2)+1,6)
 	else:
 		for i in range(b.low.x+(b.xsize/2),a.low.x+(a.xsize/2)+1):
 			tm.set_cell(i,b.low.y+(b.ysize/2),2)
 			tm.set_cell(i,b.low.y+(b.ysize/2)+1,2)
+			if i == b.high.x:
+				tm.set_cell(i,b.low.y+(b.ysize/2),5)
+				tm.set_cell(i,b.low.y+(b.ysize/2)+1,6)
+			elif i == a.low.x && b.low.y+b.ysize/2 < a.high.y && b.low.y+b.ysize/2 > a.low.y:
+				tm.set_cell(i,b.low.y+(b.ysize/2),5)
+				tm.set_cell(i,b.low.y+(b.ysize/2)+1,6)
 	if a.low.y - b.low.y < 0:
 		for i in range(a.low.y+(a.ysize/2),b.low.y+(b.ysize/2)+2):
 			tm.set_cell(a.low.x+(a.xsize/2),i,2)
 			tm.set_cell(a.low.x+(a.xsize/2)+1,i,2)
+			if i == a.high.y:
+				tm.set_cell(a.low.x+(a.xsize/2),i,7)
+				tm.set_cell(a.low.x+(a.xsize/2)+1,i,8)
+			elif i == b.low.y && a.low.x + a.xsize/2 < b.high.x && a.low.x + a.xsize/2 > b.low.x:
+				tm.set_cell(a.low.x+(a.xsize/2),i,7)
+				tm.set_cell(a.low.x+(a.xsize/2)+1,i,8)
 	else: 
 		for i in range(b.low.y+(b.ysize/2),a.low.y+(a.ysize/2)+2):
 			tm.set_cell(a.low.x+(a.xsize/2),i,2)
 			tm.set_cell(a.low.x+(a.xsize/2)+1,i,2)
+			if i == a.low.y:
+				tm.set_cell(a.low.x+(a.xsize/2),i,7)
+				tm.set_cell(a.low.x+(a.xsize/2)+1,i,8)
+			elif i == b.high.y && a.low.x + a.xsize/2 < b.high.x && a.low.x + a.xsize/2 > b.low.x:
+				tm.set_cell(a.low.x+(a.xsize/2),i,7)
+				tm.set_cell(a.low.x+(a.xsize/2)+1,i,8)
 
 # Draws the walls of the edges to an impassable tile
 # tm - TileMap to project on
@@ -74,3 +98,11 @@ func image_walls(tm:TileMap):
 		for i in range(b.low.y+(b.ysize/2)-1,a.low.y+(a.ysize/2)+3):
 			tm.set_cell(a.low.x+(a.xsize/2)-1,i,0)
 			tm.set_cell(a.low.x+(a.xsize/2)+2,i,0)
+#	tm.set_cell(low.x+xsize/2,low.y,7)
+#	tm.set_cell(1+low.x+xsize/2,low.y,8)
+#	tm.set_cell(low.x+xsize/2,high.y,7)
+#	tm.set_cell(1+low.x+xsize/2,high.y,8)
+#	tm.set_cell(low.x,low.y+ysize/2,5)
+#	tm.set_cell(low.x,1+low.y+ysize/2,6)
+#	tm.set_cell(high.x,low.y+ysize/2,5)
+#	tm.set_cell(high.x,1+low.y+ysize/2,6)

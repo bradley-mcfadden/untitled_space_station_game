@@ -10,7 +10,7 @@ export var cell_counth:int
 onready var rooms = []
 onready var edgeSet = UnsortedSet.new()
 onready var platforms = []
-const ROOM_ATTEMPTS = 2000
+const ROOM_ATTEMPTS = 20
 const MIN_WIDTH = 15
 const MIN_HEIGHT = 15
 const MAX_WIDTH = 45
@@ -90,7 +90,7 @@ func connect_rooms():
 			weightMatrix[minPos[0]][minPos[1]] = 1000000
 			weightMatrix[minPos[1]][minPos[0]] = 1000000
 	
-	for i in range(10):
+	for i in range(rooms.size()/4):
 		var minPos = kruskal(adjMatrix,weightMatrix)
 		var e = Edge.new(rooms[minPos[0]], rooms[minPos[1]])
 		while !edgeSet.add(e):
@@ -100,7 +100,7 @@ func connect_rooms():
 		adjMatrix[minPos[1]][minPos[0]] = 0
 		weightMatrix[minPos[0]][minPos[1]] = 1000000
 		weightMatrix[minPos[1]][minPos[0]] = 1000000
-			
+#
 					
 # Checks an adjacency matrix for existence of cycles.
 #	adj - Adjacency matrix to check
@@ -152,9 +152,11 @@ func display():
 	for edge in edgeSet.data:
 		edge.image_walls(self)
 	for room in rooms:
-		room.image(self)
+		room.image_ext(self)
 	for edge in edgeSet.data:
 		edge.image_empty(self)
+	for room in rooms:
+		room.image_int(self)
 	for plat in platforms:
 		plat.image(self)
 
