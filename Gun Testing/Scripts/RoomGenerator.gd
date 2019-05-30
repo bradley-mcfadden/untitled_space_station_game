@@ -90,16 +90,16 @@ func connect_rooms():
 			weightMatrix[minPos[0]][minPos[1]] = 1000000
 			weightMatrix[minPos[1]][minPos[0]] = 1000000
 	
-	for i in range(rooms.size()/4):
-		var minPos = kruskal(adjMatrix,weightMatrix)
-		var e = Edge.new(rooms[minPos[0]], rooms[minPos[1]])
-		while !edgeSet.add(e):
-			minPos = kruskal(adjMatrix,weightMatrix)
-			e = Edge.new(rooms[minPos[0]], rooms[minPos[1]])
-		adjMatrix[minPos[0]][minPos[1]] = 0
-		adjMatrix[minPos[1]][minPos[0]] = 0
-		weightMatrix[minPos[0]][minPos[1]] = 1000000
-		weightMatrix[minPos[1]][minPos[0]] = 1000000
+#	for i in range(rooms.size()/4):
+#		var minPos = kruskal(adjMatrix,weightMatrix)
+#		var e = Edge.new(rooms[minPos[0]], rooms[minPos[1]])
+#		while !edgeSet.add(e):
+#			minPos = kruskal(adjMatrix,weightMatrix)
+#			e = Edge.new(rooms[minPos[0]], rooms[minPos[1]])
+#		adjMatrix[minPos[0]][minPos[1]] = 0
+#		adjMatrix[minPos[1]][minPos[0]] = 0
+#		weightMatrix[minPos[0]][minPos[1]] = 1000000
+#		weightMatrix[minPos[1]][minPos[0]] = 1000000
 #
 					
 # Checks an adjacency matrix for existence of cycles.
@@ -154,7 +154,7 @@ func display():
 	for room in rooms:
 		room.image_ext(self)
 	for edge in edgeSet.data:
-		edge.image_empty(self)
+		edge.image_empty(self,true)
 	for room in rooms:
 		room.image_int(self)
 	for plat in platforms:
@@ -188,3 +188,16 @@ func generate_platforms():
 					  1+room.low.y+i*split)
 			var plat = Rect.new(w,h,p)
 			platforms.append(plat)
+
+# Finds room target is inside. Opens all hallways connected to room.
+#	position - Position vector of target
+func open_doors(position:Vector2):
+	var currentRoom
+	for room in rooms:
+		if room.is_target_inside(position):
+			currentRoom = room
+			break
+	var edgeList
+	for edge in edgeSet:
+		if edge.contains(currentRoom):
+			edge.image_empty(self,false)

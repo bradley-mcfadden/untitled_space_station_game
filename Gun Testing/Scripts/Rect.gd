@@ -92,3 +92,12 @@ func image_int(tm:TileMap):
 		for j in range(low.y,high.y+1):
 			if i > low.x and i < high.x and j > low.y and j < high.y:
 				tm.set_cell(i,j,1)
+
+# Determines whether or not position vector given is inside bounds of rect
+#	position - Target to check
+#	return - Was the target found?
+func is_target_inside(position:Vector2)->bool:
+	var tmPosition = position / 32
+	if tmPosition.x > low.x && tmPosition.y < high.x && tmPosition.y > low.y && tmPosition < high.x:
+		return true
+	return false
