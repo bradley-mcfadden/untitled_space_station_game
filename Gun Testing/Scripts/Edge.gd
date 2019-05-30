@@ -1,41 +1,97 @@
 extends Node
-var Rect = load("res://Scripts/Rect.gd")
 class_name Edge
-var a # Rect
-var b # Rect
+var a:Rect
+var b:Rect
 
-func _init(a, b):
-	var magA = sqrt((a.low.x*a.low.x)+(a.low.y*a.low.y))  
-	var magB = sqrt((b.low.x*b.low.x)+(b.low.y*b.low.y))  
+# Create a new edge between two rects
+#	a1 - First rect
+#	a2 - Second rect
+func _init(a1:Rect, b2:Rect): 
+	var magA = sqrt((a1.low.x*a1.low.x)+(a1.low.y*a1.low.y))  
+	var magB = sqrt((b2.low.x*b2.low.x)+(b2.low.y*b2.low.y))  
 	if magB <= magA:
-      self.a = b.copy()
-      self.b = a.copy()
+      self.a = b2.copy()
+      self.b = a1.copy()
 	else:
-    	self.a = a.copy()
-    	self.b = b.copy()
+      self.a = a1.copy()
+      self.b = b2.copy()
 
-func copy() -> Edge:
-	return Edge.new(self.a, self.b)
+# Returns a copy
+#	return - Copy of self
+func copy():
+	var copy = get_script().new(a,b)
+	return copy
 	
-func equals(e:Edge) -> bool:
+# Compares two edges
+# e - Edge to compare to
+# return - Are these edges equal?
+func equals(e) -> bool:
 	if e.a == a && e.b == b:
 		return true
 	return false
 
+# Prints the states of the two rects
+# return - Description of edge
 func to_string() -> String:
-	return "Edge "+a.to_string() +" "+ b.toString()
+	return "Edge "+a.to_string() +" "+ b.to_string()
 
-func image(tm:TileMap):
+# Sets interior of the edges of the tile map to a dark tile which is passable
+# tm - TileMap to project on
+# doorsClosed - Whether or not door tiles are created
+func image_empty(tm:TileMap,doorsClosed:bool):
 	if a.low.x - b.low.x < 0:
 		for i in range(a.low.x+(a.xsize/2),b.low.x+(b.xsize/2)+1):
-			tm.set_cell(i,b.low.y+(b.ysize/2),1)
+			tm.set_cell(i,b.low.y+(b.ysize/2),2)
+			tm.set_cell(i,b.low.y+(b.ysize/2)+1,2)
+			if doorsClosed && ((i == b.low.x) || (i == a.high.x && b.low.y+b.ysize/2 < a.high.y && b.low.y+b.ysize/2 > a.low.y)):
+				tm.set_cell(i,b.low.y+(b.ysize/2),5)
+				tm.set_cell(i,b.low.y+(b.ysize/2)+1,6)
 	else:
 		for i in range(b.low.x+(b.xsize/2),a.low.x+(a.xsize/2)+1):
-			tm.set_cell(i,b.low.y+(b.ysize/2),1)
+			tm.set_cell(i,b.low.y+(b.ysize/2),2)
+			tm.set_cell(i,b.low.y+(b.ysize/2)+1,2)
+			if doorsClosed && (i == b.high.x || (i == a.low.x && b.low.y+b.ysize/2 < a.high.y && b.low.y+b.ysize/2 > a.low.y)):
+				tm.set_cell(i,b.low.y+(b.ysize/2),5)
+				tm.set_cell(i,b.low.y+(b.ysize/2)+1,6)
 	if a.low.y - b.low.y < 0:
-		for i in range(a.low.y+(a.ysize/2),b.low.y+(b.ysize/2)+1):
-			tm.set_cell(a.low.x+(a.xsize/2),i,1)
+		for i in range(a.low.y+(a.ysize/2),b.low.y+(b.ysize/2)+2):
+			tm.set_cell(a.low.x+(a.xsize/2),i,2)
+			tm.set_cell(a.low.x+(a.xsize/2)+1,i,2)
+			if doorsClosed && (i == a.high.y || (i == b.low.y && a.low.x + a.xsize/2 < b.high.x && a.low.x + a.xsize/2 > b.low.x)):
+				tm.set_cell(a.low.x+(a.xsize/2),i,7)
+				tm.set_cell(a.low.x+(a.xsize/2)+1,i,8)
 	else: 
-		for i in range(b.low.y+(b.ysize/2),a.low.y+(a.ysize/2)+1):
-			tm.set_cell(a.low.x+(a.xsize/2),i,1)
-			
+		for i in range(b.low.y+(b.ysize/2),a.low.y+(a.ysize/2)+2):
+			tm.set_cell(a.low.x+(a.xsize/2),i,2)
+			tm.set_cell(a.low.x+(a.xsize/2)+1,i,2)
+			if doorsClosed && (i == a.low.y || (i == b.high.y && a.low.x + a.xsize/2 < b.high.x && a.low.x + a.xsize/2 > b.low.x)):
+				tm.set_cell(a.low.x+(a.xsize/2),i,7)
+				tm.set_cell(a.low.x+(a.xsize/2)+1,i,8)
+
+# Draws the walls of the edges to an impassable tile
+# tm - TileMap to project on
+func image_walls(tm:TileMap):
+	if a.low.x - b.low.x < 0:
+		for i in range(a.low.x+(a.xsize/2)-1,b.low.x+(b.xsize/2)+2):
+			tm.set_cell(i,b.low.y+(b.ysize/2)+2,0)
+			tm.set_cell(i,b.low.y+(b.ysize/2)-1,0)
+	else:
+		for i in range(b.low.x+(b.xsize/2)-1,a.low.x+(a.xsize/2)+2):
+			tm.set_cell(i,b.low.y+(b.ysize/2)+2,0)
+			tm.set_cell(i,b.low.y+(b.ysize/2)-1,0)
+	if a.low.y - b.low.y < 0:
+		for i in range(a.low.y+(a.ysize/2)-1,b.low.y+(b.ysize/2)+3):
+			tm.set_cell(a.low.x+(a.xsize/2)-1,i,0)
+			tm.set_cell(a.low.x+(a.xsize/2)+2,i,0)
+	else: 
+		for i in range(b.low.y+(b.ysize/2)-1,a.low.y+(a.ysize/2)+3):
+			tm.set_cell(a.low.x+(a.xsize/2)-1,i,0)
+			tm.set_cell(a.low.x+(a.xsize/2)+2,i,0)
+
+# Checks a and b fields to determine whether edge contains r
+#	r - Rect to search for
+#	return _ Was the rect found?
+func contains(r:Rect)->bool:
+	if r.equals(a) || r.equals(b):
+		return true
+	return false

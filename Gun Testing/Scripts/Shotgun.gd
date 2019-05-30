@@ -1,11 +1,13 @@
 extends Gun
-# signal shoot(bul, dir, pos, speed)
+
+# Init
 func _ready():
 	var GunSpriteFrames = preload("res://GunSprites/Shotgun.tres")
 	position.y += 4
 	set_sprite_frames(GunSpriteFrames)
 	emit_signal("weaponSwap",self)
 
+# Sets properties of gun
 func craft():
 	rateOfFire = 0.5
 	reloadTime = 3 
@@ -14,9 +16,9 @@ func craft():
 	degreeSpread = 15
 	bulletVelocity = 800
 	gunName = "Shotgun"
-	#var GunSpriteFrames = preload("res://Gun Sprites/GodotGun.tres")
-	#set_sprite_frames(GunSpriteFrames)
 	
+# Adjust position of gun when Player sprites rotates
+#	rot - Rotation of gun 
 func adjust_pos(rot:Vector2):
 	#print("in here")
 	if rot.x > 0:

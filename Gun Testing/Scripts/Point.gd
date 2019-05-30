@@ -6,14 +6,22 @@ class_name Point
 var x:int
 var y:int
 
+# Create a point
+#	x - X value of point
+#	y - Y value of point
 func _init(x:int,y:int):
 	self.x = x
 	self.y = y
 	
-func copy(p:Point) -> Point:
-	return Point.new(p.x,p.y)
+# Copy method
+#	return - Copy of self
+func copy():
+	var copy = get_script().new(x,y)
+	return copy
 	
-func equals(p:Point) -> bool:
+# Test for equality
+#	return - Is this equal to other point?
+func equals(p) -> bool:
 	if x == p.x and y == p.y:
 		return true
 	return false

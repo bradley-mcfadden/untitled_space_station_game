@@ -13,14 +13,14 @@ onready var backCast:RayCast2D
 onready var frontFloorCast:RayCast2D
 onready var backFloorCast:RayCast2D
 class_name Enemy
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
 
-# Called when the node enters the scene tree for the first time.
+# Init
 func _ready():
 	pass
-	
+
+# Setter for health, and handles knockback
+#	dmg - Amount of damage to take
+#	normal - Direction damage is coming from	
 func take_damage(dmg:int, normal:Vector2):
 	health -= dmg
 	if health <= 0:
@@ -29,5 +29,6 @@ func take_damage(dmg:int, normal:Vector2):
 	move_and_slide(normal,Vector2(0,-1))
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
+#	delta - Time since last frame
 func _process(delta):
 	pass
