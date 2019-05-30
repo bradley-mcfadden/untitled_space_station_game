@@ -1,0 +1,51 @@
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://Tiles/Tile10.png" type="Texture" id=1]
+[ext_resource path="res://Tiles/Tile11.png" type="Texture" id=2]
+[ext_resource path="res://Tiles/Tile12.png" type="Texture" id=3]
+[ext_resource path="res://Tiles/Tile13.png" type="Texture" id=4]
+[ext_resource path="res://Tiles/Tile14.png" type="Texture" id=5]
+[ext_resource path="res://Tiles/Tile15.png" type="Texture" id=6]
+[ext_resource path="res://Tiles/Tile16.png" type="Texture" id=7]
+[ext_resource path="res://Tiles/Tile17.png" type="Texture" id=8]
+
+[sub_resource type="SpriteFrames" id=1]
+animations = [ {
+"frames": [ ExtResource( 1 ), ExtResource( 2 ), ExtResource( 3 ), ExtResource( 4 ) ],
+"loop": true,
+"name": "default",
+"speed": 8.0
+} ]
+
+[sub_resource type="SpriteFrames" id=2]
+animations = [ {
+"frames": [ ExtResource( 5 ), ExtResource( 6 ), ExtResource( 7 ), ExtResource( 8 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[node name="EffectsMap" type="Node"]
+
+[node name="HorizontalPull" type="AnimatedSprite" parent="."]
+position = Vector2( 16, 16 )
+frames = SubResource( 1 )
+frame = 1
+playing = true
+
+[node name="Area2D" type="Area2D" parent="HorizontalPull"]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="HorizontalPull/Area2D"]
+polygon = PoolVector2Array( -16.0895, -15.9871, 14.9622, -15.8974, 14.9622, 15.8723, -16.0895, 15.8723 )
+
+[node name="VerticalPull" type="AnimatedSprite" parent="."]
+position = Vector2( 80, 16 )
+frames = SubResource( 2 )
+frame = 2
+playing = true
+
+[node name="Area2D" type="Area2D" parent="VerticalPull"]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="VerticalPull/Area2D"]
+polygon = PoolVector2Array( -16.2147, -16.0988, 16.1295, -16.0988, 16.1295, 16.036, -16.424, 16.036 )
+

@@ -1,10 +1,14 @@
-[gd_resource type="TileSet" load_steps=9 format=2]
+[gd_resource type="TileSet" load_steps=17 format=2]
 
 [ext_resource path="res://Tiles/Tile1.png" type="Texture" id=1]
 [ext_resource path="res://Tiles/Tile2.png" type="Texture" id=2]
 [ext_resource path="res://Tiles/Tile3.png" type="Texture" id=3]
 [ext_resource path="res://Tiles/Tile5.png" type="Texture" id=4]
 [ext_resource path="res://Tiles/Tile4.png" type="Texture" id=5]
+[ext_resource path="res://Tiles/Tile7.png" type="Texture" id=6]
+[ext_resource path="res://Tiles/Tile8.png" type="Texture" id=7]
+[ext_resource path="res://Tiles/Tile9.png" type="Texture" id=8]
+[ext_resource path="res://Tiles/Tile6.png" type="Texture" id=9]
 
 [sub_resource type="ConvexPolygonShape2D" id=1]
 points = PoolVector2Array( -16, -16, 16, -16, 16, 16, -16, 16 )
@@ -14,6 +18,18 @@ points = PoolVector2Array( -16.1825, -16.7731, 15.3924, -16.7731, 15.3924, 15.96
 
 [sub_resource type="ConvexPolygonShape2D" id=3]
 points = PoolVector2Array( -15.4666, -16.3857, 15.3336, -16.3857, 15.3336, 14.9956, -15.854, 14.9956 )
+
+[sub_resource type="ConvexPolygonShape2D" id=4]
+points = PoolVector2Array( -16.0945, -16.147, 15.7934, -16.147, 15.7934, 16.0731, -15.9284, 16.0731 )
+
+[sub_resource type="ConvexPolygonShape2D" id=5]
+points = PoolVector2Array( -16.1327, -16.1774, 15.8668, -16.1774, 15.8668, 15.8221, -16.1327, 15.8221 )
+
+[sub_resource type="ConvexPolygonShape2D" id=6]
+points = PoolVector2Array( -16.0283, -15.9895, 15.9848, -15.9201, 15.9154, 16.0236, -16.0283, 15.9541 )
+
+[sub_resource type="ConvexPolygonShape2D" id=7]
+points = PoolVector2Array( -16.027, -16.0791, 15.9167, -16.006, 15.9167, 15.8646, -15.9539, 15.8646 )
 
 [resource]
 0/name = "LightGrayBrick"
@@ -29,7 +45,7 @@ points = PoolVector2Array( -15.4666, -16.3857, 15.3336, -16.3857, 15.3336, 14.99
 "one_way": false,
 "one_way_margin": 1.0,
 "shape": SubResource( 1 ),
-"shape_transform": Transform2D( 1, 0, 0, 1, 16, 16 )
+"shape_transform": Transform2D( 1, 0, 0, 1, 15.4596, 15.4596 )
 } ]
 0/z_index = 0
 1/name = "DarkGrayBrick"
@@ -84,4 +100,68 @@ points = PoolVector2Array( -15.4666, -16.3857, 15.3336, -16.3857, 15.3336, 14.99
 "shape_transform": Transform2D( 1, 0, 0, 1, 16, 16 )
 } ]
 4/z_index = 0
+5/name = "IronVerticalDoorUpper"
+5/texture = ExtResource( 6 )
+5/tex_offset = Vector2( 0, 0 )
+5/modulate = Color( 1, 1, 1, 1 )
+5/region = Rect2( 0, 0, 32, 32 )
+5/tile_mode = 0
+5/occluder_offset = Vector2( 16, 16 )
+5/navigation_offset = Vector2( 16, 16 )
+5/shapes = [ {
+"autotile_coord": Vector2( 0, 0 ),
+"one_way": false,
+"one_way_margin": 1.0,
+"shape": SubResource( 4 ),
+"shape_transform": Transform2D( 1, 0, 0, 1, 16, 16 )
+} ]
+5/z_index = 0
+6/name = "IronVerticalDoorLower"
+6/texture = ExtResource( 7 )
+6/tex_offset = Vector2( 0, 0 )
+6/modulate = Color( 1, 1, 1, 1 )
+6/region = Rect2( 0, 0, 32, 32 )
+6/tile_mode = 0
+6/occluder_offset = Vector2( 16, 16 )
+6/navigation_offset = Vector2( 16, 16 )
+6/shapes = [ {
+"autotile_coord": Vector2( 0, 0 ),
+"one_way": false,
+"one_way_margin": 1.0,
+"shape": SubResource( 5 ),
+"shape_transform": Transform2D( 1, 0, 0, 1, 16, 16 )
+} ]
+6/z_index = 0
+7/name = "IronHorizontalDoorLeft"
+7/texture = ExtResource( 8 )
+7/tex_offset = Vector2( 0, 0 )
+7/modulate = Color( 1, 1, 1, 1 )
+7/region = Rect2( 0, 0, 32, 32 )
+7/tile_mode = 0
+7/occluder_offset = Vector2( 16, 16 )
+7/navigation_offset = Vector2( 16, 16 )
+7/shapes = [ {
+"autotile_coord": Vector2( 0, 0 ),
+"one_way": false,
+"one_way_margin": 1.0,
+"shape": SubResource( 6 ),
+"shape_transform": Transform2D( 1, 0, 0, 1, 16, 16 )
+} ]
+7/z_index = 0
+8/name = "IronHorizontalDoorRight"
+8/texture = ExtResource( 9 )
+8/tex_offset = Vector2( 0, 0 )
+8/modulate = Color( 1, 1, 1, 1 )
+8/region = Rect2( 0, 0, 32, 32 )
+8/tile_mode = 0
+8/occluder_offset = Vector2( 16, 16 )
+8/navigation_offset = Vector2( 16, 16 )
+8/shapes = [ {
+"autotile_coord": Vector2( 0, 0 ),
+"one_way": false,
+"one_way_margin": 1.0,
+"shape": SubResource( 7 ),
+"shape_transform": Transform2D( 1, 0, 0, 1, 16, 16 )
+} ]
+8/z_index = 0
 
