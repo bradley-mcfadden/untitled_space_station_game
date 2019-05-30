@@ -78,8 +78,16 @@ func image(tm:TileMap):
 # Draw the walls of the tilemap without the interior
 #	tm - TileMap to project on, needs at least two tiles
 func image_ext(tm:TileMap):
-	pass
+	for i in range(low.x,high.x+1):
+		for j in range(low.y,high.y+1):
+			if i > low.x and i < high.x and j > low.y and j < high.y:
+				pass
+			else:
+				tm.set_cell(i,j,0)
 
 # Draw the room on the tilemap without the walls			
 func image_int(tm:TileMap):
-	pass
+	for i in range(low.x,high.x+1):
+		for j in range(low.y,high.y+1):
+			if i > low.x and i < high.x and j > low.y and j < high.y:
+				tm.set_cell(i,j,1)
