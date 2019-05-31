@@ -154,7 +154,7 @@ func display():
 	for room in rooms:
 		room.image_ext(self)
 	for edge in edgeSet.data:
-		edge.image_empty(self,true)
+		edge.image_empty(self,false)
 	for room in rooms:
 		room.image_int(self)
 	for plat in platforms:
