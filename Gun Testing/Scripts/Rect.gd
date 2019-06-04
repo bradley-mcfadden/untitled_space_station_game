@@ -7,16 +7,18 @@ var xsize:int
 var ysize:int
 var overlap = false
 var prefab:int
+var border 
 
 # Create a new Rect
 #	xsize - Width of the rect
 #	ysize - Height of the rect
 #	low - Top left corner of the rect
-func _init(xsize,ysize,low):
+func _init(xsize,ysize,low,hasBorder=false):
 	self.low = low.copy()
 	self.xsize = xsize
 	self.ysize = ysize
 	high = Point.new(low.x+xsize,low.y+ysize)
+	border = hasBorder
 	
 # Returns a copy of this Rect
 #	return - Copy of self
@@ -50,6 +52,19 @@ func dist(r) -> float:
 #	r - Rect to compare against
 #	return - Whether or not the rects overlap
 func is_inside(r) -> bool:
+	if !border:
+	    if ( 
+        !(!(low.x >= r.low.x && high.y <= r.high.y && low.x <= r.high.x && low.y >= r.high.y) 
+        && !(low.x >= r.low.x && high.y <= r.high.y && high.x <= r.high.x && low.y >= r.low.y)
+        && !(low.x >= r.low.x && low.y >= r.low.y && low.x <= r.high.x && low.y <= r.high.y)
+        && !(high.y <= r.high.y && high.y >= r.low.y && high.x <= r.high.x && high.x >= r.low.x)
+        && !(low.y <= r.low.y && high.y >= r.low.y && low.x >= r.low.x && low.x <= r.high.x))
+        ):
+    		return true;
+	high.x += 2
+	high.y += 2
+	r.high.x += 2
+	r.high.y += 2
 	if ( 
     !(!(low.x >= r.low.x && high.y <= r.high.y && low.x <= r.high.x && low.y >= r.high.y) 
     && !(low.x >= r.low.x && high.y <= r.high.y && high.x <= r.high.x && low.y >= r.low.y)
@@ -57,7 +72,15 @@ func is_inside(r) -> bool:
     && !(high.y <= r.high.y && high.y >= r.low.y && high.x <= r.high.x && high.x >= r.low.x)
     && !(low.y <= r.low.y && high.y >= r.low.y && low.x >= r.low.x && low.x <= r.high.x))
     ):
-    	return true;
+		high.x -= 2
+		high.y -= 2
+		r.high.x -= 2
+		r.high.y -= 2
+		return true
+	high.x -= 2
+	high.y -= 2
+	r.high.x -= 2
+	r.high.y -= 2
 	return false
 
 # Return the state of the room
