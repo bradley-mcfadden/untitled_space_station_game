@@ -45,3 +45,22 @@ func spawn_robot():
 	Robot = rob.instance()
 	Robot.position = Vector2(w,i)
 	add_child(Robot)
+
+# Determines the tiles adjacent to the player, above, below, and in front
+func update_tiles():
+	var tpos = $RoomGenerator.world_to_map($Player.position)
+	var floor_tile = $RoomGenerator.get_cellv(Vector2(tpos.x, tpos.y + 1))
+	if floor_tile == 7 || floor_tile == 8:
+		$RoomGenerator.open_doors($Player.position)
+		# print(floor_tile)
+	var front_tile = $RoomGenerator.get_cellv(Vector2(tpos.x+$Player.direction, tpos.y))
+	if front_tile == 5 || front_tile == 6:
+		$RoomGenerator.open_doors($Player.position)
+		# print(front_tile)
+	var ceiling_tile = $RoomGenerator.get_cellv(Vector2(tpos.x, tpos.y-2))
+	if ceiling_tile == 7 || ceiling_tile == 8:
+		$RoomGenerator.open_doors($Player.position)
+		# print(ceiling_tile)
+
+func _physics_process(delta):
+	pass

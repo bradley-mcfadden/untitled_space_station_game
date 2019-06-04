@@ -10,6 +10,7 @@ export var cell_counth:int
 onready var rooms = []
 onready var edgeSet = UnsortedSet.new()
 onready var platforms = []
+onready var Effects = $ Effects
 const ROOM_ATTEMPTS = 5000
 const MIN_WIDTH = 15
 const MIN_HEIGHT = 15
@@ -98,8 +99,7 @@ func connect_rooms():
 		adjMatrix[minPos[1]][minPos[0]] = 0
 		weightMatrix[minPos[0]][minPos[1]] = 1000000
 		weightMatrix[minPos[1]][minPos[0]] = 1000000
-#
-					
+
 # Checks an adjacency matrix for existence of cycles.
 #	adj - Adjacency matrix to check
 #	return - Does the matrix have a cycle? 
@@ -152,7 +152,7 @@ func display():
 	for room in rooms:
 		room.image_ext(self)
 	for edge in edgeSet.data:
-		edge.image_empty(self,false)
+		edge.image_empty(self,true)
 	for room in rooms:
 		room.image_int(self)
 	for plat in platforms:
@@ -190,15 +190,20 @@ func generate_platforms():
 # Finds room target is inside. Opens all hallways connected to room.
 #	position - Position vector of target
 func open_doors(position:Vector2):
-	var currentRoom
+	var currentRoom:Rect
+	var tpos = world_to_map(position)
 	for room in rooms:
-		if room.is_target_inside(position):
+		if room.is_target_inside(tpos):
 			currentRoom = room
 			break
-	var edgeList
-	for edge in edgeSet:
+	# else, player is in an edge, so give them boost
+	for edge in edgeSet.data:
 		if edge.contains(currentRoom):
 			edge.image_empty(self,false)
+	for room in rooms:
+		room.image_int(self)
+		for plat in platforms:
+			plat.image(self)
 
 # Generate a room on a grid of sorts, each room is the median size,
 # edges will always be pretty this way.

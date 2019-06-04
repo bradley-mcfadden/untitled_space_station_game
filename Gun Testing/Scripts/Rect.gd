@@ -120,7 +120,6 @@ func image_int(tm:TileMap):
 #	position - Target to check
 #	return - Was the target found?
 func is_target_inside(position:Vector2)->bool:
-	var tmPosition = position / 32
-	if tmPosition.x > low.x && tmPosition.y < high.x && tmPosition.y > low.y && tmPosition < high.x:
+	if position.x >= low.x && position.x <= high.x && position.y >= low.y && position.y <= high.y:
 		return true
 	return false

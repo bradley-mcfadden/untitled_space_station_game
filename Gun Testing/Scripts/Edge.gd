@@ -108,6 +108,8 @@ func image_walls(tm:TileMap):
 #	r - Rect to search for
 #	return _ Was the rect found?
 func contains(r:Rect)->bool:
+	if r == null:
+		return false
 	if r.equals(a) || r.equals(b):
 		return true
 	return false

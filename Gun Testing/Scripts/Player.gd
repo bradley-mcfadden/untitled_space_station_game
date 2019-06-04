@@ -4,7 +4,6 @@ export var movespeed = 24
 const JUMP_POWER = 300
 const GRAVITY = 450
 const MAX_HEALTH = 100
-#onready var screen_size 
 onready var velocity = Vector2()
 onready var jumping = false
 onready var SMG = load("res://Scripts/SMG.gd")
@@ -17,6 +16,7 @@ onready var gunRef = [load("res://Scenes/SMG.tscn"),
 onready var coins:int
 onready var health:int 
 onready var hitShield = false
+onready var direction = 1
 #class_name Player
 
 # Init
@@ -55,6 +55,8 @@ func _physics_process(delta):
 			$AnimatedSprite.play("idle")
 		elif abs(velocity.x) < 10:
 			velocity.x = 0
+		else:
+			get_parent().update_tiles()
 		if (Input.is_action_pressed("ui_down")):
 			pass
 		if (Input.is_action_just_released("ui_x")):
@@ -70,8 +72,10 @@ func _physics_process(delta):
 		var rot = atan2(norm.y, norm.x)
 		if rot > -PI/2 && rot < PI/2:
 			$AnimatedSprite.flip_h = false
+			direction = 1
 		else:
 			$AnimatedSprite.flip_h = true
+			direction = -1
 
 # Switches between absolute roster of guns,
 # for testing purposes
