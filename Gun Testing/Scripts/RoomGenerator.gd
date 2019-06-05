@@ -10,7 +10,7 @@ export var cell_counth:int
 onready var rooms = []
 onready var edgeSet = UnsortedSet.new()
 onready var platforms = []
-onready var Effects = $ Effects
+onready var Effects = $Effects
 const ROOM_ATTEMPTS = 5000
 const MIN_WIDTH = 15
 const MIN_HEIGHT = 15
@@ -197,13 +197,21 @@ func open_doors(position:Vector2):
 			currentRoom = room
 			break
 	# else, player is in an edge, so give them boost
+	var doors = []
+	
 	for edge in edgeSet.data:
 		if edge.contains(currentRoom):
 			edge.image_empty(self,false)
+			var d = edge.get_doors(currentRoom)
+			if d != null:
+				for i in range(d.size()):
+					doors.append(d[i])
+					# add pusher factories
 	for room in rooms:
 		room.image_int(self)
 		for plat in platforms:
 			plat.image(self)
+	
 
 # Generate a room on a grid of sorts, each room is the median size,
 # edges will always be pretty this way.
@@ -225,3 +233,4 @@ func irregular_room() -> Rect:
 	var p =  Point.new(int(rand_range(0,cell_countw-w)), 
 				 int(rand_range(0,cell_counth-h)))
 	return Rect.new(w,h,p)
+	

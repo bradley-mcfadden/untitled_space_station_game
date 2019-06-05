@@ -35,10 +35,39 @@ func equals(e) -> bool:
 func to_string() -> String:
 	return "Edge "+a.to_string() +" "+ b.to_string()
 
+func get_doors(r:Rect) -> Array:
+	var doors = []
+	if a.low.x - b.low.x < 0:
+		if a.low.y == b.low.y  && a.equals(r):
+			doors.append(Vector2(a.high.x,b.low.y+(b.xsize/2)))
+		elif a.low.y - b.low.y < 0 && a.equals(r):
+			doors.append(Vector2(a.low.x+(a.xsize/2),a.high.y))
+		elif a.equals(r):
+			doors.append(Vector2(a.low.x+(a.xsize/2),a.low.y))
+		else:
+			doors.append(Vector2(b.low.x,b.low.y+(b.xsize/2)))
+	elif a.low.x - b.low.x > 0:
+		if b.low.y == a.low.y && a.equals(r):
+			doors.append(Vector2(a.low.x,a.low.y+(a.ysize/2)))
+		elif a.low.y - b.low.y < 0 && a.equals(r):
+			doors.append(Vector2(a.low.x+(a.xsize/2),a.high.y))
+		elif a.equals(r):
+			doors.append(Vector2(a.low.x+(a.xsize/2),a.low.y))
+		else:
+			doors.append(Vector2(b.high.x,b.low.x+(b.xsize/2)))
+	else:
+		if a.equals(r):
+			doors.append(Vector2(a.low.x+(a.xsize/2),a.high.y))
+		elif b.equals(r):
+			doors.append(Vector2(a.low.x+(a.xsize/2),b.low.y))
+	return doors
+		
+
 # Sets interior of the edges of the tile map to a dark tile which is passable
 # tm - TileMap to project on
 # doorsClosed - Whether or not door closed tiles are created
-func image_empty(tm:TileMap,doorsClosed:bool):
+func image_empty(tm:TileMap,doorsClosed:bool)->Array:
+	var doors = []
 	if a.low.x - b.low.x < 0:
 		for i in range(a.low.x+(a.xsize/2),b.low.x+(b.xsize/2)+1):
 			tm.set_cell(i,b.low.y+(b.ysize/2),2)
@@ -50,6 +79,7 @@ func image_empty(tm:TileMap,doorsClosed:bool):
 				else:
 					tm.set_cell(i,b.low.y+(b.ysize/2),10)
 					tm.set_cell(i,b.low.y+(b.ysize/2)+1,10)
+				doors.append(Vector2(i,b.low.y+(b.ysize/2)))
 	else:
 		for i in range(b.low.x+(b.xsize/2),a.low.x+(a.xsize/2)+1):
 			tm.set_cell(i,b.low.y+(b.ysize/2),2)
@@ -61,6 +91,7 @@ func image_empty(tm:TileMap,doorsClosed:bool):
 				else:
 					tm.set_cell(i,b.low.y+(b.ysize/2),10)
 					tm.set_cell(i,b.low.y+(b.ysize/2)+1,10)
+				doors.append(Vector2(i,b.low.y+(b.ysize/2)))
 	if a.low.y - b.low.y < 0:
 		for i in range(a.low.y+(a.ysize/2),b.low.y+(b.ysize/2)+2):
 			tm.set_cell(a.low.x+(a.xsize/2),i,2)
@@ -72,6 +103,7 @@ func image_empty(tm:TileMap,doorsClosed:bool):
 				else:
 					tm.set_cell(a.low.x+(a.xsize/2),i,9)
 					tm.set_cell(a.low.x+(a.xsize/2)+1,i,9)
+				doors.append(Vector2(a.low.x+(a.xsize/2),i))
 	else: 
 		for i in range(b.low.y+(b.ysize/2),a.low.y+(a.ysize/2)+2):
 			tm.set_cell(a.low.x+(a.xsize/2),i,2)
@@ -83,6 +115,8 @@ func image_empty(tm:TileMap,doorsClosed:bool):
 				else:
 					tm.set_cell(a.low.x+(a.xsize/2),i,9)
 					tm.set_cell(a.low.x+(a.xsize/2)+1,i,9)
+				doors.append(Vector2(a.low.x+(a.xsize/2),i))
+	return doors
 
 # Draws the walls of the edges to an impassable tile
 # tm - TileMap to project on
