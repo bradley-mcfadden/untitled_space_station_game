@@ -5,13 +5,15 @@ onready var ef:TileMap
 onready var tmps:Vector2
 onready var pushers = []
 onready var dir:Vector2
-# Called when the node enters the scene tree for the first time.
 func _ready():
 	tm = get_parent()
 	ef = tm.Effects
 	while flood():
 		pass
 	
+# Spreads pushers down a hallways
+# Will also image tiles and add pushers to array
+#	return - Was this successful?
 func flood() -> bool:
 	var success = false
 	var newPos:Vector2
@@ -56,7 +58,3 @@ func flood() -> bool:
 		success = true
 	dir = pushers[pushers.size()-1].dir
 	return success
-		
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass

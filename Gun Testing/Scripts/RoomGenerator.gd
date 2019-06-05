@@ -11,6 +11,7 @@ onready var rooms = []
 onready var edgeSet = UnsortedSet.new()
 onready var platforms = []
 onready var Effects = $Effects
+onready var pushers = []
 const ROOM_ATTEMPTS = 5000
 const MIN_WIDTH = 15
 const MIN_HEIGHT = 15
@@ -206,7 +207,11 @@ func open_doors(position:Vector2):
 			if d != null:
 				for i in range(d.size()):
 					doors.append(d[i])
-					# add pusher factories
+					var pf = PusherFactory.instance()
+					pf.tmps = d[i]
+					pushers.add(pf)
+					add_child(pf)
+					
 	for room in rooms:
 		room.image_int(self)
 		for plat in platforms:
