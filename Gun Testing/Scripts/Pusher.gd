@@ -1,12 +1,15 @@
+# A Pusher detects movement from KinematicBody and will slide
+# these bodies along its direction
 extends Area2D
 class_name Pusher
+
 onready var dir:Vector2
-onready var tmps:Vector2
+onready var done = false
 const SPEED = 50
 
-# Called when the node enters the scene tree for the first time.
+# Init
 func _ready():
-	pass # Replace with function body.
+	pass
 
 # Set the position and direction of the pusher
 #	ps - TileMap position of this pusher
@@ -19,4 +22,4 @@ func create(ps:Vector2,dir:Vector2):
 #	body - Body to push
 func _on_Pusher_body_entered(body):
 	if body is KinematicBody2D:
-		body.velocity = body.move_and_slide(dir*SPEED)
+		body.velocity += dir * SPEED
