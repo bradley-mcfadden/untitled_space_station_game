@@ -1,8 +1,8 @@
 extends KinematicBody2D
 class_name Player
 export var movespeed = 24
-const JUMP_POWER = 300
-const GRAVITY = 450
+const JUMP_POWER = 400
+const GRAVITY = 420
 const MAX_HEALTH = 100
 onready var velocity = Vector2()
 onready var jumping = false
@@ -49,8 +49,8 @@ func _physics_process(delta):
 		elif (Input.is_action_pressed("ui_right") and velocity.x+movespeed < 200):
 			velocity.x += movespeed
 			$AnimatedSprite.play("walk")
-		else:
-			velocity.x *= 0.90
+		#else:
+		#	velocity.x *= 0.90
 		if velocity.x == 0:
 			$AnimatedSprite.play("idle")
 		elif abs(velocity.x) < 10:
