@@ -6,8 +6,9 @@
 [node name="RoomGeneration" type="Node2D"]
 
 [node name="ScrollingCamera" parent="." instance=ExtResource( 1 )]
+scale = Vector2( 2, 2 )
 
 [node name="RoomGenerator" parent="." instance=ExtResource( 2 )]
-cell_countw = 500
+cell_countw = 700
 cell_counth = 200
 

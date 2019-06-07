@@ -35,38 +35,111 @@ func equals(e) -> bool:
 func to_string() -> String:
 	return "Edge "+a.to_string() +" "+ b.to_string()
 
+# Returns a door normal of the room that contains this edge
+#	r - Room to check
+#	return - Normal of doorway
+func get_door_normals(r:Rect) -> Vector2:
+	if a.low.x - b.low.x < 0:
+		if a.low.y == b.low.y  && a.equals(r):
+			return Vector2(1,0)
+		elif a.low.y - b.low.y < 0 && a.equals(r):
+			return Vector2(0,1)
+		elif a.equals(r):
+			return Vector2(0,-1)
+		else:
+			return Vector2(-1,0)
+	elif a.low.x - b.low.x > 0:
+		if b.low.y == a.low.y && a.equals(r):
+			return Vector2(-1,0)
+		elif a.low.y - b.low.y < 0 && a.equals(r):
+			return Vector2(0,1)
+		elif a.equals(r):
+			return Vector2(0,-1)
+		else:
+			return Vector2(1,0)
+	else:
+		if a.equals(r):
+			return Vector2(1,0)
+		else:
+			return Vector2(0,1)
+	
+# If this edge contains the r, return the door inside r
+#	r - Which room's door?
+#	return - Map vector location of door
+func get_doors(r:Rect) -> Vector2:
+	if a.low.x - b.low.x < 0:
+		if a.low.y == b.low.y  && a.equals(r):
+			return Vector2(a.high.x,b.low.y+(b.xsize/2))
+		elif a.low.y - b.low.y < 0 && a.equals(r):
+			return Vector2(a.low.x+(a.xsize/2),a.high.y)
+		elif a.equals(r):
+			return Vector2(a.low.x+(a.xsize/2),a.low.y)
+		else:
+			return Vector2(b.low.x,b.low.y+(b.xsize/2))
+	elif a.low.x - b.low.x > 0:
+		if b.low.y == a.low.y && a.equals(r):
+			return Vector2(a.low.x,a.low.y+(a.ysize/2))
+		elif a.low.y - b.low.y < 0 && a.equals(r):
+			return Vector2(a.low.x+(a.xsize/2),a.high.y)
+		elif a.equals(r):
+			return Vector2(a.low.x+(a.xsize/2),a.low.y)
+		else:
+			return Vector2(b.high.x,b.low.x+(b.xsize/2))
+	else:
+		if a.equals(r):
+			return Vector2(a.low.x+(a.xsize/2),a.high.y)
+		else:
+			return Vector2(a.low.x+(a.xsize/2),b.low.y)
+		
+
 # Sets interior of the edges of the tile map to a dark tile which is passable
 # tm - TileMap to project on
-# doorsClosed - Whether or not door tiles are created
+# doorsClosed - Whether or not door closed tiles are created
 func image_empty(tm:TileMap,doorsClosed:bool):
 	if a.low.x - b.low.x < 0:
 		for i in range(a.low.x+(a.xsize/2),b.low.x+(b.xsize/2)+1):
 			tm.set_cell(i,b.low.y+(b.ysize/2),2)
 			tm.set_cell(i,b.low.y+(b.ysize/2)+1,2)
-			if doorsClosed && ((i == b.low.x) || (i == a.high.x && b.low.y+b.ysize/2 < a.high.y && b.low.y+b.ysize/2 > a.low.y)):
-				tm.set_cell(i,b.low.y+(b.ysize/2),5)
-				tm.set_cell(i,b.low.y+(b.ysize/2)+1,6)
+			if ((i == b.low.x) || (i == a.high.x && b.low.y+b.ysize/2 < a.high.y && b.low.y+b.ysize/2 > a.low.y)):
+				if doorsClosed:
+					tm.set_cell(i,b.low.y+(b.ysize/2),5)
+					tm.set_cell(i,b.low.y+(b.ysize/2)+1,6)
+				else:
+					tm.set_cell(i,b.low.y+(b.ysize/2),10)
+					tm.set_cell(i,b.low.y+(b.ysize/2)+1,10)
 	else:
 		for i in range(b.low.x+(b.xsize/2),a.low.x+(a.xsize/2)+1):
 			tm.set_cell(i,b.low.y+(b.ysize/2),2)
 			tm.set_cell(i,b.low.y+(b.ysize/2)+1,2)
-			if doorsClosed && (i == b.high.x || (i == a.low.x && b.low.y+b.ysize/2 < a.high.y && b.low.y+b.ysize/2 > a.low.y)):
-				tm.set_cell(i,b.low.y+(b.ysize/2),5)
-				tm.set_cell(i,b.low.y+(b.ysize/2)+1,6)
+			if (i == b.high.x || (i == a.low.x && b.low.y+b.ysize/2 < a.high.y && b.low.y+b.ysize/2 > a.low.y)):
+				if doorsClosed:
+					tm.set_cell(i,b.low.y+(b.ysize/2),5)
+					tm.set_cell(i,b.low.y+(b.ysize/2)+1,6)
+				else:
+					tm.set_cell(i,b.low.y+(b.ysize/2),10)
+					tm.set_cell(i,b.low.y+(b.ysize/2)+1,10)
 	if a.low.y - b.low.y < 0:
 		for i in range(a.low.y+(a.ysize/2),b.low.y+(b.ysize/2)+2):
 			tm.set_cell(a.low.x+(a.xsize/2),i,2)
 			tm.set_cell(a.low.x+(a.xsize/2)+1,i,2)
-			if doorsClosed && (i == a.high.y || (i == b.low.y && a.low.x + a.xsize/2 < b.high.x && a.low.x + a.xsize/2 > b.low.x)):
-				tm.set_cell(a.low.x+(a.xsize/2),i,7)
-				tm.set_cell(a.low.x+(a.xsize/2)+1,i,8)
+			if (i == a.high.y || (i == b.low.y && a.low.x + a.xsize/2 < b.high.x && a.low.x + a.xsize/2 > b.low.x)):
+				if doorsClosed:
+					tm.set_cell(a.low.x+(a.xsize/2),i,7)
+					tm.set_cell(a.low.x+(a.xsize/2)+1,i,8)
+				else:
+					tm.set_cell(a.low.x+(a.xsize/2),i,9)
+					tm.set_cell(a.low.x+(a.xsize/2)+1,i,9)
 	else: 
 		for i in range(b.low.y+(b.ysize/2),a.low.y+(a.ysize/2)+2):
 			tm.set_cell(a.low.x+(a.xsize/2),i,2)
 			tm.set_cell(a.low.x+(a.xsize/2)+1,i,2)
-			if doorsClosed && (i == a.low.y || (i == b.high.y && a.low.x + a.xsize/2 < b.high.x && a.low.x + a.xsize/2 > b.low.x)):
-				tm.set_cell(a.low.x+(a.xsize/2),i,7)
-				tm.set_cell(a.low.x+(a.xsize/2)+1,i,8)
+			if (i == a.low.y || (i == b.high.y && a.low.x + a.xsize/2 < b.high.x && a.low.x + a.xsize/2 > b.low.x)):
+				if doorsClosed:
+					tm.set_cell(a.low.x+(a.xsize/2),i,7)
+					tm.set_cell(a.low.x+(a.xsize/2)+1,i,8)
+				else:
+					tm.set_cell(a.low.x+(a.xsize/2),i,9)
+					tm.set_cell(a.low.x+(a.xsize/2)+1,i,9)
 
 # Draws the walls of the edges to an impassable tile
 # tm - TileMap to project on
@@ -92,6 +165,8 @@ func image_walls(tm:TileMap):
 #	r - Rect to search for
 #	return _ Was the rect found?
 func contains(r:Rect)->bool:
+	if r == null:
+		return false
 	if r.equals(a) || r.equals(b):
 		return true
 	return false

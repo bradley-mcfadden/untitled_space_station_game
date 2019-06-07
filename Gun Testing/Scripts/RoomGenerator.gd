@@ -4,22 +4,27 @@ var UnsortedSet = load("res://Scripts/UnsortedSet.gd")
 var Point = load("res://Scripts/Point.gd")
 var Edge = load("res://Scripts/Edge.gd")
 var Rect = load("res://Scripts/Rect.gd")
+var PF = load("res://Scenes/PusherFactory.tscn")
 
 export var cell_countw:int
 export var cell_counth:int
 onready var rooms = []
 onready var edgeSet = UnsortedSet.new()
 onready var platforms = []
-const ROOM_ATTEMPTS = 20
+onready var Effects = $Effects
+onready var pushers:Array
+const ROOM_ATTEMPTS = 5000
 const MIN_WIDTH = 15
 const MIN_HEIGHT = 15
 const MAX_WIDTH = 45
 const MAX_HEIGHT = 20
+const BATCH = 10
 
 # Init
 func _ready():
 	randomize()
-	generate_rooms()
+	for i in range(ROOM_ATTEMPTS/BATCH):
+		generate_rooms()
 	connect_rooms()
 	generate_platforms()
 	display()
@@ -30,12 +35,8 @@ func generate_rooms():
 	var h 
 	var p
 	# Generate rooms along grid
-	for i in range(ROOM_ATTEMPTS):
-    	w = int(rand_range(MIN_WIDTH,MAX_WIDTH))
-    	h = int(rand_range(MIN_HEIGHT,MAX_HEIGHT))
-    	p =  Point.new(int(rand_range(0,cell_countw-w)), 
-				 int(rand_range(0,cell_counth-h)))
-    	rooms.append(Rect.new(w,h,p))
+	for i in range(BATCH):
+    	rooms.append(regular_room())
 	# Mark rooms that overlap with rooms not marked as overlapping
 	for i in range(rooms.size()):
 		var current = rooms[i]
@@ -90,18 +91,17 @@ func connect_rooms():
 			weightMatrix[minPos[0]][minPos[1]] = 1000000
 			weightMatrix[minPos[1]][minPos[0]] = 1000000
 	
-#	for i in range(rooms.size()/4):
-#		var minPos = kruskal(adjMatrix,weightMatrix)
-#		var e = Edge.new(rooms[minPos[0]], rooms[minPos[1]])
-#		while !edgeSet.add(e):
-#			minPos = kruskal(adjMatrix,weightMatrix)
-#			e = Edge.new(rooms[minPos[0]], rooms[minPos[1]])
-#		adjMatrix[minPos[0]][minPos[1]] = 0
-#		adjMatrix[minPos[1]][minPos[0]] = 0
-#		weightMatrix[minPos[0]][minPos[1]] = 1000000
-#		weightMatrix[minPos[1]][minPos[0]] = 1000000
-#
-					
+	for i in range(rooms.size()/6):
+		var minPos = kruskal(adjMatrix,weightMatrix)
+		var e = Edge.new(rooms[minPos[0]], rooms[minPos[1]])
+		while !edgeSet.add(e):
+			minPos = kruskal(adjMatrix,weightMatrix)
+			e = Edge.new(rooms[minPos[0]], rooms[minPos[1]])
+		adjMatrix[minPos[0]][minPos[1]] = 0
+		adjMatrix[minPos[1]][minPos[0]] = 0
+		weightMatrix[minPos[0]][minPos[1]] = 1000000
+		weightMatrix[minPos[1]][minPos[0]] = 1000000
+
 # Checks an adjacency matrix for existence of cycles.
 #	adj - Adjacency matrix to check
 #	return - Does the matrix have a cycle? 
@@ -192,12 +192,65 @@ func generate_platforms():
 # Finds room target is inside. Opens all hallways connected to room.
 #	position - Position vector of target
 func open_doors(position:Vector2):
-	var currentRoom
+	for pusher in pushers:
+		pusher.purge()
+		pusher.queue_free()
+	pushers = []
+	$Effects.clear()
+		
+	var currentRoom:Rect
+	var tpos = world_to_map(position)
 	for room in rooms:
-		if room.is_target_inside(position):
+		if room.is_target_inside(tpos):
 			currentRoom = room
 			break
-	var edgeList
-	for edge in edgeSet:
+	# else, player is in an edge, so give them boost
+	var doors = []
+	
+	var d = []
+	var dn = []
+	for edge in edgeSet.data:
 		if edge.contains(currentRoom):
 			edge.image_empty(self,false)
+			d.append(edge.get_doors(currentRoom))
+			dn.append(edge.get_door_normals(currentRoom))
+	if d != null:
+		for i in range(d.size()):
+			for j in range(2):
+				var pf = PF.instance()
+				if dn[i].x != 0:
+					pf.tmps = Vector2(d[i].x,d[i].y+j)
+				else:
+					pf.tmps = Vector2(d[i].x+j,d[i].y)
+				pf.dir = dn[i]
+				pushers.append(pf)
+				add_child(pf)
+				pf.spread()
+					
+	for room in rooms:
+		room.image_int(self)
+		for plat in platforms:
+			plat.image(self)
+	
+
+# Generate a room on a grid of sorts, each room is the median size,
+# edges will always be pretty this way.
+#	return - Regular rectangular rooms with a border
+func regular_room() -> Rect:
+	var w = int((MIN_WIDTH+MAX_WIDTH)/2)
+	var h = int((MIN_HEIGHT+MAX_HEIGHT)/2)
+	var px = int(rand_range(0,cell_countw/(w+2)))*(w+2)
+	var py = int(rand_range(0,cell_counth/(h+2)))*(h+2)
+	var p =  Point.new(px,py)
+	return Rect.new(w,h,p,true)
+	
+# Generate an irregular room with random dimnesions and no guarantee
+# of nice edges.
+#	return - Random room
+func irregular_room() -> Rect:
+	var w = int(rand_range(MIN_WIDTH,MAX_WIDTH))
+	var h = int(rand_range(MIN_HEIGHT,MAX_HEIGHT))
+	var p =  Point.new(int(rand_range(0,cell_countw-w)), 
+				 int(rand_range(0,cell_counth-h)))
+	return Rect.new(w,h,p)
+	

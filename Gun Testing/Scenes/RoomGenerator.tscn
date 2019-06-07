@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://Tiles/mytiles.tres" type="TileSet" id=1]
 [ext_resource path="res://Scripts/RoomGenerator.gd" type="Script" id=2]
+[ext_resource path="res://Tiles/layertwotiles.tres" type="TileSet" id=3]
 
 [node name="RoomGenerator" type="TileMap"]
 tile_set = ExtResource( 1 )
@@ -10,4 +11,8 @@ format = 1
 script = ExtResource( 2 )
 cell_countw = 300
 cell_counth = 300
+
+[node name="Effects" type="TileMap" parent="."]
+tile_set = ExtResource( 3 )
+cell_size = Vector2( 32, 32 )
 

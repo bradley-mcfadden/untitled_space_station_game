@@ -38,7 +38,7 @@ script = ExtResource( 1 )
 position = Vector2( 5.14859, 8.13809 )
 frames = SubResource( 2 )
 animation = "idle"
-frame = 3
+frame = 2
 speed_scale = 2.0
 playing = true
 
@@ -57,5 +57,28 @@ shape = SubResource( 3 )
 [node name="DamageTimer" type="Timer" parent="."]
 wait_time = 0.5
 one_shot = true
+
+[node name="DownRay" type="RayCast2D" parent="."]
+position = Vector2( 8, 16 )
+enabled = true
+cast_to = Vector2( 0, 15 )
+collision_mask = 17
+collide_with_areas = true
+
+[node name="UpRay" type="RayCast2D" parent="."]
+position = Vector2( 8, 9.6119 )
+rotation = 3.14159
+scale = Vector2( 1, 0.519999 )
+enabled = true
+collision_mask = 17
+collide_with_areas = true
+
+[node name="FrontRay" type="RayCast2D" parent="."]
+position = Vector2( 11.543, 9.61191 )
+rotation = -1.57079
+scale = Vector2( 1, 0.32 )
+enabled = true
+collision_mask = 17
+collide_with_areas = true
 
 [connection signal="timeout" from="DamageTimer" to="." method="_on_DamageTimer_timeout"]
