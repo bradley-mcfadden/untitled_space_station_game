@@ -4,6 +4,7 @@ var UnsortedSet = load("res://Scripts/UnsortedSet.gd")
 var Point = load("res://Scripts/Point.gd")
 var Edge = load("res://Scripts/Edge.gd")
 var Rect = load("res://Scripts/Rect.gd")
+var PF = load("res://Scenes/PusherFactory.tscn")
 
 export var cell_countw:int
 export var cell_counth:int
@@ -11,7 +12,7 @@ onready var rooms = []
 onready var edgeSet = UnsortedSet.new()
 onready var platforms = []
 onready var Effects = $Effects
-onready var pushers = []
+onready var pushers:Array
 const ROOM_ATTEMPTS = 5000
 const MIN_WIDTH = 15
 const MIN_HEIGHT = 15
@@ -191,6 +192,12 @@ func generate_platforms():
 # Finds room target is inside. Opens all hallways connected to room.
 #	position - Position vector of target
 func open_doors(position:Vector2):
+	for pusher in pushers:
+		pusher.purge()
+		pusher.queue_free()
+	pushers = []
+	$Effects.clear()
+		
 	var currentRoom:Rect
 	var tpos = world_to_map(position)
 	for room in rooms:
@@ -200,17 +207,25 @@ func open_doors(position:Vector2):
 	# else, player is in an edge, so give them boost
 	var doors = []
 	
+	var d = []
+	var dn = []
 	for edge in edgeSet.data:
 		if edge.contains(currentRoom):
 			edge.image_empty(self,false)
-			var d = edge.get_doors(currentRoom)
-			if d != null:
-				for i in range(d.size()):
-					doors.append(d[i])
-					var pf = PusherFactory.instance()
-					pf.tmps = d[i]
-					pushers.add(pf)
-					add_child(pf)
+			d.append(edge.get_doors(currentRoom))
+			dn.append(edge.get_door_normals(currentRoom))
+	if d != null:
+		for i in range(d.size()):
+			for j in range(2):
+				var pf = PF.instance()
+				if dn[i].x != 0:
+					pf.tmps = Vector2(d[i].x,d[i].y+j)
+				else:
+					pf.tmps = Vector2(d[i].x+j,d[i].y)
+				pf.dir = dn[i]
+				pushers.append(pf)
+				add_child(pf)
+				pf.spread()
 					
 	for room in rooms:
 		room.image_int(self)
