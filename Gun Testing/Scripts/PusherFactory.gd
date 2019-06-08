@@ -25,8 +25,8 @@ func _ready():
 # Starts pusher factory
 func spread():
 	newPos = tmps
-	while flood():
-		newPos = tm.world_to_map(pushers[pushers.size()-1].position)
+	flood()
+	newPos = tm.world_to_map(pushers[pushers.size()-1].position)
 	
 # Spreads pushers down a hallways
 # Will also image tiles and add pushers to array
@@ -34,10 +34,19 @@ func spread():
 func flood() -> bool:
 	var success = 0
 	if pushers.size() == 0:
+		newPos = tmps
 		if add_pusher(dir) > 0:
 			var pPos = tm.map_to_world(newPos+dir)
 			var push = PSHR.instance()
 			push.create(pPos,dir)
+			pushers.append(push)
+			add_child(push,true)
+			success += 1
+		var par = Vector2(-dir.x,-dir.y)
+		if add_pusher(par) > 0:
+			var pPos = tm.map_to_world(newPos+par)
+			var push = PSHR.instance()
+			push.create(pPos,par)
 			pushers.append(push)
 			add_child(push,true)
 			success += 1
@@ -60,12 +69,20 @@ func flood() -> bool:
 		if success > 0:
 			dir = pushers[pushers.size()-1].dir
 	else:
-		for i in range(0, pushers.size()):
-			newPos = tm.world_to_map(pushers[i].position)
+		for pusher in pushers:
+			newPos = tm.world_to_map(pusher.position)
 			if add_pusher(dir) > 0:
 				var pPos = tm.map_to_world(newPos+dir)
 				var push = PSHR.instance()
 				push.create(pPos,dir)
+				pushers.append(push)
+				add_child(push,true)
+				success += 1
+			var par = Vector2(-dir.x,-dir.y)
+			if add_pusher(par) > 0:
+				var pPos = tm.map_to_world(newPos+par)
+				var push = PSHR.instance()
+				push.create(pPos,par)
 				pushers.append(push)
 				add_child(push,true)
 				success += 1
@@ -87,6 +104,7 @@ func flood() -> bool:
 				success += 1
 			if success > 0:
 				dir = pushers[pushers.size()-1].dir
+				newPos = tm.world_to_map(pushers[pushers.size()-1].position)
 				break
 	return success > 0
 	
@@ -95,10 +113,19 @@ func flood() -> bool:
 #	return - 1 or 0 for success or failure
 func add_pusher(dir:Vector2)->int:
 	if ef.get_cellv(newPos+dir) < 0 and tm.get_cellv(newPos+dir) == dg:
-		if dir.x != 0:
-			ef.set_cellv(newPos+dir,hp)
-		else:
-			ef.set_cellv(newPos+dir,vp)
+		# Debugging arrows
+		if dir.x == 1:
+			ef.set_cellv(newPos+dir,4)
+		elif dir.x == -1:
+			ef.set_cellv(newPos+dir,6)
+		elif dir.y == -1:
+			ef.set_cellv(newPos+dir,3)
+		elif dir.y == 1:
+			ef.set_cellv(newPos+dir,5)
+		# if dir.x != 0:
+		# 	ef.set_cellv(newPos+dir,0)
+		# else:
+		# 	ef.set_cellv(newPos+dir,1)
 		return 1
 	return 0
 	

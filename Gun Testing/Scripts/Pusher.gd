@@ -4,7 +4,6 @@ extends Area2D
 class_name Pusher
 
 onready var dir:Vector2
-onready var done = false
 const SPEED = 50
 
 # Init
