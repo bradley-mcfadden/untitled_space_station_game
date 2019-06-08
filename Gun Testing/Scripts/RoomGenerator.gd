@@ -8,22 +8,22 @@ var PF = load("res://Scenes/PusherFactory.tscn")
 
 export var cell_countw:int
 export var cell_counth:int
+export var roomAttempts = 2
+export var batch = 2
 onready var rooms = []
 onready var edgeSet = UnsortedSet.new()
 onready var platforms = []
 onready var Effects = $Effects
 onready var pushers:Array
-const ROOM_ATTEMPTS = 5000
 const MIN_WIDTH = 15
 const MIN_HEIGHT = 15
 const MAX_WIDTH = 45
 const MAX_HEIGHT = 20
-const BATCH = 10
 
 # Init
 func _ready():
 	randomize()
-	for i in range(ROOM_ATTEMPTS/BATCH):
+	for i in range(roomAttempts/batch):
 		generate_rooms()
 	connect_rooms()
 	generate_platforms()
@@ -35,7 +35,7 @@ func generate_rooms():
 	var h 
 	var p
 	# Generate rooms along grid
-	for i in range(BATCH):
+	for i in range(batch):
     	rooms.append(regular_room())
 	# Mark rooms that overlap with rooms not marked as overlapping
 	for i in range(rooms.size()):
@@ -59,6 +59,7 @@ func generate_rooms():
 func connect_rooms():
 	var weightMatrix = []
 	for i in range(rooms.size()):
+		#print(rooms[i].to_string())
 		weightMatrix.append([])
 		for j in range(rooms.size()):
 			weightMatrix[i].append(0)
@@ -210,12 +211,14 @@ func open_doors(position:Vector2):
 	var d = []
 	var dn = []
 	for edge in edgeSet.data:
+		edge.image_empty(self,true)
 		if edge.contains(currentRoom):
 			edge.image_empty(self,false)
 			d.append(edge.get_doors(currentRoom))
 			dn.append(edge.get_door_normals(currentRoom))
 	if d != null:
 		for i in range(d.size()):
+			var hall = []
 			for j in range(2):
 				var pf = PF.instance()
 				if dn[i].x != 0:
@@ -223,15 +226,16 @@ func open_doors(position:Vector2):
 				else:
 					pf.tmps = Vector2(d[i].x+j,d[i].y)
 				pf.dir = dn[i]
+				hall.append(pf)
 				pushers.append(pf)
 				add_child(pf)
-				pf.spread()
+			while !(!hall[0].flood() && !hall[1].flood()):
+				pass
 					
 	for room in rooms:
 		room.image_int(self)
 		for plat in platforms:
 			plat.image(self)
-	
 
 # Generate a room on a grid of sorts, each room is the median size,
 # edges will always be pretty this way.
