@@ -1,7 +1,7 @@
 extends Node
 
 var rob = preload("res://Scenes/Robot.tscn")
-onready var Robot = $Robot
+#onready var Robot = $Robot
 
 # Init
 func _ready():
@@ -30,22 +30,6 @@ func on_Gun_shoot(bullet, direction, location, vel):
 	child.speed = vel
 	add_child(child)
 
-# CURRENTLY DEPRECATED
-# Spawns a robot
-func spawn_robot():
-	randomize()
-	var w = rand_range(-400,400)
-	var h = rand_range(-1,1)
-	var i
-	if h > 0:
-		i = 0
-	else:
-		i = 150
-	Robot.queue_free()
-	Robot = rob.instance()
-	Robot.position = Vector2(w,i)
-	add_child(Robot)
-
 # Determines the tiles adjacent to the player, above, below, and in front
 func update_tiles():
 	var tpos = $RoomGenerator.world_to_map($Player.position)
@@ -62,5 +46,13 @@ func update_tiles():
 		$RoomGenerator.open_doors($Player.position)
 		# print(ceiling_tile)
 
-func _physics_process(delta):
-	pass
+# Method so that children can start hall timer.
+func start_hall_timer():
+	$HallTimer.start()
+	
+# Event handler for when hall time runs out.
+# Closes all doors if player is in a room
+func _on_HallTimer_timeout():
+	if $RoomGenerator.find_player($Player.position) != null:
+		$HallTimer.stop()
+		$RoomGenerator.close_doors()

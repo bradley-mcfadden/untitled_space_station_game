@@ -4,7 +4,7 @@ extends Area2D
 class_name Pusher
 
 onready var dir:Vector2
-const SPEED = 50
+const SPEED = 100
 
 # Init
 func _ready():
