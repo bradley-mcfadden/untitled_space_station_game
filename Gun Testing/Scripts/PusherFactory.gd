@@ -14,121 +14,69 @@ onready var hp:int
 onready var vp:int
 onready var dg:int
 onready var newPos:Vector2
+onready var visited = UnsortedSet.new()
+onready var vDir = []
 # Init
 func _ready():
 	tm = get_parent()
 	ef = tm.Effects
 	hp = ef.tile_set.find_tile_by_name("HorizontalPull")
 	vp = ef.tile_set.find_tile_by_name("VerticalPull")
-	dg = tm.tile_set.find_tile_by_name("DarkPurpleBrick")
 	
-# Starts pusher factory
-func spread():
-	newPos = tmps
-	flood()
-	newPos = tm.world_to_map(pushers[pushers.size()-1].position)
-	
-# Spreads pushers down a hallways
-# Will also image tiles and add pushers to array
-#	return - Was this successful?
-func flood() -> bool:
-	var success = 0
-	if pushers.size() == 0:
-		newPos = tmps
-		if add_pusher(dir) > 0:
-			var pPos = tm.map_to_world(newPos+dir)
-			var push = PSHR.instance()
-			push.create(pPos,dir)
-			pushers.append(push)
-			add_child(push,true)
-			success += 1
-		var par = Vector2(-dir.x,-dir.y)
-		if add_pusher(par) > 0:
-			var pPos = tm.map_to_world(newPos+par)
-			var push = PSHR.instance()
-			push.create(pPos,par)
-			pushers.append(push)
-			add_child(push,true)
-			success += 1
-		var normal = Vector2(dir.y,dir.x)
-		if add_pusher(normal) > 0:
-			var pPos = tm.map_to_world(newPos+dir)
-			var push = PSHR.instance()
-			push.create(pPos,normal)
-			pushers.append(push)
-			add_child(push,true)
-			success += 1
-		normal *= -1
-		if add_pusher(normal) > 0:
-			var pPos = tm.map_to_world(newPos+dir)
-			var push = PSHR.instance()
-			push.create(pPos,normal)
-			pushers.append(push)
-			add_child(push,true)
-			success += 1
-		if success > 0:
-			dir = pushers[pushers.size()-1].dir
-	else:
-		for pusher in pushers:
-			newPos = tm.world_to_map(pusher.position)
-			if add_pusher(dir) > 0:
-				var pPos = tm.map_to_world(newPos+dir)
-				var push = PSHR.instance()
-				push.create(pPos,dir)
-				pushers.append(push)
-				add_child(push,true)
-				success += 1
-			var par = Vector2(-dir.x,-dir.y)
-			if add_pusher(par) > 0:
-				var pPos = tm.map_to_world(newPos+par)
-				var push = PSHR.instance()
-				push.create(pPos,par)
-				pushers.append(push)
-				add_child(push,true)
-				success += 1
-			var normal = Vector2(dir.y,dir.x)
-			if add_pusher(normal) > 0:
-				var pPos = tm.map_to_world(newPos+dir)
-				var push = PSHR.instance()
-				push.create(pPos,normal)
-				pushers.append(push)
-				add_child(push,true)
-				success += 1
-			normal *= -1
-			if add_pusher(normal) > 0:
-				var pPos = tm.map_to_world(newPos+dir)
-				var push = PSHR.instance()
-				push.create(pPos,normal)
-				pushers.append(push)
-				add_child(push,true)
-				success += 1
-			if success > 0:
-				dir = pushers[pushers.size()-1].dir
-				newPos = tm.world_to_map(pushers[pushers.size()-1].position)
-				break
-	return success > 0
-	
-# Adds pusher to TileMap and returns 1 if it can be added
-#	dir - Direction of pusher relative to newPos
-#	return - 1 or 0 for success or failure
-func add_pusher(dir:Vector2)->int:
-	if ef.get_cellv(newPos+dir) < 0 and tm.get_cellv(newPos+dir) == dg:
-		# Debugging arrows
-		if dir.x == 1:
-			ef.set_cellv(newPos+dir,4)
-		elif dir.x == -1:
-			ef.set_cellv(newPos+dir,6)
-		elif dir.y == -1:
-			ef.set_cellv(newPos+dir,3)
-		elif dir.y == 1:
-			ef.set_cellv(newPos+dir,5)
-		# if dir.x != 0:
-		# 	ef.set_cellv(newPos+dir,0)
-		# else:
-		# 	ef.set_cellv(newPos+dir,1)
-		return 1
-	return 0
-	
+# Depth first search that spreads down a certain tile
+#	brick - Tile to spread down
+func dfs_spread(brick:int,debug=false):
+	dg = brick
+	vDir.append(dir)
+	dfs_flood(tmps,dir)
+	# print(visited.data.size()," ",vDir.size())
+	for i in range(visited.data.size()):
+		var pPos = tm.map_to_world(visited.data[i])
+		var push = PSHR.instance()
+		push.create(pPos,vDir[i])
+		pushers.append(push)
+		add_child(push,true)
+		if debug:
+			if vDir[i].x == 1:
+				ef.set_cellv(visited.data[i],4)
+			elif vDir[i].x == -1:
+				ef.set_cellv(visited.data[i],6)
+			elif vDir[i].y == -1:
+				ef.set_cellv(visited.data[i],3)
+			elif vDir[i].y == 1:
+				ef.set_cellv(visited.data[i],5)
+		else:
+			if vDir[i].x != 0:
+				ef.set_cellv(visited.data[i],hp)
+			else:
+				ef.set_cellv(visited.data[i],vp)
+
+# Recursive flood function that spreads down a tile
+#	pos - Position of current tile
+#	dir - Direction of current tile
+func dfs_flood(pos:Vector2,dir:Vector2):
+	visited.add(pos)
+	var normal = Vector2(dir.y,dir.x)
+	for i in range(1,3):
+		if tm.get_cellv(pos+(dir*i)) == dg:
+			if visited.contains(pos+(dir*i)):
+				return
+			else:
+				vDir.append(dir)
+				dfs_flood(pos+(dir*i),dir)
+		if tm.get_cellv(pos+(normal*i)) == dg:
+			if visited.contains(pos+(normal*i)):
+				return
+			else:
+				vDir.append(normal)
+				dfs_flood(pos+(normal*i),normal)
+		if tm.get_cellv(pos-(normal*i)) == dg:
+			if visited.contains(pos-(normal*i)):
+				return
+			else:
+				vDir.append(-normal)
+				dfs_flood(pos-(normal*i),-normal)
+
 # Cleanup function that destroys all children and this node
 func purge():
 	for pusher in pushers:

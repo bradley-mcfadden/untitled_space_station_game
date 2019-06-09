@@ -15,6 +15,8 @@ onready var edgeSet = UnsortedSet.new()
 onready var platforms = []
 onready var Effects = $Effects
 onready var pushers:Array
+onready var dg:int
+onready var rg:int
 const MIN_WIDTH = 15
 const MIN_HEIGHT = 15
 const MAX_WIDTH = 45
@@ -22,6 +24,8 @@ const MAX_HEIGHT = 20
 
 # Init
 func _ready():
+	dg = tile_set.find_tile_by_name("DarkPurpleBrick")
+	rg = tile_set.find_tile_by_name("RedBrick")
 	randomize()
 	for i in range(roomAttempts/batch):
 		generate_rooms()
@@ -31,9 +35,6 @@ func _ready():
 
 # Generate non-overlapping rooms
 func generate_rooms():
-	var w
-	var h 
-	var p
 	# Generate rooms along grid
 	for i in range(batch):
     	rooms.append(regular_room())
@@ -193,49 +194,49 @@ func generate_platforms():
 # Finds room target is inside. Opens all hallways connected to room.
 #	position - Position vector of target
 func open_doors(position:Vector2):
+	get_parent().start_hall_timer()
 	for pusher in pushers:
 		pusher.purge()
 		pusher.queue_free()
 	pushers = []
 	$Effects.clear()
 		
-	var currentRoom:Rect
-	var tpos = world_to_map(position)
-	for room in rooms:
-		if room.is_target_inside(tpos):
-			currentRoom = room
-			break
-	# else, player is in an edge, so give them boost
-	var doors = []
-	
+	var currentRoom = find_player(position)
 	var d = []
 	var dn = []
 	for edge in edgeSet.data:
-		edge.image_empty(self,true)
+		edge.image_empty(self,false)
 		if edge.contains(currentRoom):
-			edge.image_empty(self,false)
+			#edge.image_empty(self,false)
 			d.append(edge.get_doors(currentRoom))
 			dn.append(edge.get_door_normals(currentRoom))
 	if d != null:
 		for i in range(d.size()):
-			var hall = []
-			for j in range(2):
-				var pf = PF.instance()
-				if dn[i].x != 0:
-					pf.tmps = Vector2(d[i].x,d[i].y+j)
-				else:
-					pf.tmps = Vector2(d[i].x+j,d[i].y)
-				pf.dir = dn[i]
-				hall.append(pf)
-				pushers.append(pf)
-				add_child(pf)
-			while !(!hall[0].flood() && !hall[1].flood()):
-				pass
+			var pf = PF.instance()
+			pf.tmps = d[i]
+			pf.dir = dn[i]
+			pushers.append(pf)
+			add_child(pf)
+			pf.dfs_spread(dg)
+			var pf2 = PF.instance()
+			if dn[i].x != 0:
+				pf2.tmps = Vector2(d[i].x,d[i].y+1)
+			else:
+				pf2.tmps = Vector2(d[i].x+1,d[i].y)
+			pf2.dir = dn[i]
+			pushers.append(pf2)
+			add_child(pf2)
+			pf2.dfs_spread(rg)
 					
 	for room in rooms:
 		room.image_int(self)
 		for plat in platforms:
 			plat.image(self)
+
+# Shuts every door in the edge set.
+func close_doors():
+	for edge in edgeSet.data:
+		edge.image_empty(self,true)
 
 # Generate a room on a grid of sorts, each room is the median size,
 # edges will always be pretty this way.
@@ -258,3 +259,14 @@ func irregular_room() -> Rect:
 				 int(rand_range(0,cell_counth-h)))
 	return Rect.new(w,h,p)
 	
+# Determines where the player is and returns it as a Rect
+#	position - Player's world position
+#	return - Rect of where Player is, or null if player is in a hallway
+func find_player(position:Vector2):
+	var currentRoom:Rect = null
+	var tpos = world_to_map(position)
+	for room in rooms:
+		if room.is_target_inside(tpos):
+			currentRoom = room
+			break
+	return currentRoom

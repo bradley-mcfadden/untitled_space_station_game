@@ -125,7 +125,7 @@ func image_empty(tm:TileMap,doorsClosed:bool):
 						tm.set_cell(i,a.low.y+(a.ysize/2)+1,10)
 				else:
 					tm.set_cell(i,a.low.y+(a.ysize/2),2)
-					tm.set_cell(i,a.low.y+(a.ysize/2)+1,2)
+					tm.set_cell(i,a.low.y+(a.ysize/2)+1,11)
 		elif a.low.y < b.low.y:
 			# print("Case 2")
 			for i in range(a.low.x+(a.xsize/2),b.low.x+1):
@@ -138,7 +138,7 @@ func image_empty(tm:TileMap,doorsClosed:bool):
 						tm.set_cell(i,b.low.y+(b.ysize/2)+1,10)
 				else:
 					tm.set_cell(i,b.low.y+(b.ysize/2),2)
-					tm.set_cell(i,b.low.y+(b.ysize/2)+1,2)
+					tm.set_cell(i,b.low.y+(b.ysize/2)+1,11)
 			for i in range(a.high.y,b.low.y+(b.ysize/2)):
 				if i == a.high.y:
 					if doorsClosed:
@@ -149,7 +149,7 @@ func image_empty(tm:TileMap,doorsClosed:bool):
 						tm.set_cell(a.low.x+(a.xsize/2)+1,i,9)
 				else:
 					tm.set_cell(a.low.x+(a.xsize/2),i,2)
-					tm.set_cell(a.low.x+(a.xsize/2)+1,i,2)
+					tm.set_cell(a.low.x+(a.xsize/2)+1,i,11)
 		elif a.low.y > b.low.y:
 			# print("Case 3")
 			for i in range(a.low.x+(a.xsize/2),b.low.x+1):
@@ -162,7 +162,7 @@ func image_empty(tm:TileMap,doorsClosed:bool):
 						tm.set_cell(i,b.low.y+(b.ysize/2)+1,10)
 				else:
 					tm.set_cell(i,b.low.y+(b.ysize/2),2)
-					tm.set_cell(i,b.low.y+(b.ysize/2)+1,2)
+					tm.set_cell(i,b.low.y+(b.ysize/2)+1,11)
 			for i in range(b.low.y+(b.ysize/2),a.low.y+1):
 				if i == a.low.y:
 					if doorsClosed:
@@ -173,7 +173,7 @@ func image_empty(tm:TileMap,doorsClosed:bool):
 						tm.set_cell(a.low.x+(a.xsize/2)+1,i,9)
 				else:
 					tm.set_cell(a.low.x+(a.xsize/2),i,2)
-					tm.set_cell(a.low.x+(a.xsize/2)+1,i,2)
+					tm.set_cell(a.low.x+(a.xsize/2)+1,i,11)
 		else:
 			pass
 	elif a.low.x > b.low.x:
@@ -191,7 +191,7 @@ func image_empty(tm:TileMap,doorsClosed:bool):
 						tm.set_cell(i,a.low.y+(a.ysize/2)+1,10)
 				else:
 					tm.set_cell(i,a.low.y+(a.ysize/2),2)
-					tm.set_cell(i,a.low.y+(a.ysize/2)+1,2)
+					tm.set_cell(i,a.low.y+(a.ysize/2)+1,11)
 			for i in range(a.low.y+(a.ysize/2),b.low.y+1):
 				if i == b.low.y:
 					if doorsClosed:
@@ -202,7 +202,7 @@ func image_empty(tm:TileMap,doorsClosed:bool):
 						tm.set_cell(b.low.x+(b.xsize/2)+1,i,9)
 				else:
 					tm.set_cell(b.low.x+(b.xsize/2),i,2)
-					tm.set_cell(b.low.x+(b.xsize/2)+1,i,2)
+					tm.set_cell(b.low.x+(b.xsize/2)+1,i,11)
 		elif a.low.y - b.low.y > 0:
 			pass
 	elif a.low.x == b.low.x:
@@ -218,7 +218,7 @@ func image_empty(tm:TileMap,doorsClosed:bool):
 						tm.set_cell(a.low.x+(a.xsize/2)+1,i,9)
 				else:
 					tm.set_cell(a.low.x+(a.xsize/2),i,2)
-					tm.set_cell(a.low.x+(a.xsize/2)+1,i,2)
+					tm.set_cell(a.low.x+(a.xsize/2)+1,i,11)
 			
 
 # Draws the walls of the edges to an impassable tile
