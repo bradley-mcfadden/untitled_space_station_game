@@ -4,7 +4,7 @@ export var damage:int
 export var movespeed:int
 signal hit(damage)
 const GRAVITY = 450
-onready var direction = -1
+export var direction = -1
 onready var velocity:Vector2
 onready var spriteAnim:AnimatedSprite
 onready var collisionShape:CollisionShape2D

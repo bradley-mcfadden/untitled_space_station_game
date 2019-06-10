@@ -5,6 +5,7 @@ var Point = load("res://Scripts/Point.gd")
 var Edge = load("res://Scripts/Edge.gd")
 var Rect = load("res://Scripts/Rect.gd")
 var PF = load("res://Scenes/PusherFactory.tscn")
+var Room1 = preload("res://PresetRooms/Room1.tscn")
 
 export var cell_countw:int
 export var cell_counth:int
@@ -158,14 +159,18 @@ func display():
 	for edge in edgeSet.data:
 		edge.image_empty(self,true)
 	for room in rooms:
+		var r1 = Room1.instance()
 		room.image_int(self)
-	for plat in platforms:
-		plat.image(self)
+		r1.position = map_to_world(Vector2(room.low.x+1,room.low.y+1))
+		add_child(r1)
+	# for plat in platforms:
+		# plat.image(self)
 
 # Returns the midpoint of some arbitrary room
 # return - Vector2 spawn point
 func arbitrary_room() -> Vector2:
 	var t = int(rand_range(0,rooms.size()))
+	# Set t to be a spawn room
 	var spawn = Vector2((rooms[t].xsize/2)+rooms[t].low.x,
 						(rooms[t].ysize/2)+rooms[t].low.y)
 	spawn *= 32
@@ -230,8 +235,8 @@ func open_doors(position:Vector2):
 					
 	for room in rooms:
 		room.image_int(self)
-		for plat in platforms:
-			plat.image(self)
+		# for plat in platforms:
+			# plat.image(self)
 
 # Shuts every door in the edge set.
 func close_doors():

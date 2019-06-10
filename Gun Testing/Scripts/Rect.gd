@@ -8,6 +8,8 @@ var ysize:int
 var overlap = false
 var prefab:int
 var border 
+var type = 1
+# var room = load("res://Scenes/Room1.tscn")
 
 # Create a new Rect
 #	xsize - Width of the rect
@@ -115,7 +117,7 @@ func image_int(tm:TileMap):
 		for j in range(low.y,high.y+1):
 			if i > low.x and i < high.x and j > low.y and j < high.y:
 				tm.set_cell(i,j,1)
-
+				
 # Determines whether or not position vector given is inside bounds of rect
 #	position - Target to check
 #	return - Was the target found?
