@@ -1,15 +1,15 @@
 extends Node
-
+onready var Player = $Player
 var rob = preload("res://Scenes/Robot.tscn")
 #onready var Robot = $Robot
 
 # Init
 func _ready():
-	$Player.position = $RoomGenerator.arbitrary_room()
+	Player.position = $RoomGenerator.arbitrary_room()
 	
 # Reset player position, enemies, etc
 func new_game():
-	$Player.start()
+	Player.start()
 	$Player/HUD/DeathLabel.visible = false
 	$Player/HUD/RestartButton.visible = false
 	# spawn_robot()
@@ -49,6 +49,7 @@ func update_tiles():
 # Method so that children can start hall timer.
 func start_hall_timer():
 	$HallTimer.start()
+	Player.toggle_damping()
 	
 # Event handler for when hall time runs out.
 # Closes all doors if player is in a room
@@ -56,3 +57,4 @@ func _on_HallTimer_timeout():
 	if $RoomGenerator.find_player($Player.position) != null:
 		$HallTimer.stop()
 		$RoomGenerator.close_doors()
+		Player.toggle_damping()

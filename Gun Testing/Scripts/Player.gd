@@ -2,9 +2,10 @@
 extends KinematicBody2D
 class_name Player
 export var movespeed = 24
-const JUMP_POWER = 400
-const GRAVITY = 420
+const GRAVITY = 450
 const MAX_HEALTH = 100
+const ROOM_JUMP = 350
+const EDGE_JUMP = 450
 onready var velocity = Vector2()
 onready var jumping = false
 onready var SMG = load("res://Scripts/SMG.gd")
@@ -18,6 +19,8 @@ onready var coins:int
 onready var health:int 
 onready var hitShield = false
 onready var direction = 1
+onready var linearDamping = 0.90
+onready var jumpPower = 350
 #class_name Player
 
 # Init
@@ -43,15 +46,15 @@ func _physics_process(delta):
 		if (!is_on_floor()):
 			velocity.y += delta * GRAVITY
 		if (is_on_floor() and Input.is_action_pressed("ui_up")):
-			velocity.y = -JUMP_POWER*1.15
+			velocity.y = -jumpPower*1.15
 		if (Input.is_action_pressed("ui_left") and velocity.x-movespeed > -200):
 			velocity.x -= movespeed
 			$AnimatedSprite.play("walk")
 		elif (Input.is_action_pressed("ui_right") and velocity.x+movespeed < 200):
 			velocity.x += movespeed
 			$AnimatedSprite.play("walk")
-		#else:
-		#	velocity.x *= 0.90
+		else:
+			velocity.x *= linearDamping
 		if velocity.x == 0:
 			$AnimatedSprite.play("idle")
 		elif abs(velocity.x) < 10:
@@ -120,3 +123,15 @@ func take_damage(damage:int, norm:Vector2):
 # Event handler for expiry of damage timer
 func _on_DamageTimer_timeout():
 	hitShield = false
+
+# Toggles linear damping on or off and increases jump power when damping is off
+func toggle_damping():
+	if linearDamping == 1:
+		linearDamping = 0.9
+	else:
+		linearDamping = 1
+	if jumpPower == EDGE_JUMP:
+		jumpPower = ROOM_JUMP
+	else:
+		jumpPower = EDGE_JUMP 
+	# print("called"," ",linearDamping," ",jumpPower)
