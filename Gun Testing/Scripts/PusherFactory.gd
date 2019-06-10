@@ -60,19 +60,19 @@ func dfs_flood(pos:Vector2,dir:Vector2):
 	for i in range(1,3):
 		if tm.get_cellv(pos+(dir*i)) == dg:
 			if visited.contains(pos+(dir*i)):
-				return
+				pass
 			else:
 				vDir.append(dir)
 				dfs_flood(pos+(dir*i),dir)
 		if tm.get_cellv(pos+(normal*i)) == dg:
 			if visited.contains(pos+(normal*i)):
-				return
+				pass
 			else:
 				vDir.append(normal)
 				dfs_flood(pos+(normal*i),normal)
 		if tm.get_cellv(pos-(normal*i)) == dg:
 			if visited.contains(pos-(normal*i)):
-				return
+				pass
 			else:
 				vDir.append(-normal)
 				dfs_flood(pos-(normal*i),-normal)

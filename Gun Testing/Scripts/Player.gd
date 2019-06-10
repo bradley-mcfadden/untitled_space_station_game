@@ -1,3 +1,4 @@
+# when player is not in room, get rid of damping 
 extends KinematicBody2D
 class_name Player
 export var movespeed = 24

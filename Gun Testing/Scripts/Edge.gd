@@ -39,7 +39,7 @@ func to_string() -> String:
 #	r - Room to check
 #	return - Normal of doorway
 func get_door_normals(r:Rect) -> Vector2:
-	if a.low.x - b.low.x < 0:
+	if a.low.x < b.low.x:
 		# Case 1
 		if a.low.y == b.low.y  && a.equals(r):
 			return Vector2(1,0)
@@ -51,17 +51,20 @@ func get_door_normals(r:Rect) -> Vector2:
 			return Vector2(0,-1)
 		else:
 			return Vector2(-1,0)
-	elif a.low.x - b.low.x > 0:
-		# Case 4 - DOUBT
-		if b.low.y == a.low.y && a.equals(r):
-			return Vector2(-1,0)
-		# Case 5
-		elif a.low.y - b.low.y < 0 && a.equals(r):
-			return Vector2(-1,0)
-		# Case 6 - DOUBT
-		elif a.equals(r):
-			return Vector2(0,-1)
+	elif a.low.x > b.low.x:
+		if a.equals(r):
+			# Case 4 - DOUBT
+			if b.low.y == a.low.y:
+				return Vector2(-1,0)
+			# Case 5
+			elif a.low.y < b.low.y:
+				return Vector2(-1,0)
+			# Case 6 - DOUBT
+			else:
+				return Vector2(0,-1)
 		else:
+			if a.low.y < b.low.y:
+				return Vector2(0,-1)
 			return Vector2(1,0)
 	else:
 		# Case 7
@@ -114,7 +117,7 @@ func get_doors(r:Rect) -> Vector2:
 func image_empty(tm:TileMap,doorsClosed:bool):
 	if a.low.x < b.low.x:
 		if a.low.y == b.low.y:
-			# print("Case 1")
+			print("Case 1")
 			for i in range(a.high.x,b.low.x+1):
 				if i == a.high.x || i == b.low.x:
 					if doorsClosed:
@@ -127,7 +130,7 @@ func image_empty(tm:TileMap,doorsClosed:bool):
 					tm.set_cell(i,a.low.y+(a.ysize/2),2)
 					tm.set_cell(i,a.low.y+(a.ysize/2)+1,11)
 		elif a.low.y < b.low.y:
-			# print("Case 2")
+			print("Case 2")
 			for i in range(a.low.x+(a.xsize/2),b.low.x+1):
 				if i == b.low.x:
 					if doorsClosed:
@@ -151,7 +154,7 @@ func image_empty(tm:TileMap,doorsClosed:bool):
 					tm.set_cell(a.low.x+(a.xsize/2),i,2)
 					tm.set_cell(a.low.x+(a.xsize/2)+1,i,11)
 		elif a.low.y > b.low.y:
-			# print("Case 3")
+			print("Case 3")
 			for i in range(a.low.x+(a.xsize/2),b.low.x+1):
 				if i == b.low.x:
 					if doorsClosed:
@@ -180,7 +183,7 @@ func image_empty(tm:TileMap,doorsClosed:bool):
 		if b.low.y == a.low.y:
 			pass
 		elif a.low.y - b.low.y < 0:
-			# print("Case 5")
+			print("Case 5")
 			for i in range(b.low.x+(b.xsize/2),a.low.x+1):
 				if i == a.low.x:
 					if doorsClosed:
@@ -206,7 +209,7 @@ func image_empty(tm:TileMap,doorsClosed:bool):
 		elif a.low.y - b.low.y > 0:
 			pass
 	elif a.low.x == b.low.x:
-		# print("Case 7")
+		print("Case 7")
 		if a.low.y < b.low.y:
 			for i in range(a.high.y,b.low.y+1):
 				if i == a.high.y || i == b.low.y:
