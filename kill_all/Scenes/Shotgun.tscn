@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Scripts/Shotgun.gd" type="Script" id=1]
+
+[node name="Shotgun" type="AnimatedSprite"]
+centered = false
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="ReloadTimer" type="Timer" parent="."]
+
+[node name="RateofFireTimer" type="Timer" parent="."]
+
