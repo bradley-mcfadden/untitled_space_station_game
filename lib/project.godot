@@ -74,7 +74,7 @@ _global_script_class_icons={
 
 [application]
 
-config/name="Gun Testing"
+config/name="/kill_all"
 run/main_scene="res://Scenes/Main.tscn"
 boot_splash/image="res://SpaceManSprites/Spaceman-SpritesA1.png"
 config/icon="res://SpaceManSprites/Spaceman-Sprites1.png"
