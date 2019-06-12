@@ -6,6 +6,10 @@ onready var type:int
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	var x = get_parent().get_parent().get_parent()
+	if x is Node:
+		self.connect("chest_entered",x,"_on_Chest_Entered")
+		
 	randomize()
 	var rng = rand_range(0,1)
 	if rng < 0.35:
@@ -21,10 +25,8 @@ func _ready():
 	# print(rng," ",type)
 	$AnimatedSprite.animation = str(type)
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
-
-
+# Event handler for when chest is passed through
+#	body - What passed through it?
 func _on_Chest_body_entered(body):
-	pass # Replace with function body.
+	if body is Player:
+		emit_signal("chest_entered",position,type)
