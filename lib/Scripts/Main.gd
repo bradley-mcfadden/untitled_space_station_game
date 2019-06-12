@@ -5,7 +5,7 @@ var rob = preload("res://Scenes/Robot.tscn")
 
 # Init
 func _ready():
-	Player.position = $RoomGenerator.arbitrary_room()
+	Player.position = $RoomGenerator.spawn_room()
 	
 # Reset player position, enemies, etc
 func new_game():
@@ -58,3 +58,9 @@ func _on_HallTimer_timeout():
 		$HallTimer.stop()
 		$RoomGenerator.close_doors()
 		Player.toggle_damping()
+
+# Event handler for a chest being opened.
+#	pos - Position of chest.
+#	lootPool - Tier of the chest, determines what can drop from it.
+func _on_Chest_Entered(pos:Vector2,lootPool:int):
+	pass
