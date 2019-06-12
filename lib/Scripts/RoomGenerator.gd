@@ -6,11 +6,14 @@ var Edge = load("res://Scripts/Edge.gd")
 var Rect = load("res://Scripts/Rect.gd")
 var PF = load("res://Scenes/PusherFactory.tscn")
 var Room1 = preload("res://PresetRooms/Room1.tscn")
+var ChestRoom = preload("res://PresetRooms/ChestRoom.tscn")
+var SpawnRoom = preload("res://PresetRooms/SpawnRoom.tscn")
+onready var RoomScenes = [SpawnRoom,ChestRoom,Room1]
 
 export var cell_countw:int
 export var cell_counth:int
-export var roomAttempts = 2
-export var batch = 2
+export var roomAttempts = 20
+export var batch = 20
 onready var rooms = []
 onready var edgeSet = UnsortedSet.new()
 onready var platforms = []
@@ -30,8 +33,10 @@ func _ready():
 	randomize()
 	for i in range(roomAttempts/batch):
 		generate_rooms()
+	rooms[0].type = 0
+	for i in range(2):
+		rooms[i+1].type = 1
 	connect_rooms()
-	generate_platforms()
 	display()
 
 # Generate non-overlapping rooms
@@ -42,6 +47,7 @@ func generate_rooms():
 	# Mark rooms that overlap with rooms not marked as overlapping
 	for i in range(rooms.size()):
 		var current = rooms[i]
+		rooms[i].type = 2
 		for j in range(rooms.size()):
 			if i == j:
 				continue
@@ -81,6 +87,7 @@ func connect_rooms():
 			adjMatrix[i].append(0)
 
 	for i in range(rooms.size()-1):
+		# rooms[i].type = 1
 		while true:
 			var minPos = kruskal(adjMatrix,weightMatrix)
 			adjMatrix[minPos[0]][minPos[1]] = 1
@@ -159,12 +166,21 @@ func display():
 	for edge in edgeSet.data:
 		edge.image_empty(self,true)
 	for room in rooms:
-		var r1 = Room1.instance()
+		var r1 = RoomScenes[room.type].instance()
+		# print(room.type)
 		room.image_int(self)
 		r1.position = map_to_world(Vector2(room.low.x+1,room.low.y+1))
 		add_child(r1)
 	# for plat in platforms:
 		# plat.image(self)
+
+# Returns the cneter of the room of type 0. This room has no enemies.
+#	return - Location of spawn room.
+func spawn_room() -> Vector2:
+	var spawn = Vector2((rooms[0].xsize/2) + rooms[0].low.x,
+						(rooms[0].ysize/2) + rooms[0].low.y)
+	spawn *= 32 
+	return spawn
 
 # Returns the midpoint of some arbitrary room
 # return - Vector2 spawn point
