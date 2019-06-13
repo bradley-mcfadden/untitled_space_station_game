@@ -63,4 +63,13 @@ func _on_HallTimer_timeout():
 #	pos - Position of chest.
 #	lootPool - Tier of the chest, determines what can drop from it.
 func _on_Chest_Entered(pos:Vector2,lootPool:int):
-	pass
+	if lootPool == Chest.WHITE:
+		pass
+	elif lootPool == Chest.GREEN:
+		pass
+	elif lootPool == Chest.BLUE:
+		pass
+	elif lootPool == Chest.PURPLE:
+		pass
+	elif lootPool == Chest.ORANGE:
+		pass

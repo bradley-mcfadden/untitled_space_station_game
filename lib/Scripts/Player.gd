@@ -21,6 +21,7 @@ onready var hitShield = false
 onready var direction = 1
 onready var linearDamping = 0.90
 onready var jumpPower = 350
+onready var items = []
 #class_name Player
 
 # Init
@@ -135,3 +136,7 @@ func toggle_damping():
 	else:
 		jumpPower = EDGE_JUMP 
 	# print("called"," ",linearDamping," ",jumpPower)
+
+func add_item(i:Item):
+	items.append(i)
+	$HUD.add_item(i)

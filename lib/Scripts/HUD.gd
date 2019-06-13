@@ -26,4 +26,9 @@ func _on_weaponSwap(weapon:Gun):
 #	Gun to take properties from	
 func _on_updateGun(weapon:Gun):
 	$AmmoLabel.text = str(weapon.actualBullets) +"\n"+str(weapon.clipSize)
+
+#Takes an item, and adds it to the GUI of the player inventory
+func add_item(i:Item):
+	var texture = TextureRect.new()
+	texture.texture = i.image
 	

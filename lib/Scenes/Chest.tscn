@@ -1,6 +1,6 @@
 [gd_scene load_steps=9 format=2]
 
-[ext_resource path="res://Chest.gd" type="Script" id=1]
+[ext_resource path="res://Scripts/Chest.gd" type="Script" id=1]
 [ext_resource path="res://Tiles/Tile18.png" type="Texture" id=2]
 [ext_resource path="res://Tiles/Tile30.png" type="Texture" id=3]
 [ext_resource path="res://Tiles/Tile29.png" type="Texture" id=4]
