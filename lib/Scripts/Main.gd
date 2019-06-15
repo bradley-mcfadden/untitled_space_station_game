@@ -1,7 +1,7 @@
 extends Node
 onready var Player = $Player
 var rob = preload("res://Scenes/Robot.tscn")
-#onready var Robot = $Robot
+var lootPoolWHITE = [preload("res://Scenes/TwoPercent.tscn")]
 
 # Init
 func _ready():
@@ -62,7 +62,7 @@ func _on_HallTimer_timeout():
 # Event handler for a chest being opened.
 #	pos - Position of chest.
 #	lootPool - Tier of the chest, determines what can drop from it.
-func _on_Chest_Entered(pos:Vector2,lootPool:int):
+func _on_Chest_Entered(chest:Chest,pos:Vector2,lootPool:int):
 	if lootPool == Chest.WHITE:
 		pass
 	elif lootPool == Chest.GREEN:
@@ -73,3 +73,5 @@ func _on_Chest_Entered(pos:Vector2,lootPool:int):
 		pass
 	elif lootPool == Chest.ORANGE:
 		pass
+	Player.add_item(lootPoolWHITE[0].instance())
+	chest.disconnect("chest_entered",self,"_on_Chest_Entered")
