@@ -1,7 +1,7 @@
 extends Area2D
 class_name Chest
 enum {WHITE,GREEN,BLUE,PURPLE,ORANGE}
-signal chest_entered(pos,lootPool)
+signal chest_entered(chest,pos,lootPool)
 onready var type:int
 
 # Called when the node enters the scene tree for the first time.
@@ -29,4 +29,4 @@ func _ready():
 #	body - What passed through it?
 func _on_Chest_body_entered(body):
 	if body is Player:
-		emit_signal("chest_entered",position,type)
+		emit_signal("chest_entered",self,position,type)
