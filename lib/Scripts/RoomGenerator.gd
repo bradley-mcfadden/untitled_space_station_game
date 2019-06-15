@@ -14,6 +14,7 @@ export var cell_countw:int
 export var cell_counth:int
 export var roomAttempts = 20
 export var batch = 20
+export var chest_rooms = 5
 onready var rooms = []
 onready var edgeSet = UnsortedSet.new()
 onready var platforms = []
@@ -34,7 +35,7 @@ func _ready():
 	for i in range(roomAttempts/batch):
 		generate_rooms()
 	rooms[0].type = 0
-	for i in range(2):
+	for i in range(chest_rooms):
 		rooms[i+1].type = 1
 	connect_rooms()
 	display()

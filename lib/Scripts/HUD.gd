@@ -2,14 +2,17 @@ extends CanvasLayer
 
 # Init
 func _ready():
-	$HealthBar.value = get_parent().MAX_HEALTH
+	$HealthBar.value = get_parent().max_health
 	$CoinCountLabel.text = str(get_parent().coins)
 	$RestartButton.connect("pressed", get_parent().get_parent(),"new_game")
+	$HealthLabel.text = str(get_parent().health)+"/"+str(get_parent().max_health)
 
 # Update the progress of the health bar
 #	health - New health value
-func healthUpdate(health:int):
+func health_update(health:int,maxHealth=0):
+	$HealthBar.max_value += maxHealth
 	$HealthBar.value = health
+	$HealthLabel.text = str(get_parent().health)+"/"+str(get_parent().max_health)
 
 # Replaces the image in the gun image
 #	Gun to set image to
@@ -27,8 +30,18 @@ func _on_weaponSwap(weapon:Gun):
 func _on_updateGun(weapon:Gun):
 	$AmmoLabel.text = str(weapon.actualBullets) +"\n"+str(weapon.clipSize)
 
-#Takes an item, and adds it to the GUI of the player inventory
+# Takes an item, and adds it to the GUI of the player inventory
+#	i - Item reference
 func add_item(i:Item):
 	var texture = TextureRect.new()
-	texture.texture = i.image
+	texture.rect_position.x = 16 + ($Inventory.WIDTH/13)*($Inventory.items.size()%12)
+	texture.rect_position.y += 16 + ($Inventory.HEIGHT/2)*($Inventory.items.size()/12)
+	$Inventory.items.append(texture)
+	texture.texture = i.texture
+	# texture.rect_position = $Inventory.position
+	$Inventory.add_child(texture)
+	# texture.rect_position.y += $Inventory.HEIGHT/4
+	# print($LifeLabel.rect_global_position)
+	# print($Inventory.global_position)
+	# print(texture.rect_global_position)
 	
