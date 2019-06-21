@@ -8,7 +8,7 @@ var ysize:int
 var overlap = false
 var prefab:int
 var border 
-var type = 1
+var type:int
 # var room = load("res://Scenes/Room1.tscn")
 
 # Create a new Rect

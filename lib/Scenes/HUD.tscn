@@ -1,9 +1,11 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Scripts/HUD.gd" type="Script" id=1]
 [ext_resource path="res://Fonts/CourierBoldItalic.tres" type="DynamicFont" id=2]
-[ext_resource path="res://UISprites/coins.png" type="Texture" id=3]
-[ext_resource path="res://Fonts/CourierBoldSmaller.tres" type="DynamicFont" id=4]
+[ext_resource path="res://Fonts/CourierBoldSmallest.tres" type="DynamicFont" id=3]
+[ext_resource path="res://UISprites/coins.png" type="Texture" id=4]
+[ext_resource path="res://Fonts/CourierBoldSmaller.tres" type="DynamicFont" id=5]
+[ext_resource path="res://Scripts/Inventory.gd" type="Script" id=6]
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0.0862745, 0.0666667, 0.0666667, 1 )
@@ -1184,7 +1186,7 @@ margin_top = 10.0
 margin_right = 805.0
 margin_bottom = 139.0
 custom_fonts/font = ExtResource( 2 )
-text = "ITEMS
+text = "INVENTORY
 "
 align = 1
 
@@ -1220,15 +1222,25 @@ hint_tooltip = "lkkkkk
 theme = SubResource( 3 )
 custom_fonts/font = ExtResource( 2 )
 custom_colors/font_color = Color( 1, 0, 0, 1 )
+step = 1.0
 value = 80.0
 percent_visible = false
+
+[node name="HealthLabel" type="Label" parent="."]
+margin_left = 110.0
+margin_top = 52.0
+margin_right = 234.0
+margin_bottom = 85.0
+custom_fonts/font = ExtResource( 3 )
+text = "font"
+align = 1
 
 [node name="CoinTexture" type="TextureRect" parent="."]
 margin_left = 1280.0
 margin_top = 40.0
 margin_right = 1320.0
 margin_bottom = 80.0
-texture = ExtResource( 3 )
+texture = ExtResource( 4 )
 
 [node name="CoinCountLabel" type="Label" parent="."]
 margin_left = 1300.0
@@ -1253,7 +1265,7 @@ margin_left = 1320.0
 margin_top = 670.0
 margin_right = 1445.0
 margin_bottom = 739.0
-custom_fonts/font = ExtResource( 4 )
+custom_fonts/font = ExtResource( 5 )
 text = "50
 60"
 align = 1
@@ -1280,4 +1292,11 @@ grow_horizontal = 2
 grow_vertical = 0
 custom_fonts/font = ExtResource( 2 )
 text = "Restart?"
+
+[node name="Inventory" type="Polygon2D" parent="."]
+position = Vector2( 384, 32 )
+color = Color( 0.847059, 0.741176, 0.866667, 0.0980392 )
+invert_border = 0.1
+polygon = PoolVector2Array( 0, 0, 768, 0, 768, 128, 0, 128 )
+script = ExtResource( 6 )
 

@@ -1,18 +1,18 @@
 extends Node
 onready var Player = $Player
 var rob = preload("res://Scenes/Robot.tscn")
-#onready var Robot = $Robot
+var lootPoolWHITE = [preload("res://Scenes/TwoPercent.tscn")]
 
 # Init
 func _ready():
-	Player.position = $RoomGenerator.arbitrary_room()
+	Player.position = $RoomGenerator.spawn_room()
 	
 # Reset player position, enemies, etc
 func new_game():
-	Player.start()
+	$RoomGenerator.generate_dungeon()
+	Player.start($RoomGenerator.spawn_room())
 	$Player/HUD/DeathLabel.visible = false
 	$Player/HUD/RestartButton.visible = false
-	# spawn_robot()
 	
 # Called when character dies
 func game_over():
@@ -58,3 +58,20 @@ func _on_HallTimer_timeout():
 		$HallTimer.stop()
 		$RoomGenerator.close_doors()
 		Player.toggle_damping()
+
+# Event handler for a chest being opened.
+#	pos - Position of chest.
+#	lootPool - Tier of the chest, determines what can drop from it.
+func _on_Chest_Entered(chest:Chest,pos:Vector2,lootPool:int):
+	if lootPool == Chest.WHITE:
+		pass
+	elif lootPool == Chest.GREEN:
+		pass
+	elif lootPool == Chest.BLUE:
+		pass
+	elif lootPool == Chest.PURPLE:
+		pass
+	elif lootPool == Chest.ORANGE:
+		pass
+	Player.add_item(lootPoolWHITE[0].instance())
+	chest.disconnect("chest_entered",self,"_on_Chest_Entered")
