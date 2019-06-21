@@ -9,10 +9,10 @@ func _ready():
 	
 # Reset player position, enemies, etc
 func new_game():
-	Player.start()
+	$RoomGenerator.generate_dungeon()
+	Player.start($RoomGenerator.spawn_room())
 	$Player/HUD/DeathLabel.visible = false
 	$Player/HUD/RestartButton.visible = false
-	# spawn_robot()
 	
 # Called when character dies
 func game_over():
