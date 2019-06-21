@@ -3,6 +3,7 @@ extends KinematicBody2D
 class_name Player
 export var movespeed = 24
 const GRAVITY = 450
+const STARTING_HEALTH = 100
 var max_health = 100
 const ROOM_JUMP = 350
 const EDGE_JUMP = 450
@@ -27,16 +28,17 @@ onready var HUD
 
 # Init
 func _ready():
-	start()
+	start(Vector2(0,0))
 	HUD = $HUD
 
-# CURRENTLY DEPRECATED
 # Reset player position on death	
-func start():
+# startPosition - Location player starts on respawn
+func start(startPosition:Vector2):
 	coins = 0
 	jumping = false
 	hitShield = false
-	position = Vector2(130,34)
+	self.position = startPosition
+	max_health = STARTING_HEALTH
 	health = max_health
 	$HUD.health_update(health)
 	$DamageTimer.start()
