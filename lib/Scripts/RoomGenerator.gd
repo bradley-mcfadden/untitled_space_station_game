@@ -9,7 +9,7 @@ var Room1 = preload("res://PresetRooms/Room1.tscn")
 var ChestRoom = preload("res://PresetRooms/ChestRoom.tscn")
 var SpawnRoom = preload("res://PresetRooms/SpawnRoom.tscn")
 onready var RoomScenes = [SpawnRoom,ChestRoom,Room1]
-
+onready var roomChildren = []
 export var cell_countw:int
 export var cell_counth:int
 export var roomAttempts = 20
@@ -32,6 +32,11 @@ func _ready():
 	dg = tile_set.find_tile_by_name("DarkPurpleBrick")
 	rg = tile_set.find_tile_by_name("RedBrick")
 	randomize()
+	generate_dungeon()
+
+# Generate Dungeon
+func generate_dungeon():
+	reset()
 	for i in range(roomAttempts/batch):
 		generate_rooms()
 	rooms[0].type = 0
@@ -40,6 +45,16 @@ func _ready():
 	connect_rooms()
 	display()
 
+# Initialize arrays and clear tilemap
+func reset():
+	rooms = []
+	edgeSet = UnsortedSet.new()
+	platforms = []
+	for child in roomChildren:
+		child.queue_free()
+	roomChildren = []
+	clear()
+	
 # Generate non-overlapping rooms
 func generate_rooms():
 	# Generate rooms along grid
@@ -172,6 +187,7 @@ func display():
 		room.image_int(self)
 		r1.position = map_to_world(Vector2(room.low.x+1,room.low.y+1))
 		add_child(r1)
+		roomChildren.append(r1)
 	# for plat in platforms:
 		# plat.image(self)
 
