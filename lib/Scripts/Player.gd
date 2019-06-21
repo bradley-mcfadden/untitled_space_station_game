@@ -32,7 +32,7 @@ func _ready():
 	HUD = $HUD
 
 # Reset player position on death	
-# startPosition - Location player starts on respawn
+#	startPosition - Location player starts on respawn
 func start(startPosition:Vector2):
 	coins = 0
 	jumping = false
