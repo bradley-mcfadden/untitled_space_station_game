@@ -23,6 +23,11 @@ func add(t) -> bool:
 		return false
 	data.append(t)
 	return true
+	
+# Grab a random element from the set.
+#	return - Random element from set.
+func grab():
+	return data[int(rand_range(0,data.size()))]
 
 # Calls to_string for every object in the set	
 # return - State of the set

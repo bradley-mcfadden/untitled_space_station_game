@@ -93,6 +93,35 @@ func prim_connect():
 	var root = int(rand_range(0,rooms.size()))
 	var tree = []
 	tree.append(root)
+	while tree.size() < desiredRooms:
+		var neighbours:UnsortedSet
+		if neighbours != null:
+			for i in neighbours.data:
+				var child = int(neighbours.grab())
+				var parent = -1
+				for j in tree:
+					if weightMatrix[child][tree[j]] == GlobalVariables.BORDER:
+						parent = tree[j]
+						adjMatrix[parent][child] = 1
+						adjMatrix[child][parent] = 1
+						if !has_cycle(adjMatrix):
+							var e = Edge.new(rooms[parent],rooms[child])
+							edgeSet.add(e)
+							tree.append(child)
+						else:
+							adjMatrix[parent][child] = 0
+							adjMatrix[child][parent] = 0
+				if parent >= 0:
+					weightMatrix[parent][child] = 100000
+					weightMatrix[child][parent] = 100000
+
+# Return an array of rooms that are GlobalVariables.BORDER away from this one.
+#	adjMatrix - Adjacency matrix of current graph.
+#	weightMatrix - Weighted adjacency matrix.
+#	tree - Current members of tree.
+#	return - Set of all adjacency non-members of tree.
+func get_neighbours(adjMatrix:Array,weightMatrix:Array,tree:Array) -> UnsortedSet:
+	return null
 	
 # Generate non-overlapping rooms
 func generate_rooms():
