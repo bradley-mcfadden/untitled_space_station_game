@@ -3,7 +3,8 @@ extends KinematicBody2D
 class_name Player
 export var movespeed = 24
 const GRAVITY = 450
-const MAX_HEALTH = 100
+const STARTING_HEALTH = 100
+var max_health = 100
 const ROOM_JUMP = 350
 const EDGE_JUMP = 450
 onready var velocity = Vector2()
@@ -21,21 +22,25 @@ onready var hitShield = false
 onready var direction = 1
 onready var linearDamping = 0.90
 onready var jumpPower = 350
+onready var items = []
+onready var HUD
 #class_name Player
 
 # Init
 func _ready():
-	start()
+	start(Vector2(0,0))
+	HUD = $HUD
 
-# CURRENTLY DEPRECATED
 # Reset player position on death	
-func start():
+# startPosition - Location player starts on respawn
+func start(startPosition:Vector2):
 	coins = 0
 	jumping = false
 	hitShield = false
-	position = Vector2(130,34)
-	health = MAX_HEALTH
-	$HUD.healthUpdate(health)
+	self.position = startPosition
+	max_health = STARTING_HEALTH
+	health = max_health
+	$HUD.health_update(health)
 	$DamageTimer.start()
 	$Shotgun.craft()
 	
@@ -117,7 +122,7 @@ func take_damage(damage:int, norm:Vector2):
 			
 		else:
 			health -= damage
-		$HUD.healthUpdate(health)
+		$HUD.health_update(health)
 		move_and_slide(norm)
 
 # Event handler for expiry of damage timer
@@ -135,3 +140,8 @@ func toggle_damping():
 	else:
 		jumpPower = EDGE_JUMP 
 	# print("called"," ",linearDamping," ",jumpPower)
+
+func add_item(i:Item):
+	i.effect(self)
+	items.append(i)
+	$HUD.add_item(i)
