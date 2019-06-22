@@ -63,10 +63,10 @@ func is_inside(r) -> bool:
         && !(low.y <= r.low.y && high.y >= r.low.y && low.x >= r.low.x && low.x <= r.high.x))
         ):
     		return true;
-	high.x += 2
-	high.y += 2
-	r.high.x += 2
-	r.high.y += 2
+	high.x += GlobalVariables.BORDER
+	high.y += GlobalVariables.BORDER
+	r.high.x += GlobalVariables.BORDER
+	r.high.y += GlobalVariables.BORDER
 	if ( 
     !(!(low.x >= r.low.x && high.y <= r.high.y && low.x <= r.high.x && low.y >= r.high.y) 
     && !(low.x >= r.low.x && high.y <= r.high.y && high.x <= r.high.x && low.y >= r.low.y)
@@ -74,15 +74,15 @@ func is_inside(r) -> bool:
     && !(high.y <= r.high.y && high.y >= r.low.y && high.x <= r.high.x && high.x >= r.low.x)
     && !(low.y <= r.low.y && high.y >= r.low.y && low.x >= r.low.x && low.x <= r.high.x))
     ):
-		high.x -= 2
-		high.y -= 2
-		r.high.x -= 2
-		r.high.y -= 2
+		high.x -= GlobalVariables.BORDER
+		high.y -= GlobalVariables.BORDER
+		r.high.x -= GlobalVariables.BORDER
+		r.high.y -= GlobalVariables.BORDER
 		return true
-	high.x -= 2
-	high.y -= 2
-	r.high.x -= 2
-	r.high.y -= 2
+	high.x -= GlobalVariables.BORDER
+	high.y -= GlobalVariables.BORDER
+	r.high.x -= GlobalVariables.BORDER
+	r.high.y -= GlobalVariables.BORDER
 	return false
 
 # Return the state of the room

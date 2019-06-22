@@ -15,6 +15,7 @@ export var cell_counth:int
 export var roomAttempts = 20
 export var batch = 20
 export var chest_rooms = 5
+export var desiredRooms = 25
 onready var rooms = []
 onready var edgeSet = UnsortedSet.new()
 onready var platforms = []
@@ -26,6 +27,9 @@ const MIN_WIDTH = 15
 const MIN_HEIGHT = 15
 const MAX_WIDTH = 45
 const MAX_HEIGHT = 20
+const MEAN_WIDTH = (MIN_WIDTH + MAX_WIDTH)/2
+const MEAN_HEIGHT = (MIN_HEIGHT + MAX_HEIGHT)/2
+const CHANCE_BACK_EDGE = 0.10
 
 # Init
 func _ready():
@@ -54,6 +58,41 @@ func reset():
 		child.queue_free()
 	roomChildren = []
 	clear()
+
+# Generate the Isaac style grid of rooms in complete form
+func isaac_generate():
+	var px = cell_countw / (MEAN_WIDTH+GlobalVariables.BORDER)
+	var py = cell_counth / (MEAN_HEIGHT+GlobalVariables.BORDER)
+	for w in range(px):
+		for h in range(py):
+			var p = Point.new(px,py)
+			rooms.append(Rect.new(w,h,p,true))
+	rooms.shuffle()
+
+# Starting with a random room, create a spanning tree of rooms that 
+# is more weighted around the starting room. Edges never overlap.
+func prim_connect():
+	var weightMatrix = []
+	for i in range(rooms.size()):
+		weightMatrix.append([])
+		for j in range(rooms.size()):
+			weightMatrix[i].append(0)
+		
+	for i in range(weightMatrix.size()):
+		var r = rooms[i]
+		for j in range(weightMatrix[i].size()):
+			if i == j:
+				weightMatrix[i][j] = 1000000
+			else:
+				weightMatrix[i][j] = r.dist(rooms[j])
+	var adjMatrix = []
+	for i in range(rooms.size()):
+		adjMatrix.append([])
+		for j in range(rooms.size()):
+			adjMatrix[i].append(0)
+	var root = int(rand_range(0,rooms.size()))
+	var tree = []
+	tree.append(root)
 	
 # Generate non-overlapping rooms
 func generate_rooms():
@@ -282,8 +321,8 @@ func close_doors():
 func regular_room() -> Rect:
 	var w = int((MIN_WIDTH+MAX_WIDTH)/2)
 	var h = int((MIN_HEIGHT+MAX_HEIGHT)/2)
-	var px = int(rand_range(0,cell_countw/(w+2)))*(w+2)
-	var py = int(rand_range(0,cell_counth/(h+2)))*(h+2)
+	var px = int(rand_range(0,cell_countw/(w+GlobalVariables.BORDER)))*(w+GlobalVariables.BORDER)
+	var py = int(rand_range(0,cell_counth/(h+GlobalVariables.BORDER)))*(h+GlobalVariables.BORDER)
 	var p =  Point.new(px,py)
 	return Rect.new(w,h,p,true)
 	
