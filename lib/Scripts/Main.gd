@@ -54,10 +54,12 @@ func start_hall_timer():
 # Event handler for when hall time runs out.
 # Closes all doors if player is in a room
 func _on_HallTimer_timeout():
-	if $RoomGenerator.find_player($Player.position) != null:
+	var playerRoom = $RoomGenerator.find_player_index($Player.position)
+	if playerRoom != -1:
 		$HallTimer.stop()
 		$RoomGenerator.close_doors()
 		Player.toggle_damping()
+		$RoomGenerator.spawn_enemies(playerRoom)
 
 # Event handler for a chest being opened.
 #	pos - Position of chest.
