@@ -38,7 +38,7 @@ script = ExtResource( 1 )
 position = Vector2( 5.14859, 8.13809 )
 frames = SubResource( 2 )
 animation = "idle"
-frame = 2
+frame = 3
 speed_scale = 2.0
 playing = true
 
@@ -70,6 +70,7 @@ position = Vector2( 8, 9.6119 )
 rotation = 3.14159
 scale = Vector2( 1, 0.519999 )
 enabled = true
+cast_to = Vector2( 0, 25 )
 collision_mask = 17
 collide_with_areas = true
 
