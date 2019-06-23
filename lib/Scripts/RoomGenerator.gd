@@ -60,6 +60,8 @@ func reset():
 	for child in roomChildren:
 		child.queue_free()
 	roomChildren = []
+	enemies = []
+	lock = false
 	clear()
 
 # Generate the Isaac style grid of rooms in complete form
