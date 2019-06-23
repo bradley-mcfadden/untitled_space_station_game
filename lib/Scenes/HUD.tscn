@@ -1217,8 +1217,6 @@ margin_left = 110.0
 margin_top = 40.0
 margin_right = 235.0
 margin_bottom = 80.0
-hint_tooltip = "lkkkkk
-"
 theme = SubResource( 3 )
 custom_fonts/font = ExtResource( 2 )
 custom_colors/font_color = Color( 1, 0, 0, 1 )
