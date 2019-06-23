@@ -25,6 +25,7 @@ func take_damage(dmg:int, normal:Vector2):
 	health -= dmg
 	# If I'm dead
 	if health <= 0:
+		collisionShape.disabled = true
 		get_parent().numEnemies -= 1
 		# If there are no other enemies,
 		# then mark the room as cleared, 
