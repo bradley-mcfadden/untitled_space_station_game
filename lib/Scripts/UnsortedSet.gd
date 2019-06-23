@@ -34,6 +34,6 @@ func grab():
 func to_string() -> String:
 	var s = "["
 	for i in range(data.size()):
-		s += data[i]
+		s += str(data[i])
 	s += "]"
 	return s

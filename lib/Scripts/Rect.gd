@@ -10,6 +10,7 @@ var prefab:int
 var border 
 var type:int
 var visited = true
+var cleared
 # var room = load("res://Scenes/Room1.tscn")
 
 # Create a new Rect
@@ -22,6 +23,7 @@ func _init(xsize,ysize,low,hasBorder=false):
 	self.ysize = ysize
 	high = Point.new(low.x+xsize,low.y+ysize)
 	border = hasBorder
+	cleared = false
 	
 # Returns a copy of this Rect
 #	return - Copy of self
