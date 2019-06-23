@@ -23,8 +23,15 @@ func _ready():
 #	normal - Direction damage is coming from	
 func take_damage(dmg:int, normal:Vector2):
 	health -= dmg
+	# If I'm dead
 	if health <= 0:
-		# print("I have died")
+		get_parent().numEnemies -= 1
+		# If there are no other enemies,
+		# then mark the room as cleared, 
+		# unlock the world.
+		if get_parent().numEnemies <= 0:
+			get_parent().get_parent().cleared = true
+			get_parent().get_parent().get_parent().lock = false
 		queue_free()
 	move_and_slide(normal,Vector2(0,-1))
 
