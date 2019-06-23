@@ -9,6 +9,7 @@ var overlap = false
 var prefab:int
 var border 
 var type:int
+var visited = true
 # var room = load("res://Scenes/Room1.tscn")
 
 # Create a new Rect
@@ -49,6 +50,27 @@ func dist(r) -> float:
 	var deltax = (r.low.x + (r.xsize/2)) - (low.x+(xsize/2))
 	var deltay = (r.low.y + (r.ysize/2)) - (low.y+(ysize/2))
 	return sqrt((deltax*deltax)+(deltay*deltay))
+
+# Used for finding adjacent rooms on a grid like map.
+# Rooms adjacent to one another will have a distance of border.
+#	r - Room to check this against.
+#	return - GlobalVariables.BORDER if adjacent; else dist(r) 
+func dist_adjacency(r) -> float:
+	if equals(r):
+      return 100000.0
+	if low.x == r.low.x:
+      if low.y < r.low.y:
+        return r.low.y - high.y  
+      elif low.y > r.low.y:
+        return low.y - r.high.y
+	elif low.y == r.low.y:
+      if low.x < r.low.x:
+        return r.low.x - high.x
+      elif low.x > r.low.x:
+        return low.x - r.high.x
+	var deltax = low.x+(xsize/2) - r.low.x+(r.xsize/2)
+	var deltay = low.y+(ysize/2) - r.low.y+(r.ysize/2)
+	return float(sqrt((deltax*deltax)+(deltay*deltay)))
 	
 # Check if another rect is inside this
 #	r - Rect to compare against
