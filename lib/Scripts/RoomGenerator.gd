@@ -240,9 +240,9 @@ func open_doors(position:Vector2):
 	var d = []
 	var dn = []
 	for edge in edgeSet.data:
-		# edge.image_empty(self,false)
+		edge.image_empty(self,false)
 		if edge.contains(currentRoom):
-			edge.image_empty(self,false)
+			#edge.image_empty(self,false)
 			d.append(edge.get_doors(currentRoom))
 			dn.append(edge.get_door_normals(currentRoom))
 	if d != null:
