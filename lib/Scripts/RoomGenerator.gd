@@ -20,9 +20,11 @@ onready var rooms = []
 onready var edgeSet = UnsortedSet.new()
 onready var platforms = []
 onready var Effects = $Effects
-onready var pushers:Array
+onready var pushers = []
 onready var dg:int
 onready var rg:int
+onready var enemies:Array
+onready var lock = false
 const MIN_WIDTH = 15
 const MIN_HEIGHT = 15
 const MAX_WIDTH = 45
@@ -136,6 +138,7 @@ func prim_connect():
 	for i in range(1,rs+1):
 		if rooms[rs-i].visited:
 			rooms.remove(rs-i)
+			
 	# Add in back edges
 	weightMatrix = []
 	for i in range(rooms.size()):
@@ -202,11 +205,18 @@ func display():
 	for edge in edgeSet.data:
 		edge.image_empty(self,true)
 	for room in rooms:
-		var r1 = RoomScenes[room.type].instance()
+		var r1:Node = RoomScenes[room.type].instance()
 		room.image_int(self)
 		r1.position = map_to_world(Vector2(room.low.x+1,room.low.y+1))
 		add_child(r1)
 		roomChildren.append(r1)
+		if r1.has_node("Enemies"):
+			var temp = r1.get_node("Enemies")
+			enemies.append(temp)
+			r1.remove_child(temp)
+		else:
+			enemies.append(null)
+		
 
 # Returns the cneter of the room of type 0. This room has no enemies.
 #	return - Location of spawn room.
@@ -229,14 +239,17 @@ func arbitrary_room() -> Vector2:
 # Finds room target is inside. Opens all hallways connected to room.
 #	position - Position vector of target
 func open_doors(position:Vector2):
+	if lock:
+		return
 	get_parent().start_hall_timer()
 	for pusher in pushers:
 		pusher.purge()
 		pusher.queue_free()
 	pushers = []
 	$Effects.clear()
-		
-	var currentRoom = find_player(position)
+	
+	var currentRoomIndex = find_player_index(position)
+	var currentRoom = rooms[currentRoomIndex]
 	var d = []
 	var dn = []
 	for edge in edgeSet.data:
@@ -277,10 +290,30 @@ func close_doors():
 #	position - Player's world position
 #	return - Rect of where Player is, or null if player is in a hallway
 func find_player(position:Vector2):
-	var currentRoom:Rect = null
 	var tpos = world_to_map(position)
 	for room in rooms:
 		if room.is_target_inside(tpos):
-			currentRoom = room
-			break
+			return room
+	return null
+
+# Determine what room the player is in and return its index in
+# the rooms array. 
+#	position - Player's world position
+#	return - Index of room in rooms array where player is or -1 if 
+#			 in hallway.
+func find_player_index(position:Vector2):
+	var currentRoom:int = -1
+	var tpos = world_to_map(position)
+	for i in range(rooms.size()):
+		if rooms[i].is_target_inside(tpos):
+			return i
 	return currentRoom
+
+# Add the children of a room's Enemies node
+# Only works if enemies have not already been killed 
+# in that room.
+#	roomIndex - Index to spawn enemies of.
+func spawn_enemies(roomIndex:int):
+	if roomIndex >= chest_rooms+1 && roomChildren[roomIndex].cleared != true:
+		roomChildren[roomIndex].add_child(enemies[roomIndex])
+		lock = true
