@@ -9,6 +9,6 @@
 scale = Vector2( 2, 2 )
 
 [node name="RoomGenerator" parent="." instance=ExtResource( 2 )]
-cell_countw = 700
+cell_countw = 200
 cell_counth = 200
 
