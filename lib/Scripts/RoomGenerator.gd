@@ -29,26 +29,27 @@ const MAX_WIDTH = 45
 const MAX_HEIGHT = 20
 const MEAN_WIDTH = (MIN_WIDTH + MAX_WIDTH)/2
 const MEAN_HEIGHT = (MIN_HEIGHT + MAX_HEIGHT)/2
-const CHANCE_BACK_EDGE = 0.10
+const CHANCE_BACK_EDGE = 0.25
 
 # Init
 func _ready():
 	dg = tile_set.find_tile_by_name("DarkPurpleBrick")
 	rg = tile_set.find_tile_by_name("RedBrick")
 	randomize()
-	generate_dungeon()
+	generate_dungeon_2()
 
-# Generate Dungeon
-func generate_dungeon():
+# Generates an Isaac style dungeon
+func generate_dungeon_2():
 	reset()
-	for i in range(roomAttempts/batch):
-		generate_rooms()
+	isaac_generate()
+	prim_connect()
+	for i in range(rooms.size()):
+		rooms[i].type = int(rand_range(2,RoomScenes.size()))
 	rooms[0].type = 0
 	for i in range(chest_rooms):
 		rooms[i+1].type = 1
-	connect_rooms()
 	display()
-
+	
 # Initialize arrays and clear tilemap
 func reset():
 	rooms = []
@@ -65,8 +66,10 @@ func isaac_generate():
 	var py = cell_counth / (MEAN_HEIGHT+GlobalVariables.BORDER)
 	for w in range(px):
 		for h in range(py):
-			var p = Point.new(px,py)
-			rooms.append(Rect.new(w,h,p,true))
+			var p = Point.new(w*(MEAN_WIDTH+GlobalVariables.BORDER),
+			        h*(MEAN_HEIGHT+GlobalVariables.BORDER))
+			rooms.append(Rect.new(MEAN_WIDTH,MEAN_HEIGHT,p,true))
+	# Mix up order of array so there isn't any bias
 	rooms.shuffle()
 
 # Starting with a random room, create a spanning tree of rooms that 
@@ -84,7 +87,7 @@ func prim_connect():
 			if i == j:
 				weightMatrix[i][j] = 1000000
 			else:
-				weightMatrix[i][j] = r.dist(rooms[j])
+				weightMatrix[i][j] = r.dist_adjacency(rooms[j])
 	var adjMatrix = []
 	for i in range(rooms.size()):
 		adjMatrix.append([])
@@ -93,27 +96,62 @@ func prim_connect():
 	var root = int(rand_range(0,rooms.size()))
 	var tree = []
 	tree.append(root)
+	# print(tree)
+	# print(get_neighbours(adjMatrix,weightMatrix,tree).data)
 	while tree.size() < desiredRooms:
-		var neighbours:UnsortedSet
+		# Make spanning tree
+		var neighbours = get_neighbours(adjMatrix, weightMatrix, tree)
 		if neighbours != null:
 			for i in neighbours.data:
 				var child = int(neighbours.grab())
 				var parent = -1
 				for j in tree:
-					if weightMatrix[child][tree[j]] == GlobalVariables.BORDER:
-						parent = tree[j]
+					# If rooms are beside one another
+					if weightMatrix[child][j] == GlobalVariables.BORDER:
+						parent = j
 						adjMatrix[parent][child] = 1
 						adjMatrix[child][parent] = 1
 						if !has_cycle(adjMatrix):
 							var e = Edge.new(rooms[parent],rooms[child])
 							edgeSet.add(e)
 							tree.append(child)
+							break
 						else:
 							adjMatrix[parent][child] = 0
 							adjMatrix[child][parent] = 0
+				# If a parent has been found, make this edge unavailable
 				if parent >= 0:
 					weightMatrix[parent][child] = 100000
 					weightMatrix[child][parent] = 100000
+					break
+
+	# If the tree does not contain a room, mark as visited
+	for i in range(rooms.size()):
+		for j in range(tree.size()):
+			if i == tree[j]:
+				rooms[i].visited = false
+				break
+	# Remove all visited rooms
+	var rs = rooms.size()
+	for i in range(1,rs+1):
+		if rooms[rs-i].visited:
+			rooms.remove(rs-i)
+	# Add in back edges
+	weightMatrix = []
+	for i in range(rooms.size()):
+		weightMatrix.append([])
+		for j in range(rooms.size()):
+			weightMatrix[i].append(0)
+			
+	for i in range(weightMatrix.size()):
+		var r = rooms[i]
+		for j in range(weightMatrix.size()):
+			if i == j:
+				weightMatrix[i][j] = 100000
+			else:
+				weightMatrix[i][j] = r.dist_adjacency(rooms[j])
+				if weightMatrix[i][j] == GlobalVariables.BORDER && rand_range(0,1) < CHANCE_BACK_EDGE:
+					edgeSet.add(Edge.new(rooms[i],rooms[j]))
 
 # Return an array of rooms that are GlobalVariables.BORDER away from this one.
 #	adjMatrix - Adjacency matrix of current graph.
@@ -121,80 +159,12 @@ func prim_connect():
 #	tree - Current members of tree.
 #	return - Set of all adjacency non-members of tree.
 func get_neighbours(adjMatrix:Array,weightMatrix:Array,tree:Array) -> UnsortedSet:
-	return null
-	
-# Generate non-overlapping rooms
-func generate_rooms():
-	# Generate rooms along grid
-	for i in range(batch):
-    	rooms.append(regular_room())
-	# Mark rooms that overlap with rooms not marked as overlapping
-	for i in range(rooms.size()):
-		var current = rooms[i]
-		rooms[i].type = 2
-		for j in range(rooms.size()):
-			if i == j:
-				continue
-			if !rooms[j].overlap and current.is_inside(rooms[j]):
-				rooms[i].overlap = true
-				current.overlap = true
-				break
-				
-	# Remove rooms from the set that are marked as overlapping
-	# Goes in reverse order to avoid screwing up things
-	var rs = rooms.size()
-	for i in range(1,rs+1):
-		if rooms[rs-i].overlap:
-			rooms.remove(rs-i)
-
-# Generate a minimal spanning tree of the generate rooms
-func connect_rooms():
-	var weightMatrix = []
-	for i in range(rooms.size()):
-		#print(rooms[i].to_string())
-		weightMatrix.append([])
-		for j in range(rooms.size()):
-			weightMatrix[i].append(0)
-		
-	for i in range(weightMatrix.size()):
-		var r = rooms[i]
-		for j in range(weightMatrix[i].size()):
-			if i == j:
-				weightMatrix[i][j] = 1000000
-			else:
-				weightMatrix[i][j] = r.dist(rooms[j])
-				
-	var adjMatrix = []
-	for i in range(rooms.size()):
-		adjMatrix.append([])
-		for j in range(rooms.size()):
-			adjMatrix[i].append(0)
-
-	for i in range(rooms.size()-1):
-		# rooms[i].type = 1
-		while true:
-			var minPos = kruskal(adjMatrix,weightMatrix)
-			adjMatrix[minPos[0]][minPos[1]] = 1
-			adjMatrix[minPos[1]][minPos[0]] = 1
-			if !has_cycle(adjMatrix):
-				var e = Edge.new(rooms[minPos[0]], rooms[minPos[1]])
-				edgeSet.add(e)
-				break
-			adjMatrix[minPos[0]][minPos[1]] = 0
-			adjMatrix[minPos[1]][minPos[0]] = 0
-			weightMatrix[minPos[0]][minPos[1]] = 1000000
-			weightMatrix[minPos[1]][minPos[0]] = 1000000
-	
-	for i in range(rooms.size()/6):
-		var minPos = kruskal(adjMatrix,weightMatrix)
-		var e = Edge.new(rooms[minPos[0]], rooms[minPos[1]])
-		while !edgeSet.add(e):
-			minPos = kruskal(adjMatrix,weightMatrix)
-			e = Edge.new(rooms[minPos[0]], rooms[minPos[1]])
-		adjMatrix[minPos[0]][minPos[1]] = 0
-		adjMatrix[minPos[1]][minPos[0]] = 0
-		weightMatrix[minPos[0]][minPos[1]] = 1000000
-		weightMatrix[minPos[1]][minPos[0]] = 1000000
+	var neighbours = UnsortedSet.new()
+	for i in range(tree.size()):
+		for j in range(weightMatrix[tree[i]].size()):
+			if weightMatrix[tree[i]][j] == GlobalVariables.BORDER && adjMatrix[tree[i]][j] == 0:
+				neighbours.add(j)
+	return neighbours
 
 # Checks an adjacency matrix for existence of cycles.
 #	adj - Adjacency matrix to check
@@ -223,24 +193,6 @@ func dfs(vertex:int, visited:UnsortedSet, parent:int, adj:Array) -> bool:
 				return true
 	return false
 
-# Accepts and adjacency matrix and a weighted adjacency matrix.
-# Determines minimal edge not already in the adjacency matrix.
-#	adj - Adjacency matrix
-#	weight - Matrix of all possible edges with distances
-func kruskal(adj:Array, weight:Array) -> Array:
-	var minI = 0
-	var minJ = 0
-	for i in range(weight.size()):
-		for j in range(i,weight[i].size()):
-			if adj[i][j] == 0:
-				if weight[i][j] < weight[minI][minJ]:
-					minI = i
-					minJ = j
-	var mp = []
-	mp.append(minI)
-	mp.append(minJ)	
-	return mp
-	
 # Displays the image of each room and edge on the TileMap
 func display():
 	for edge in edgeSet.data:
@@ -251,13 +203,10 @@ func display():
 		edge.image_empty(self,true)
 	for room in rooms:
 		var r1 = RoomScenes[room.type].instance()
-		# print(room.type)
 		room.image_int(self)
 		r1.position = map_to_world(Vector2(room.low.x+1,room.low.y+1))
 		add_child(r1)
 		roomChildren.append(r1)
-	# for plat in platforms:
-		# plat.image(self)
 
 # Returns the cneter of the room of type 0. This room has no enemies.
 #	return - Location of spawn room.
@@ -276,26 +225,6 @@ func arbitrary_room() -> Vector2:
 						(rooms[t].ysize/2)+rooms[t].low.y)
 	spawn *= 32
 	return spawn
-	
-# Generate platforms in each room, so that the room can be traversed
-func generate_platforms():
-	randomize()
-	var w 
-	var h = 0
-	var p
-	for room in rooms:
-		var rand = room.ysize/4
-		var split = room.ysize/rand
-		for i in range(1,rand):
-			w = int(rand_range(room.xsize/3,room.xsize-4))
-			if i < rand-1:
-				p = Point.new(int(rand_range(room.low.x+2, room.high.x-w-2)),
-					  1+room.low.y+(i*split))
-			else:
-				p = Point.new(int(rand_range(room.low.x+2, room.high.x-w)),
-					  1+room.low.y+i*split)
-			var plat = Rect.new(w,h,p)
-			platforms.append(plat)
 
 # Finds room target is inside. Opens all hallways connected to room.
 #	position - Position vector of target
@@ -311,9 +240,9 @@ func open_doors(position:Vector2):
 	var d = []
 	var dn = []
 	for edge in edgeSet.data:
-		edge.image_empty(self,false)
+		# edge.image_empty(self,false)
 		if edge.contains(currentRoom):
-			#edge.image_empty(self,false)
+			edge.image_empty(self,false)
 			d.append(edge.get_doors(currentRoom))
 			dn.append(edge.get_door_normals(currentRoom))
 	if d != null:
@@ -344,27 +273,6 @@ func close_doors():
 	for edge in edgeSet.data:
 		edge.image_empty(self,true)
 
-# Generate a room on a grid of sorts, each room is the median size,
-# edges will always be pretty this way.
-#	return - Regular rectangular rooms with a border
-func regular_room() -> Rect:
-	var w = int((MIN_WIDTH+MAX_WIDTH)/2)
-	var h = int((MIN_HEIGHT+MAX_HEIGHT)/2)
-	var px = int(rand_range(0,cell_countw/(w+GlobalVariables.BORDER)))*(w+GlobalVariables.BORDER)
-	var py = int(rand_range(0,cell_counth/(h+GlobalVariables.BORDER)))*(h+GlobalVariables.BORDER)
-	var p =  Point.new(px,py)
-	return Rect.new(w,h,p,true)
-	
-# Generate an irregular room with random dimnesions and no guarantee
-# of nice edges.
-#	return - Random room
-func irregular_room() -> Rect:
-	var w = int(rand_range(MIN_WIDTH,MAX_WIDTH))
-	var h = int(rand_range(MIN_HEIGHT,MAX_HEIGHT))
-	var p =  Point.new(int(rand_range(0,cell_countw-w)), 
-				 int(rand_range(0,cell_counth-h)))
-	return Rect.new(w,h,p)
-	
 # Determines where the player is and returns it as a Rect
 #	position - Player's world position
 #	return - Rect of where Player is, or null if player is in a hallway
