@@ -8,5 +8,6 @@ func _ready():
 # Effect gives a significant damage increase for a chunk of health.
 func effect(p):
 	p.max_health -= 50
-	p.take_damage(50)
-	p.damageMultiplier *= 1.3
+	p.take_damage(50,Vector2(0,0))
+	p.HUD.health_update(0,-50)
+	PlayerVariables.damageMultiplier *= 1.3

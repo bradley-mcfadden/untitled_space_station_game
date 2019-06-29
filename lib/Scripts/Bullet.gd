@@ -3,7 +3,7 @@ class_name Bullet
 var speed
 var count = 0
 var velocity
-var damage = 10
+var damage:int
 func _ready():
 	linear_velocity.x = speed * cos(rotation)
 	linear_velocity.y = speed * sin(rotation)
@@ -27,5 +27,5 @@ func _physics_process(delta):
 	if result:
 		#print(result.collider)
 		if result.collider is Enemy:
-			result.collider.take_damage(damage,damage*linear_velocity*delta)
+			result.collider.take_damage(damage*PlayerVariables.damageMultiplier,damage*linear_velocity*delta)
 			queue_free()

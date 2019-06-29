@@ -1,8 +1,9 @@
 extends Node
 onready var Player = $Player
 var rob = preload("res://Scenes/Robot.tscn")
-var lootPoolWHITE = [preload("res://Scenes/TwoPercent.tscn")]
-var lootPoolGREEN = [preload("res://Scenes/PainPills.tscn"),preload("res://Scenes/TowerShield.tscn")]
+var lootPoolWHITE = [preload("res://Scenes/TwoPercent.tscn"),preload("res://Scenes/Coffee.tscn")]
+var lootPoolGREEN = [preload("res://Scenes/PainPills.tscn"),preload("res://Scenes/TowerShield.tscn"),
+                     preload("res://Scenes/RollerBlades.tscn")]
 var lootPoolBLUE = [preload("res://Scenes/MarineHelmet.tscn"),preload("res://Scenes/PhoneBook.tscn")]
 var lootPoolPURPLE = [preload("res://Scenes/ElixirOfLife.tscn"),preload("res://Scenes/FullMetalJacket.tscn")]
 var lootPoolORANGE = [preload("res://Scenes/ChiliPepper.tscn"),preload("res://Scenes/BottleOfRage.tscn")]
@@ -26,11 +27,13 @@ func game_over():
 #	direction - Rotation of bullet
 #	location - Location to spawn bullet
 #	vel - Movement speed of bullet 
-func on_Gun_shoot(bullet, direction, location, vel):
+#	damage - Amount of damage of the bullet
+func on_Gun_shoot(bullet, direction, location, vel, damage):
 	var child = bullet.instance()
 	child.rotation = direction
 	child.position = location
 	child.speed = vel
+	child.damage = damage
 	add_child(child)
 
 # Determines the tiles adjacent to the player, above, below, and in front

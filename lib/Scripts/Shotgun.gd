@@ -16,6 +16,7 @@ func craft():
 	degreeSpread = 15
 	bulletVelocity = 800
 	gunName = "Shotgun"
+	bulletDamage = 50
 	
 # Adjust position of gun when Player sprites rotates
 #	rot - Rotation of gun 

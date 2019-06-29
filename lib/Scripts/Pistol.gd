@@ -16,6 +16,7 @@ func craft():
 	degreeSpread = 15
 	bulletVelocity = 600
 	gunName = "Pistol"
+	bulletDamage = 50
 	#var GunSpriteFrames = preload("res://Gun Sprites/GodotGun.tres")
 	#set_sprite_frames(GunSpriteFrames)
 	

@@ -1,7 +1,8 @@
 # when player is not in room, get rid of damping 
 extends KinematicBody2D
 class_name Player
-export var movespeed = 24
+export var movespeed:float
+var speedCap
 const GRAVITY = 450
 const STARTING_HEALTH = 100
 var max_health = 100
@@ -25,6 +26,7 @@ onready var jumpPower = 350
 onready var items = []
 onready var HUD
 onready var damageMultiplier 
+# onready var movespeedMultiplier
 #class_name Player
 
 # Init
@@ -35,6 +37,8 @@ func _ready():
 # Reset player position on death	
 #	startPosition - Location player starts on respawn
 func start(startPosition:Vector2):
+	speedCap = 200
+	movespeed = 24
 	damageMultiplier = 1
 	coins = 0
 	jumping = false
@@ -54,10 +58,10 @@ func _physics_process(delta):
 			velocity.y += delta * GRAVITY
 		if (is_on_floor() and Input.is_action_pressed("ui_up")):
 			velocity.y = -jumpPower*1.15
-		if (Input.is_action_pressed("ui_left") and velocity.x-movespeed > -200):
+		if (Input.is_action_pressed("ui_left") and velocity.x-movespeed > -speedCap):
 			velocity.x -= movespeed
 			$AnimatedSprite.play("walk")
-		elif (Input.is_action_pressed("ui_right") and velocity.x+movespeed < 200):
+		elif (Input.is_action_pressed("ui_right") and velocity.x+movespeed < speedCap):
 			velocity.x += movespeed
 			$AnimatedSprite.play("walk")
 		else:
@@ -73,6 +77,7 @@ func _physics_process(delta):
 		if (Input.is_action_just_released("ui_x")):
 			rotate_gun_list()
 			#velocity.y += 1
+		# velocity *= movespeedMultiplier
 		velocity = move_and_slide(velocity,Vector2(0,-1))
 		#position += velocity * delta
 		#position.x = clamp(position.x, 8, screen_size.x-20)

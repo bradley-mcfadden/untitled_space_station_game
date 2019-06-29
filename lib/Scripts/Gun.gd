@@ -1,6 +1,6 @@
 extends AnimatedSprite
 class_name Gun
-signal shoot(bullet, direction, origin, speed)
+signal shoot(bullet, direction, origin, speed, damage)
 signal weaponSwap(weapon)
 signal updateGun(weapon)
 var Bullet = load("res://Scenes/Bullet.tscn")
@@ -10,6 +10,7 @@ export var clipSize:int
 export var pellets:int
 export var bulletVelocity:int
 export var degreeSpread:int
+export var bulletDamage:int
 onready var actualBullets
 onready var canFire
 onready var ReloadTimer
@@ -71,7 +72,7 @@ func fire_gun(rot):
 	for i in range(pellets):
 		var spread = rand_range(-radianSpread/2,radianSpread/2)
 		var rot2 = atan2(rot.y, rot.x)
-		emit_signal("shoot", Bullet,rot2+spread, self.global_position, bulletVelocity) 
+		emit_signal("shoot", Bullet,rot2+spread, self.global_position, bulletVelocity, bulletDamage) 
 	if actualBullets == 0:
 		ReloadTimer.start()
 	else:
