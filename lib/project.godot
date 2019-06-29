@@ -64,11 +64,6 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Scripts/Rect.gd"
 }, {
-"base": "Item",
-"class": "TwoPercent",
-"language": "GDScript",
-"path": "res://Scripts/TwoPercent.gd"
-}, {
 "base": "Node",
 "class": "UnsortedSet",
 "language": "GDScript",
@@ -86,7 +81,6 @@ _global_script_class_icons={
 "Pusher": "",
 "PusherFactory": "",
 "Rect": "",
-"TwoPercent": "",
 "UnsortedSet": ""
 }
 

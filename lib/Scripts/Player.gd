@@ -24,6 +24,7 @@ onready var linearDamping = 0.90
 onready var jumpPower = 350
 onready var items = []
 onready var HUD
+onready var damageMultiplier 
 #class_name Player
 
 # Init
@@ -34,6 +35,7 @@ func _ready():
 # Reset player position on death	
 #	startPosition - Location player starts on respawn
 func start(startPosition:Vector2):
+	damageMultiplier = 1
 	coins = 0
 	jumping = false
 	hitShield = false

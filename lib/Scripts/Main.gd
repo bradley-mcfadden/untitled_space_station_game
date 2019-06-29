@@ -2,7 +2,10 @@ extends Node
 onready var Player = $Player
 var rob = preload("res://Scenes/Robot.tscn")
 var lootPoolWHITE = [preload("res://Scenes/TwoPercent.tscn")]
-
+var lootPoolGREEN = [preload("res://Scenes/PainPills.tscn"),preload("res://Scenes/TowerShield.tscn")]
+var lootPoolBLUE = [preload("res://Scenes/MarineHelmet.tscn"),preload("res://Scenes/PhoneBook.tscn")]
+var lootPoolPURPLE = [preload("res://Scenes/ElixirOfLife.tscn"),preload("res://Scenes/FullMetalJacket.tscn")]
+var lootPoolORANGE = [preload("res://Scenes/ChiliPepper.tscn"),preload("res://Scenes/BottleOfRage.tscn")]
 # Init
 func _ready():
 	Player.position = $RoomGenerator.spawn_room()
@@ -66,14 +69,14 @@ func _on_HallTimer_timeout():
 #	lootPool - Tier of the chest, determines what can drop from it.
 func _on_Chest_Entered(chest:Chest,pos:Vector2,lootPool:int):
 	if lootPool == Chest.WHITE:
-		pass
+		Player.add_item(lootPoolWHITE[int(rand_range(0,lootPoolWHITE.size()))].instance())
 	elif lootPool == Chest.GREEN:
-		pass
+		Player.add_item(lootPoolGREEN[int(rand_range(0,lootPoolGREEN.size()))].instance())
 	elif lootPool == Chest.BLUE:
-		pass
+		Player.add_item(lootPoolBLUE[int(rand_range(0,lootPoolBLUE.size()))].instance())
 	elif lootPool == Chest.PURPLE:
-		pass
+		Player.add_item(lootPoolPURPLE[int(rand_range(0,lootPoolPURPLE.size()))].instance())
 	elif lootPool == Chest.ORANGE:
-		pass
-	Player.add_item(lootPoolWHITE[0].instance())
+		Player.add_item(lootPoolORANGE[int(rand_range(0,lootPoolORANGE.size()))].instance())
+	# Player.add_item(lootPoolPURPLE[int(rand_range(0,lootPoolPURPLE.size()))].instance())
 	chest.disconnect("chest_entered",self,"_on_Chest_Entered")
