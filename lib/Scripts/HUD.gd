@@ -11,7 +11,10 @@ func _ready():
 #	health - New health value
 func health_update(health:int,maxHealth=0):
 	$HealthBar.max_value += maxHealth
-	$HealthBar.value = health
+	if maxHealth > health:
+		$HealthBar.value = maxHealth
+	else:
+		$HealthBar.value = health
 	$HealthLabel.text = str(get_parent().health)+"/"+str(get_parent().max_health)
 
 # Replaces the image in the gun image

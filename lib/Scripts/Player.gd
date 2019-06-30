@@ -25,8 +25,6 @@ onready var linearDamping = 0.90
 onready var jumpPower = 350
 onready var items = []
 onready var HUD
-onready var damageMultiplier 
-# onready var movespeedMultiplier
 #class_name Player
 
 # Init
@@ -39,7 +37,7 @@ func _ready():
 func start(startPosition:Vector2):
 	speedCap = 200
 	movespeed = 24
-	damageMultiplier = 1
+	PlayerVariables.damageMultiplier = 1
 	coins = 0
 	jumping = false
 	hitShield = false

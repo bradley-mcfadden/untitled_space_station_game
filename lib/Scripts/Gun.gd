@@ -26,7 +26,7 @@ func _ready():
 	self.connect("shoot",get_parent().get_parent(), "on_Gun_shoot")
 	ReloadTimer = Timer.new()
 	centered = true
-	ReloadTimer.wait_time = reloadTime
+	ReloadTimer.wait_time = reloadTime * PlayerVariables.reloadMultiplier
 	ReloadTimer.one_shot = true
 	# on reload 
 	ReloadTimer.connect("timeout",self,"on_ReloadTimer_timeout")

@@ -1,11 +1,13 @@
 extends Node
 onready var Player = $Player
 var rob = preload("res://Scenes/Robot.tscn")
-var lootPoolWHITE = [preload("res://Scenes/TwoPercent.tscn"),preload("res://Scenes/Coffee.tscn")]
+var lootPoolWHITE = [preload("res://Scenes/TwoPercent.tscn"),preload("res://Scenes/Coffee.tscn"),
+                     preload("res://Scenes/Grease.tscn")]
 var lootPoolGREEN = [preload("res://Scenes/PainPills.tscn"),preload("res://Scenes/TowerShield.tscn"),
                      preload("res://Scenes/RollerBlades.tscn")]
 var lootPoolBLUE = [preload("res://Scenes/MarineHelmet.tscn"),preload("res://Scenes/PhoneBook.tscn")]
-var lootPoolPURPLE = [preload("res://Scenes/ElixirOfLife.tscn"),preload("res://Scenes/FullMetalJacket.tscn")]
+var lootPoolPURPLE = [preload("res://Scenes/ElixirOfLife.tscn"),preload("res://Scenes/FullMetalJacket.tscn"),
+                      preload("res://Scenes/Batteries.tscn")]
 var lootPoolORANGE = [preload("res://Scenes/ChiliPepper.tscn"),preload("res://Scenes/BottleOfRage.tscn")]
 # Init
 func _ready():
