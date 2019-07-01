@@ -32,7 +32,7 @@ func _ready():
 	ReloadTimer.connect("timeout",self,"on_ReloadTimer_timeout")
 	add_child(ReloadTimer)
 	RateOfFireTimer = Timer.new()
-	RateOfFireTimer.wait_time = rateOfFire
+	RateOfFireTimer.wait_time = rateOfFire * PlayerVariables.fireRateMultiplier
 	RateOfFireTimer.one_shot = true
 	# on rate of fire refresh 
 	RateOfFireTimer.connect("timeout",self,"on_RateOfFireTimer_timeout")

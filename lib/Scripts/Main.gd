@@ -5,7 +5,8 @@ var lootPoolWHITE = [preload("res://Scenes/TwoPercent.tscn"),preload("res://Scen
                      preload("res://Scenes/Grease.tscn")]
 var lootPoolGREEN = [preload("res://Scenes/PainPills.tscn"),preload("res://Scenes/TowerShield.tscn"),
                      preload("res://Scenes/RollerBlades.tscn")]
-var lootPoolBLUE = [preload("res://Scenes/MarineHelmet.tscn"),preload("res://Scenes/PhoneBook.tscn")]
+var lootPoolBLUE = [preload("res://Scenes/MarineHelmet.tscn"),preload("res://Scenes/PhoneBook.tscn"),
+                    preload("res://Scenes/Gloves.tscn")]
 var lootPoolPURPLE = [preload("res://Scenes/ElixirOfLife.tscn"),preload("res://Scenes/FullMetalJacket.tscn"),
                       preload("res://Scenes/Batteries.tscn")]
 var lootPoolORANGE = [preload("res://Scenes/ChiliPepper.tscn"),preload("res://Scenes/BottleOfRage.tscn")]
@@ -85,3 +86,12 @@ func _on_Chest_Entered(chest:Chest,pos:Vector2,lootPool:int):
 		Player.add_item(lootPoolORANGE[int(rand_range(0,lootPoolORANGE.size()))].instance())
 	# Player.add_item(lootPoolPURPLE[int(rand_range(0,lootPoolPURPLE.size()))].instance())
 	chest.disconnect("chest_entered",self,"_on_Chest_Entered")
+	
+# Event handler for when a player enters a ladder.
+func _on_Ladder_Entered():
+	Player.onLadder = true
+	print(Player.onLadder)
+	
+func _on_Ladder_Exited():
+	Player.onLadder = false
+	print(Player.onLadder)

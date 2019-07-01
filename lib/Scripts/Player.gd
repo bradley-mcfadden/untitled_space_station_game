@@ -3,10 +3,10 @@ extends KinematicBody2D
 class_name Player
 export var movespeed:float
 var speedCap
-const GRAVITY = 450
+const GRAVITY = 10
 const STARTING_HEALTH = 100
 var max_health = 100
-const ROOM_JUMP = 350
+const ROOM_JUMP = 450
 const EDGE_JUMP = 450
 onready var velocity = Vector2()
 onready var jumping = false
@@ -25,6 +25,8 @@ onready var linearDamping = 0.90
 onready var jumpPower = 350
 onready var items = []
 onready var HUD
+onready var accumSpeed
+onready var onLadder
 #class_name Player
 
 # Init
@@ -35,6 +37,8 @@ func _ready():
 # Reset player position on death	
 #	startPosition - Location player starts on respawn
 func start(startPosition:Vector2):
+	onLadder = false
+	accumSpeed = 0
 	speedCap = 200
 	movespeed = 24
 	PlayerVariables.damageMultiplier = 1
@@ -52,9 +56,18 @@ func start(startPosition:Vector2):
 #	delta - Time since last frame
 func _physics_process(delta):
 	if health > 0:
-		if (!is_on_floor()):
-			velocity.y += delta * GRAVITY
-		if (is_on_floor() and Input.is_action_pressed("ui_up")):
+		if (!is_on_floor() && !onLadder):
+			accumSpeed += 0.5
+			velocity.y += GRAVITY + accumSpeed
+		elif onLadder:
+			velocity.y = 0
+			if Input.is_action_pressed("ui_up"):
+				velocity.y -= 64
+			elif Input.is_action_pressed("ui_down"):
+				velocity.y += 64
+		else:
+			accumSpeed = 0
+		if (is_on_floor() and Input.is_action_pressed("ui_up") and !onLadder):
 			velocity.y = -jumpPower*1.15
 		if (Input.is_action_pressed("ui_left") and velocity.x-movespeed > -speedCap):
 			velocity.x -= movespeed
