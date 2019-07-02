@@ -55,6 +55,25 @@ func start(startPosition:Vector2):
 	$Shotgun.craft()
 	currentGun = $Shotgun
 	
+# Handles input
+#	delta - Time since last frame
+func _process(delta):
+	if health < 0:
+		return
+	if Input.is_action_pressed("ui_up"):
+		pass
+	if Input.is_action_pressed("ui_down"):
+		pass
+	if Input.is_action_pressed("ui_up"):
+		pass
+	if Input.is_action_pressed("ui_left"):
+		pass
+	elif Input.is_action_pressed("ui_right"):
+		pass
+	else:
+		pass
+	if Input.is_action_just_released("ui_x"):
+		rotate_gun_list()
 # Handles input and movement of player
 #	delta - Time since last frame
 func _physics_process(delta):
@@ -92,8 +111,6 @@ func _physics_process(delta):
 			else:
 				$AnimatedSprite.play("walk")
 				get_parent().update_tiles()
-		if (Input.is_action_pressed("ui_down")):
-			pass
 		if (Input.is_action_just_released("ui_x")):
 			rotate_gun_list()
 		velocity = move_and_slide(velocity,Vector2(0,-1))
@@ -169,3 +186,15 @@ func add_item(i:Item):
 	i.effect(self)
 	items.append(i)
 	$HUD.add_item(i)
+	
+# Event handler for when a player enters a ladder.
+func _on_Ladder_Entered():
+	onLadder = true
+	Anim.play("climb")
+	currentGun.visible = false
+	# print(Player.onLadder)
+
+# Handler for when player exits a ladder.
+func _on_Ladder_Exited():
+	onLadder = false
+	currentGun.visible = true

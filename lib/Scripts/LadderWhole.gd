@@ -1,3 +1,5 @@
+# Similar to Pusher Factory, but creates a ladder of specified length
+# On entering the ladder, one can climb or descend it
 extends Node2D
 export var length:int
 onready var segments:Array
@@ -6,6 +8,7 @@ onready var Area = $Area2D
 signal ladder_entered()
 signal ladder_exited()
 
+# Init
 func _ready():
 	# position += Vector2(16,16)
 	var rect:CollisionPolygon2D = Area.get_child(0)
@@ -20,31 +23,18 @@ func _ready():
 		add_child(l1)
 	
 	var x = get_parent().get_parent().get_parent()
-	if x is Node:
-		self.connect("ladder_entered",x,"_on_Ladder_Entered")
-		self.connect("ladder_exited",x,"_on_Ladder_Exited")
+	x = x.get_node("Player")
+	self.connect("ladder_entered",x,"_on_Ladder_Entered")
+	self.connect("ladder_exited",x,"_on_Ladder_Exited")
 
-#func ladder_update():
-#	var isPlayerIn = false
-#	var i = 0
-#	for ladder in segments:
-#		i+=1
-#		if ladder.playerInside == true:
-#			isPlayerIn = true
-#		# print(i,ladder.playerInside)
-#		# print("Segment: ",i," ",ladder.playerInside)
-#	if isPlayerIn == true:
-#		emit_signal("ladder_entered")
-#	elif isPlayerIn == false:
-#		emit_signal("ladder_exited")		
-
-
-
+# Handler for detecting if player has entered the ladder
+#	body - Body that entered Area2D
 func _on_Area2D_body_entered(body):
 	if body is Player:
 		emit_signal("ladder_entered")
 
-
+# Handler for detecting if player has exited the ladder
+#	body - Body that exited Area2D
 func _on_Area2D_body_exited(body):
 	if body is Player:
 		emit_signal("ladder_exited")

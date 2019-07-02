@@ -1,5 +1,5 @@
 extends Node
-onready var Player = $Player
+onready var Player
 var rob = preload("res://Enemies/Robot.tscn")
 var lootPoolWHITE = [preload("res://Items/TwoPercent.tscn"),preload("res://Items/Coffee.tscn"),
                      preload("res://Items/Grease.tscn")]
@@ -12,6 +12,7 @@ var lootPoolPURPLE = [preload("res://Items/ElixirOfLife.tscn"),preload("res://It
 var lootPoolORANGE = [preload("res://Items/ChiliPepper.tscn"),preload("res://Items/BottleOfRage.tscn")]
 # Init
 func _ready():
+	Player = $Player
 	Player.position = $RoomGenerator.spawn_room()
 	
 # Reset player position, enemies, etc
@@ -86,15 +87,3 @@ func _on_Chest_Entered(chest:Chest,pos:Vector2,lootPool:int):
 		Player.add_item(lootPoolORANGE[int(rand_range(0,lootPoolORANGE.size()))].instance())
 	# Player.add_item(lootPoolPURPLE[int(rand_range(0,lootPoolPURPLE.size()))].instance())
 	chest.disconnect("chest_entered",self,"_on_Chest_Entered")
-	
-# Event handler for when a player enters a ladder.
-func _on_Ladder_Entered():
-	Player.onLadder = true
-	Player.Anim.play("climb")
-	Player.currentGun.visible = false
-	# print(Player.onLadder)
-
-# Handler for when player exits a ladder.
-func _on_Ladder_Exited():
-	Player.onLadder = false
-	Player.currentGun.visible = true
