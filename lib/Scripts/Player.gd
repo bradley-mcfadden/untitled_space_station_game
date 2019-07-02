@@ -10,13 +10,13 @@ const ROOM_JUMP = 450
 const EDGE_JUMP = 450
 onready var velocity = Vector2()
 onready var jumping = false
-onready var SMG = load("res://Scripts/SMG.gd")
-onready var Shotgun = load("res://Scripts/Shotgun.gd")
-onready var Pistol = load("res://Scripts/Pistol.gd")
+onready var SMG = load("res://Guns/GunScripts/SMG.gd")
+onready var Shotgun = load("res://Guns/GunScripts/Shotgun.gd")
+onready var Pistol = load("res://Guns/GunScripts/Pistol.gd")
 onready var gunList = [SMG,Shotgun,Pistol]
-onready var gunRef = [load("res://Scenes/SMG.tscn"),
-					  load("res://Scenes/Shotgun.tscn"),
-					  load("res://Scenes/Pistol.tscn")]
+onready var gunRef = [load("res://Guns/SMG.tscn"),
+					  load("res://Guns/Shotgun.tscn"),
+					  load("res://Guns/Pistol.tscn")]
 onready var coins:int
 onready var health:int 
 onready var hitShield = false
@@ -62,9 +62,9 @@ func _physics_process(delta):
 		elif onLadder:
 			velocity.y = 0
 			if Input.is_action_pressed("ui_up"):
-				velocity.y -= 64
+				velocity.y -= 96
 			elif Input.is_action_pressed("ui_down"):
-				velocity.y += 64
+				velocity.y += 96
 		else:
 			accumSpeed = 0
 		if (is_on_floor() and Input.is_action_pressed("ui_up") and !onLadder):
@@ -116,7 +116,7 @@ func rotate_gun_list():
 		if cGun is gunList[i]:
 			cPos = i
 			cGun.queue_free()
-	print("CPOS"+str(cPos))
+	# print("CPOS"+str(cPos))
 	var tempGun
 	if cPos == gunList.size()-1:
 		tempGun = gunRef[0].instance()
@@ -159,6 +159,8 @@ func toggle_damping():
 		jumpPower = EDGE_JUMP 
 	# print("called"," ",linearDamping," ",jumpPower)
 
+# Add an item to the HUD's inventory
+# i - Item to add
 func add_item(i:Item):
 	i.effect(self)
 	items.append(i)
