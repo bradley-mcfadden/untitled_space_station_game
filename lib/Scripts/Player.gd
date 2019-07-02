@@ -1,13 +1,13 @@
-# when player is not in room, get rid of damping 
+
 extends KinematicBody2D
 class_name Player
-export var movespeed:float
 var speedCap
 const GRAVITY = 10
 const STARTING_HEALTH = 100
 var max_health = 100
 const ROOM_JUMP = 450
 const EDGE_JUMP = 450
+onready var movespeed
 onready var velocity = Vector2()
 onready var jumping = false
 onready var SMG = load("res://Guns/GunScripts/SMG.gd")
@@ -29,7 +29,6 @@ onready var accumSpeed
 onready var onLadder
 onready var Anim = $AnimatedSprite
 onready var currentGun
-#class_name Player
 
 # Init
 func _ready():
@@ -74,7 +73,8 @@ func _process(delta):
 		pass
 	if Input.is_action_just_released("ui_x"):
 		rotate_gun_list()
-# Handles input and movement of player
+		
+# Handles movement of player
 #	delta - Time since last frame
 func _physics_process(delta):
 	if health > 0:
@@ -149,20 +149,21 @@ func rotate_gun_list():
 #	damage - Amount of damage to take
 #	norm - Direction of incoming damage
 func take_damage(damage:int, norm:Vector2):
-	if !hitShield:
+	if hitShield:
+		return
+	hitShield = true
+	$DamageTimer.start()
+	if health - damage <= 0:
 		hitShield = true
-		$DamageTimer.start()
-		if health - damage <= 0:
-			hitShield = true
-			health = 0
-			get_parent().game_over()
-			$HUD/DeathLabel.visible = true
-			$HUD/RestartButton.visible = true
-			
-		else:
-			health -= damage
-		$HUD.health_update(health)
-		move_and_slide(norm)
+		health = 0
+		get_parent().game_over()
+		$HUD/DeathLabel.visible = true
+		$HUD/RestartButton.visible = true
+		
+	else:
+		health -= damage
+	$HUD.health_update(health)
+	velocity = move_and_slide(norm)
 
 # Event handler for expiry of damage timer
 func _on_DamageTimer_timeout():
