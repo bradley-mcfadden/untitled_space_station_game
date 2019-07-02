@@ -10,4 +10,5 @@ func effect(p):
 	p.max_health -= 50
 	p.take_damage(50,Vector2(0,0))
 	p.HUD.health_update(0,-50)
+	p.HUD.health_update(0,0)
 	PlayerVariables.damageMultiplier *= 1.3
