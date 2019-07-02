@@ -27,6 +27,8 @@ onready var items = []
 onready var HUD
 onready var accumSpeed
 onready var onLadder
+onready var Anim = $AnimatedSprite
+onready var currentGun
 #class_name Player
 
 # Init
@@ -51,6 +53,7 @@ func start(startPosition:Vector2):
 	$HUD.health_update(health)
 	$DamageTimer.start()
 	$Shotgun.craft()
+	currentGun = $Shotgun
 	
 # Handles input and movement of player
 #	delta - Time since last frame
@@ -63,38 +66,38 @@ func _physics_process(delta):
 			velocity.y = 0
 			if Input.is_action_pressed("ui_up"):
 				velocity.y -= 96
+				$AnimatedSprite.play("climb")
 			elif Input.is_action_pressed("ui_down"):
 				velocity.y += 96
+				$AnimatedSprite.play("climb")
+			else:
+				$AnimatedSprite.play("climb_idle")
 		else:
 			accumSpeed = 0
 		if (is_on_floor() and Input.is_action_pressed("ui_up") and !onLadder):
 			velocity.y = -jumpPower*1.15
 		if (Input.is_action_pressed("ui_left") and velocity.x-movespeed > -speedCap):
 			velocity.x -= movespeed
-			$AnimatedSprite.play("walk")
 		elif (Input.is_action_pressed("ui_right") and velocity.x+movespeed < speedCap):
 			velocity.x += movespeed
-			$AnimatedSprite.play("walk")
 		else:
 			velocity.x *= linearDamping
-		if velocity.x == 0:
-			$AnimatedSprite.play("idle")
-		elif abs(velocity.x) < 10:
-			velocity.x = 0
-		else:
-			get_parent().update_tiles()
+		if !onLadder:
+			if Input.is_action_pressed("ui_lmbd"):
+				currentGun.fire_gun()
+			if velocity.x == 0:
+				$AnimatedSprite.play("idle")
+			elif abs(velocity.x) < 10:
+				velocity.x = 0
+			else:
+				$AnimatedSprite.play("walk")
+				get_parent().update_tiles()
 		if (Input.is_action_pressed("ui_down")):
 			pass
 		if (Input.is_action_just_released("ui_x")):
 			rotate_gun_list()
-			#velocity.y += 1
-		# velocity *= movespeedMultiplier
 		velocity = move_and_slide(velocity,Vector2(0,-1))
-		#position += velocity * delta
-		#position.x = clamp(position.x, 8, screen_size.x-20)
-		#position.y = clamp(position.y, 12, screen_size.y-20)
 		var norm = get_global_mouse_position() - self.position
-		#look_at(get_global_mouse_position())
 		norm = norm.normalized()
 		var rot = atan2(norm.y, norm.x)
 		if rot > -PI/2 && rot < PI/2:
@@ -123,6 +126,7 @@ func rotate_gun_list():
 	else:
 		tempGun = gunRef[cPos+1].instance()
 	add_child(tempGun)
+	currentGun = tempGun
 
 # Updates player health and HUD
 #	damage - Amount of damage to take

@@ -21,7 +21,7 @@ func craft():
 	#set_sprite_frames(GunSpriteFrames)
 	
 # Adjusts the position of pistol when Player sprite is flipped
-func adjust_pos(rot:Vector2):
+func adjust_pos():
 	#print("in here")
 	if rot.x > 0:
 		position.x = 8

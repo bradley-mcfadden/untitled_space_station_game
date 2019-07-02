@@ -1,15 +1,15 @@
 extends Node
 onready var Player = $Player
-var rob = preload("res://Scenes/Robot.tscn")
-var lootPoolWHITE = [preload("res://Scenes/TwoPercent.tscn"),preload("res://Scenes/Coffee.tscn"),
-                     preload("res://Scenes/Grease.tscn")]
-var lootPoolGREEN = [preload("res://Scenes/PainPills.tscn"),preload("res://Scenes/TowerShield.tscn"),
-                     preload("res://Scenes/RollerBlades.tscn")]
-var lootPoolBLUE = [preload("res://Scenes/MarineHelmet.tscn"),preload("res://Scenes/PhoneBook.tscn"),
-                    preload("res://Scenes/Gloves.tscn")]
-var lootPoolPURPLE = [preload("res://Scenes/ElixirOfLife.tscn"),preload("res://Scenes/FullMetalJacket.tscn"),
-                      preload("res://Scenes/Batteries.tscn")]
-var lootPoolORANGE = [preload("res://Scenes/ChiliPepper.tscn"),preload("res://Scenes/BottleOfRage.tscn")]
+var rob = preload("res://Enemies/Robot.tscn")
+var lootPoolWHITE = [preload("res://Items/TwoPercent.tscn"),preload("res://Items/Coffee.tscn"),
+                     preload("res://Items/Grease.tscn")]
+var lootPoolGREEN = [preload("res://Items/PainPills.tscn"),preload("res://Items/TowerShield.tscn"),
+                     preload("res://Items/RollerBlades.tscn")]
+var lootPoolBLUE = [preload("res://Items/MarineHelmet.tscn"),preload("res://Items/PhoneBook.tscn"),
+                    preload("res://Items/Gloves.tscn")]
+var lootPoolPURPLE = [preload("res://Items/ElixirOfLife.tscn"),preload("res://Items/FullMetalJacket.tscn"),
+                      preload("res://Items/Batteries.tscn")]
+var lootPoolORANGE = [preload("res://Items/ChiliPepper.tscn"),preload("res://Items/BottleOfRage.tscn")]
 # Init
 func _ready():
 	Player.position = $RoomGenerator.spawn_room()
@@ -90,8 +90,11 @@ func _on_Chest_Entered(chest:Chest,pos:Vector2,lootPool:int):
 # Event handler for when a player enters a ladder.
 func _on_Ladder_Entered():
 	Player.onLadder = true
-	print(Player.onLadder)
-	
+	Player.Anim.play("climb")
+	Player.currentGun.visible = false
+	# print(Player.onLadder)
+
+# Handler for when player exits a ladder.
 func _on_Ladder_Exited():
 	Player.onLadder = false
-	print(Player.onLadder)
+	Player.currentGun.visible = true

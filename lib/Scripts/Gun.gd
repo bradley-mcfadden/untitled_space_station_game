@@ -17,6 +17,7 @@ onready var ReloadTimer
 onready var RateOfFireTimer
 onready var radianSpread
 onready var gunName
+onready var rot
 
 # Init
 func _ready():
@@ -47,41 +48,36 @@ func _ready():
 # Update sprite and handle firing input
 #	delta - Time since last frame
 func _process(delta):
-	if get_parent().health > 0:
+	if get_parent().health > 0 and !get_parent().onLadder:
 		look_at(get_global_mouse_position())
-		var rot = get_global_mouse_position() - global_position
-		adjust_pos(rot) 
+		rot = get_global_mouse_position() - global_position
+		adjust_pos() 
 		if rot.x > 0:
 			flip_v = false
 		else:
 			flip_v = true
-			
-		if canFire and Input.is_action_pressed("ui_lmbd"):
-			fire_gun(rot)
-	
 # Placeholder function to be replaced by child classes
 func craft():
 	pass
 
 # Spawn a bullet
-#	rot - Rotation of gun
-func fire_gun(rot):
-	canFire = false
-	actualBullets -= 1
-	emit_signal("updateGun",self)
-	for i in range(pellets):
-		var spread = rand_range(-radianSpread/2,radianSpread/2)
-		var rot2 = atan2(rot.y, rot.x)
-		emit_signal("shoot", Bullet,rot2+spread, self.global_position, bulletVelocity, bulletDamage) 
-	if actualBullets == 0:
-		ReloadTimer.start()
-	else:
-		RateOfFireTimer.start()
+func fire_gun():
+	if canFire:
+		canFire = false
+		actualBullets -= 1
+		emit_signal("updateGun",self)
+		for i in range(pellets):
+			var spread = rand_range(-radianSpread/2,radianSpread/2)
+			var rot2 = atan2(rot.y, rot.x)
+			emit_signal("shoot", Bullet,rot2+spread, self.global_position, bulletVelocity, bulletDamage) 
+		if actualBullets == 0:
+			ReloadTimer.start()
+		else:
+			RateOfFireTimer.start()
 
 # Meant to adjust position of gun in character's
 # hand when sprite flips.
-#	rot - Rotation of gun
-func adjust_pos(rot:Vector2):
+func adjust_pos():
 	pass
 
 # Event handler when reload timer is up	

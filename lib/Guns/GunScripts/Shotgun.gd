@@ -20,7 +20,7 @@ func craft():
 	
 # Adjust position of gun when Player sprites rotates
 #	rot - Rotation of gun 
-func adjust_pos(rot:Vector2):
+func adjust_pos():
 	#print("in here")
 	if rot.x > 0:
 		position.x = 12

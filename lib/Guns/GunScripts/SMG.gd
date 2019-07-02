@@ -22,7 +22,7 @@ func craft():
 	#set_sprite_frames(GunSpriteFrames)
 	
 # Handles adjusting position of Gun when rotated
-func adjust_pos(rot:Vector2):
+func adjust_pos():
 	#print("in here")
 	if rot.x > 0:
 		position.x = 15
