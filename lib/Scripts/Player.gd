@@ -29,6 +29,7 @@ onready var accumSpeed
 onready var onLadder
 onready var Anim = $AnimatedSprite
 onready var currentGun
+onready var running:bool
 
 # Init
 func _ready():
@@ -38,6 +39,7 @@ func _ready():
 # Reset player position on death	
 #	startPosition - Location player starts on respawn
 func start(startPosition:Vector2):
+	running = false
 	onLadder = false
 	accumSpeed = 0
 	speedCap = 200
@@ -54,75 +56,84 @@ func start(startPosition:Vector2):
 	$Shotgun.craft()
 	currentGun = $Shotgun
 	
-# Handles input
+# Handles non-movement related input 
 #	delta - Time since last frame
 func _process(delta):
-	if health < 0:
+	if health <= 0:
 		return
-	if Input.is_action_pressed("ui_up"):
-		pass
-	if Input.is_action_pressed("ui_down"):
-		pass
-	if Input.is_action_pressed("ui_up"):
-		pass
-	if Input.is_action_pressed("ui_left"):
-		pass
-	elif Input.is_action_pressed("ui_right"):
-		pass
-	else:
-		pass
-	if Input.is_action_just_released("ui_x"):
-		rotate_gun_list()
+	if (Input.is_action_just_released("ui_x")):
+		rotate_gun_list()	
 		
-# Handles movement of player
+	var norm = get_global_mouse_position() - self.position
+	norm = norm.normalized()
+	
+	var rot = atan2(norm.y, norm.x)
+	if rot > -PI/2 && rot < PI/2:
+		$AnimatedSprite.flip_h = false
+		direction = 1
+	else:
+		$AnimatedSprite.flip_h = true
+		direction = -1	
+	
+# Handles movement of player and input
 #	delta - Time since last frame
 func _physics_process(delta):
-	if health > 0:
-		if (!is_on_floor() && !onLadder):
+	if health <= 0:
+		return
+	if !onLadder:
+		if !is_on_floor():
 			accumSpeed += 0.5
 			velocity.y += GRAVITY + accumSpeed
-		elif onLadder:
-			velocity.y = 0
-			if Input.is_action_pressed("ui_up"):
-				velocity.y -= 96
-				$AnimatedSprite.play("climb")
-			elif Input.is_action_pressed("ui_down"):
-				velocity.y += 96
-				$AnimatedSprite.play("climb")
-			else:
-				$AnimatedSprite.play("climb_idle")
-		else:
+		elif Input.is_action_pressed("ui_up"):
+			velocity.y = -jumpPower * 1.15
 			accumSpeed = 0
-		if (is_on_floor() and Input.is_action_pressed("ui_up") and !onLadder):
-			velocity.y = -jumpPower*1.15
-		if (Input.is_action_pressed("ui_left") and velocity.x-movespeed > -speedCap):
-			velocity.x -= movespeed
-		elif (Input.is_action_pressed("ui_right") and velocity.x+movespeed < speedCap):
-			velocity.x += movespeed
+		if Input.is_action_pressed("ui_lmbd") and !running:
+			currentGun.fire_gun()
+		if velocity.x == 0:
+			$AnimatedSprite.play("idle")
+		elif abs(velocity.x) < 10:
+			velocity.x = 0
 		else:
-			velocity.x *= linearDamping
-		if !onLadder:
-			if Input.is_action_pressed("ui_lmbd"):
-				currentGun.fire_gun()
-			if velocity.x == 0:
-				$AnimatedSprite.play("idle")
-			elif abs(velocity.x) < 10:
-				velocity.x = 0
+			$AnimatedSprite.play("walk")
+		get_parent().update_tiles()
+		
+	elif onLadder:
+		velocity.y = 0
+		if Input.is_action_pressed("ui_up"):
+			velocity.y -= 96
+			$AnimatedSprite.play("climb")
+		elif Input.is_action_pressed("ui_down"):
+			velocity.y += 96
+			$AnimatedSprite.play("climb")
+		else:
+			$AnimatedSprite.play("climb_idle")
+			
+	if Input.is_action_pressed("ui_shift"):
+		if onLadder:
+			pass
+		else:
+			if abs(velocity.x)+movespeed < speedCap * 2:
+				if Input.is_action_pressed("ui_left"):
+					velocity.x -= movespeed * 1.5
+				elif Input.is_action_pressed("ui_right"):
+					velocity.x += movespeed * 1.5
+				else:
+					velocity.x *= linearDamping
+			running = true 
+			currentGun.visible = false
+	elif Input.is_action_just_released("ui_shift"):
+		running = false
+		currentGun.visible = true
+	else:
+		if abs(velocity.x)+movespeed < speedCap:
+			if Input.is_action_pressed("ui_left"):
+				velocity.x -= movespeed
+			elif Input.is_action_pressed("ui_right"):
+				velocity.x += movespeed
 			else:
-				$AnimatedSprite.play("walk")
-				get_parent().update_tiles()
-		if (Input.is_action_just_released("ui_x")):
-			rotate_gun_list()
-		velocity = move_and_slide(velocity,Vector2(0,-1))
-		var norm = get_global_mouse_position() - self.position
-		norm = norm.normalized()
-		var rot = atan2(norm.y, norm.x)
-		if rot > -PI/2 && rot < PI/2:
-			$AnimatedSprite.flip_h = false
-			direction = 1
-		else:
-			$AnimatedSprite.flip_h = true
-			direction = -1
+				velocity.x *= linearDamping
+	velocity.x *= linearDamping
+	velocity = move_and_slide(velocity,Vector2(0,-1))
 
 # Switches between absolute roster of guns,
 # for testing purposes
