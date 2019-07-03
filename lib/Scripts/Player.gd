@@ -1,15 +1,14 @@
 
 extends KinematicBody2D
 class_name Player
-var speedCap
+
 const GRAVITY = 10
 const STARTING_HEALTH = 100
-var max_health = 100
 const ROOM_JUMP = 450
 const EDGE_JUMP = 450
 onready var movespeed
-onready var velocity = Vector2()
-onready var jumping = false
+onready var velocity:Vector2
+onready var jumping:bool
 onready var SMG = load("res://Guns/GunScripts/SMG.gd")
 onready var Shotgun = load("res://Guns/GunScripts/Shotgun.gd")
 onready var Pistol = load("res://Guns/GunScripts/Pistol.gd")
@@ -17,17 +16,19 @@ onready var gunList = [SMG,Shotgun,Pistol]
 onready var gunRef = [load("res://Guns/SMG.tscn"),
 					  load("res://Guns/Shotgun.tscn"),
 					  load("res://Guns/Pistol.tscn")]
+onready var maxHealth
+onready var speedCap
 onready var coins:int
 onready var health:int 
-onready var hitShield = false
-onready var direction = 1
-onready var linearDamping = 0.90
-onready var jumpPower = 350
+onready var hitShield:bool
+onready var direction
+onready var linearDamping
+onready var jumpPower
 onready var items = []
 onready var HUD
 onready var accumSpeed
 onready var onLadder
-onready var Anim = $AnimatedSprite
+onready var Anim:AnimatedSprite
 onready var currentGun
 onready var running:bool
 
@@ -39,6 +40,11 @@ func _ready():
 # Reset player position on death	
 #	startPosition - Location player starts on respawn
 func start(startPosition:Vector2):
+	Anim = $AnimatedSprite
+	direction = 1
+	linearDamping = 0.90
+	jumpPower = 350
+	velocity = Vector2()
 	running = false
 	onLadder = false
 	accumSpeed = 0
@@ -49,8 +55,8 @@ func start(startPosition:Vector2):
 	jumping = false
 	hitShield = false
 	self.position = startPosition
-	max_health = STARTING_HEALTH
-	health = max_health
+	maxHealth = STARTING_HEALTH
+	health = maxHealth
 	$HUD.health_update(health)
 	$DamageTimer.start()
 	$Shotgun.craft()
