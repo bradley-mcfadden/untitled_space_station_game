@@ -6,6 +6,7 @@ const GRAVITY = 10
 const STARTING_HEALTH = 100
 const ROOM_JUMP = 450
 const EDGE_JUMP = 450
+var maxHealth = STARTING_HEALTH
 onready var movespeed
 onready var velocity:Vector2
 onready var jumping:bool
@@ -16,7 +17,6 @@ onready var gunList = [SMG,Shotgun,Pistol]
 onready var gunRef = [load("res://Guns/SMG.tscn"),
 					  load("res://Guns/Shotgun.tscn"),
 					  load("res://Guns/Pistol.tscn")]
-onready var maxHealth
 onready var speedCap
 onready var coins:int
 onready var health:int 

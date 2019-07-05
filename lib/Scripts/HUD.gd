@@ -2,10 +2,10 @@ extends CanvasLayer
 
 # Init
 func _ready():
-	$HealthBar.value = get_parent().max_health
+	$HealthBar.value = get_parent().maxHealth
 	$CoinCountLabel.text = str(get_parent().coins)
 	$RestartButton.connect("pressed", get_parent().get_parent(),"new_game")
-	$HealthLabel.text = str(get_parent().health)+"/"+str(get_parent().max_health)
+	$HealthLabel.text = str(get_parent().health)+"/"+str(get_parent().maxHealth)
 
 # Update the progress of the health bar
 #	health - New health value
@@ -15,7 +15,7 @@ func health_update(health:int,maxHealth=0):
 		$HealthBar.value = maxHealth
 	else:
 		$HealthBar.value = health
-	$HealthLabel.text = str(get_parent().health)+"/"+str(get_parent().max_health)
+	$HealthLabel.text = str(get_parent().health)+"/"+str(get_parent().maxHealth)
 
 # Replaces the image in the gun image
 #	Gun to set image to

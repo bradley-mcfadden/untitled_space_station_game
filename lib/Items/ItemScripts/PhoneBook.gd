@@ -9,5 +9,5 @@ func _ready():
 #	p - Player target
 func effect(p):
 	p.health += 70
-	p.max_health += 20
+	p.maxHealth += 20
 	p.HUD.health_update(p.health,20)
