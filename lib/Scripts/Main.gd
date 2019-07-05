@@ -10,6 +10,7 @@ var lootPoolBLUE = [preload("res://Items/MarineHelmet.tscn"),preload("res://Item
 var lootPoolPURPLE = [preload("res://Items/ElixirOfLife.tscn"),preload("res://Items/FullMetalJacket.tscn"),
                       preload("res://Items/Batteries.tscn")]
 var lootPoolORANGE = [preload("res://Items/ChiliPepper.tscn"),preload("res://Items/BottleOfRage.tscn")]
+var Pickup = preload("res://Scenes/Pickup.tscn")
 # Init
 func _ready():
 	Player = $Player
@@ -75,15 +76,25 @@ func _on_HallTimer_timeout():
 #	pos - Position of chest.
 #	lootPool - Tier of the chest, determines what can drop from it.
 func _on_Chest_Entered(chest:Chest,pos:Vector2,lootPool:int):
+	var drop = Pickup.instance()
+	drop.global_position = chest.global_position
+	var chestContents
 	if lootPool == Chest.WHITE:
-		Player.add_item(lootPoolWHITE[int(rand_range(0,lootPoolWHITE.size()))].instance())
+		chestContents =lootPoolWHITE[int(rand_range(0,lootPoolWHITE.size()))].instance()
 	elif lootPool == Chest.GREEN:
-		Player.add_item(lootPoolGREEN[int(rand_range(0,lootPoolGREEN.size()))].instance())
+		chestContents = lootPoolGREEN[int(rand_range(0,lootPoolGREEN.size()))].instance()
 	elif lootPool == Chest.BLUE:
-		Player.add_item(lootPoolBLUE[int(rand_range(0,lootPoolBLUE.size()))].instance())
+		chestContents = lootPoolBLUE[int(rand_range(0,lootPoolBLUE.size()))].instance()
 	elif lootPool == Chest.PURPLE:
-		Player.add_item(lootPoolPURPLE[int(rand_range(0,lootPoolPURPLE.size()))].instance())
+		chestContents = lootPoolPURPLE[int(rand_range(0,lootPoolPURPLE.size()))].instance()
 	elif lootPool == Chest.ORANGE:
-		Player.add_item(lootPoolORANGE[int(rand_range(0,lootPoolORANGE.size()))].instance())
-	# Player.add_item(lootPoolPURPLE[int(rand_range(0,lootPoolPURPLE.size()))].instance())
+		chestContents = lootPoolORANGE[int(rand_range(0,lootPoolORANGE.size()))].instance()
+	drop.set_item(chestContents)
+	drop.connect("pickup",self,"_on_Pickup_Entered")
+	add_child(drop)
 	chest.disconnect("chest_entered",self,"_on_Chest_Entered")
+	
+func _on_Pickup_Entered(pickup,droppedItem):
+	if droppedItem is Item:
+		Player.add_item(droppedItem)
+		pickup.queue_free()
