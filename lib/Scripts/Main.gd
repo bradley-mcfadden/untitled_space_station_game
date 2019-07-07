@@ -91,9 +91,12 @@ func _on_Chest_Entered(chest:Chest,pos:Vector2,lootPool:int):
 		chestContents = lootPoolORANGE[int(rand_range(0,lootPoolORANGE.size()))].instance()
 	drop.set_item(chestContents)
 	drop.connect("pickup",self,"_on_Pickup_Entered")
-	add_child(drop)
+	call_deferred("add_child",drop)
 	chest.disconnect("chest_entered",self,"_on_Chest_Entered")
 	
+# When a pickup is entered, add it to Player inventory or prompt to swap active items.
+#	pickup - Reference to pickup scene
+#	droppedItem - Item to place in inventory
 func _on_Pickup_Entered(pickup,droppedItem):
 	if droppedItem is Item:
 		Player.add_item(droppedItem)
