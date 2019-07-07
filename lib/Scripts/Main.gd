@@ -97,4 +97,5 @@ func _on_Chest_Entered(chest:Chest,pos:Vector2,lootPool:int):
 func _on_Pickup_Entered(pickup,droppedItem):
 	if droppedItem is Item:
 		Player.add_item(droppedItem)
+		Player.HUD.fading_message("Picked up '"+droppedItem.title+"'.")
 		pickup.queue_free()

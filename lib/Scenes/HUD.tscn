@@ -1298,3 +1298,21 @@ invert_border = 0.1
 polygon = PoolVector2Array( 0, 0, 768, 0, 768, 128, 0, 128 )
 script = ExtResource( 6 )
 
+[node name="MessageLabel" type="Label" parent="."]
+visible = false
+margin_left = 645.857
+margin_top = 652.286
+margin_right = 905.857
+margin_bottom = 699.286
+grow_horizontal = 2
+custom_fonts/font = ExtResource( 3 )
+text = "Replace 'Broken Clock' with 'Spirit Camera'? [Q]
+"
+align = 1
+uppercase = true
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]

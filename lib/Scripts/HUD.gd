@@ -48,3 +48,14 @@ func add_item(i:Item):
 	# print($Inventory.global_position)
 	# print(texture.rect_global_position)
 	
+# Puts text into the MessageLabel. Disappears after 5 seconds.
+#	text - Message to show
+func fading_message(text:String):
+	$MessageLabel.visible = true
+	$MessageLabel.text = text
+	$Timer.start()
+	
+# Clears label text and makes label invisible
+func _on_Timer_timeout():
+	$MessageLabel.visible = false
+	$MessageLabel.text = ''

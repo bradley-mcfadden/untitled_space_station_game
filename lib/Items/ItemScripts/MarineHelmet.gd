@@ -1,7 +1,7 @@
 extends Item
 
 # Init 
-func _ready():
+func _init():
 	image = texture
 	title = "Marine Helmet"
 

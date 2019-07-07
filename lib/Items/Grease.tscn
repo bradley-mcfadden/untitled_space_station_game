@@ -3,9 +3,6 @@
 [ext_resource path="res://Items/ItemSprites/Grease.png" type="Texture" id=1]
 [ext_resource path="res://Items/ItemScripts/Grease.gd" type="Script" id=2]
 
-
-
-
 [node name="Item" type="Sprite"]
 texture = ExtResource( 1 )
 script = ExtResource( 2 )

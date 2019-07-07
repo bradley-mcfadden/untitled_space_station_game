@@ -1,9 +1,9 @@
 extends Item
 
 # Init
-func _ready():
+func _init():
 	image = texture
-	title = ""	
+	title = "Grease"	
 	
 # Makes player reload faster
 #	p - Player

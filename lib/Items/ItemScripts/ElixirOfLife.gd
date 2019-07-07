@@ -1,9 +1,10 @@
 extends Item
 
 # Init
-func _ready():
+func _init():
 	image = texture
 	title = "Elixir of Life"
+	
 # Increase max health and restore life to full
 #	p - Player reference	
 func effect(p):

@@ -1,9 +1,13 @@
 extends Item
 
-func _ready():
+# Init
+func _init():
 	image = texture
-	title = ""
-		
+	title = "Gloves"
+
+# Decreases time for player to reload and increases
+# rate of fire.
+#	p - Player to put effect on.
 func effect(p):
 	PlayerVariables.reloadMultiplier *= 0.90
 	var cGun:Gun 
