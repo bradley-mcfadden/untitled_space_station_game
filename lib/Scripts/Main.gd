@@ -2,14 +2,15 @@ extends Node
 onready var Player
 var rob = preload("res://Enemies/Robot.tscn")
 var lootPoolWHITE = [preload("res://Items/TwoPercent.tscn"),preload("res://Items/Coffee.tscn"),
-                     preload("res://Items/Grease.tscn")]
+                     preload("res://Items/Grease.tscn"),preload("res://Items/TheChain.tscn")]
 var lootPoolGREEN = [preload("res://Items/PainPills.tscn"),preload("res://Items/TowerShield.tscn"),
-                     preload("res://Items/RollerBlades.tscn")]
+                     preload("res://Items/RollerBlades.tscn"), preload("res://Items/ExtendedMagazine.tscn")]
 var lootPoolBLUE = [preload("res://Items/MarineHelmet.tscn"),preload("res://Items/PhoneBook.tscn"),
-                    preload("res://Items/Gloves.tscn")]
+                    preload("res://Items/Gloves.tscn"), preload("res://Items/ItchyFinger.tscn")]
 var lootPoolPURPLE = [preload("res://Items/ElixirOfLife.tscn"),preload("res://Items/FullMetalJacket.tscn"),
-                      preload("res://Items/Batteries.tscn")]
-var lootPoolORANGE = [preload("res://Items/ChiliPepper.tscn"),preload("res://Items/BottleOfRage.tscn")]
+                      preload("res://Items/Batteries.tscn"),preload("res://Items/DrumClip.tscn")]
+var lootPoolORANGE = [preload("res://Items/ChiliPepper.tscn"),preload("res://Items/BottleOfRage.tscn"),
+                      preload("res://Items/MysteryPowder.tscn")]
 var Pickup = preload("res://Scenes/Pickup.tscn")
 # Init
 func _ready():
@@ -18,6 +19,7 @@ func _ready():
 	
 # Reset player position, enemies, etc
 func new_game():
+	PlayerVariables.reset()
 	$RoomGenerator.generate_dungeon_2()
 	Player.start($RoomGenerator.spawn_room())
 	$Player/HUD/DeathLabel.visible = false

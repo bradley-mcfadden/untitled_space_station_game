@@ -38,7 +38,7 @@ func _ready():
 	# on rate of fire refresh 
 	RateOfFireTimer.connect("timeout",self,"on_RateOfFireTimer_timeout")
 	add_child(RateOfFireTimer)
-	actualBullets = clipSize
+	actualBullets = int(clipSize*PlayerVariables.clipMultiplier)
 	canFire = true
 	radianSpread = deg2rad(degreeSpread)
 	self.connect("weaponSwap",get_parent().get_node("HUD"),"_on_weaponSwap")
@@ -62,7 +62,7 @@ func craft():
 
 # Spawn a bullet
 func fire_gun():
-	if canFire:
+	if canFire && rot != null:
 		canFire = false
 		actualBullets -= 1
 		emit_signal("updateGun",self)
@@ -82,7 +82,7 @@ func adjust_pos():
 
 # Event handler when reload timer is up	
 func on_ReloadTimer_timeout():
-	actualBullets = clipSize
+	actualBullets = int(clipSize*PlayerVariables.clipMultiplier)
 	canFire = true
 	emit_signal("updateGun",self)
 	
