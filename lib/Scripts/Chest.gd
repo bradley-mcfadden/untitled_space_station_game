@@ -30,3 +30,4 @@ func _ready():
 func _on_Chest_body_entered(body):
 	if body is Player:
 		emit_signal("chest_entered",self,position,type)
+		$AnimatedSprite.play(str(type)+"opened")

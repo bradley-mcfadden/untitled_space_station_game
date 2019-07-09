@@ -5,7 +5,7 @@ var rob = preload("res://Enemies/Robot.tscn")
 var lootPoolWHITE = [preload("res://Items/TwoPercent.tscn"),preload("res://Items/Coffee.tscn"),
                      preload("res://Items/Grease.tscn"),preload("res://Items/TheChain.tscn"),
 					 preload("res://Items/OldJersey.tscn"), preload("res://Items/BeyondMeat.tscn"),
-					 preload("res://Items/ItemScripts/Cookies.gd")]
+					 preload("res://Items/Cookies.tscn"), preload("res://Items/Shells.tscn")]
 var lootPoolGREEN = [preload("res://Items/PainPills.tscn"),preload("res://Items/TowerShield.tscn"),
                      preload("res://Items/RollerBlades.tscn"), preload("res://Items/ExtendedMagazine.tscn"),
 					 preload("res://Items/Binoculars.tscn")]
@@ -13,9 +13,10 @@ var lootPoolBLUE = [preload("res://Items/MarineHelmet.tscn"),preload("res://Item
                     preload("res://Items/Gloves.tscn"), preload("res://Items/ItchyFinger.tscn")]
 var lootPoolPURPLE = [preload("res://Items/ElixirOfLife.tscn"),preload("res://Items/FullMetalJacket.tscn"),
                       preload("res://Items/Batteries.tscn"),preload("res://Items/DrumClip.tscn"),
-					  preload("res://Items/Deadeye.tscn")]
+					  preload("res://Items/Deadeye.tscn"), preload("res://Items/SoyMilk.tscn")]
 var lootPoolORANGE = [preload("res://Items/ChiliPepper.tscn"),preload("res://Items/BottleOfRage.tscn"),
-                      preload("res://Items/MysteryPowder.tscn"), preload("res://Items/Catalyst.tscn")]
+                      preload("res://Items/MysteryPowder.tscn"), preload("res://Items/Catalyst.tscn"),
+					  preload("res://Items/AlmondMilk.tscn")]
 var Pickup = preload("res://Scenes/Pickup.tscn")
 
 # Init

@@ -1,4 +1,3 @@
-
 extends KinematicBody2D
 class_name Player
 
@@ -17,7 +16,7 @@ onready var gunList = [SMG,Shotgun,Pistol]
 onready var gunRef = [load("res://Guns/SMG.tscn"),
 					  load("res://Guns/Shotgun.tscn"),
 					  load("res://Guns/Pistol.tscn")]
-onready var gunAmmo
+onready var gunInventory
 onready var speedCap
 onready var coins:int
 onready var health:int 
@@ -32,15 +31,20 @@ onready var onLadder
 onready var Anim:AnimatedSprite
 onready var currentGun
 onready var running:bool
+onready var DamageTimer:Timer
+onready var veganPower:bool
 
 # Init
 func _ready():
 	start(Vector2(0,0))
 	HUD = $HUD
+	DamageTimer = $DamageTimer
 
 # Reset player position on death	
 #	startPosition - Location player starts on respawn
 func start(startPosition:Vector2):
+	veganPower = false
+	gunInventory = []
 	Anim = $AnimatedSprite
 	direction = 1
 	linearDamping = 0.90
@@ -59,9 +63,11 @@ func start(startPosition:Vector2):
 	maxHealth = STARTING_HEALTH
 	health = maxHealth
 	$HUD.health_update(health)
+	$DamageTimer.wait_time = 0.5
 	$DamageTimer.start()
 	$Shotgun.craft()
 	currentGun = $Shotgun
+	gunInventory.append(currentGun)
 	
 # Handles non-movement related input 
 #	delta - Time since last frame
@@ -129,8 +135,11 @@ func _physics_process(delta):
 			running = true 
 			currentGun.visible = false
 	elif Input.is_action_just_released("ui_shift"):
-		running = false
-		currentGun.visible = true
+		if onLadder:
+			pass
+		else:
+			running = false
+			currentGun.visible = true
 	else:
 		if abs(velocity.x)+movespeed < speedCap:
 			if Input.is_action_pressed("ui_left"):
@@ -169,6 +178,8 @@ func rotate_gun_list():
 func take_damage(damage:int, norm:Vector2):
 	if hitShield:
 		return
+	if veganPower:
+		PlayerVariables.damageMultiplier *= 2
 	hitShield = true
 	$DamageTimer.start()
 	if health - damage <= 0:
@@ -186,6 +197,8 @@ func take_damage(damage:int, norm:Vector2):
 # Event handler for expiry of damage timer
 func _on_DamageTimer_timeout():
 	hitShield = false
+	if veganPower:
+		PlayerVariables.damageMultiplier /= 2
 
 # Toggles linear damping on or off and increases jump power when damping is off
 func toggle_damping():
@@ -215,6 +228,7 @@ func _on_Ladder_Entered():
 
 # Handler for when player exits a ladder.
 func _on_Ladder_Exited():
+	running = false
 	onLadder = false
 	currentGun.visible = true
 

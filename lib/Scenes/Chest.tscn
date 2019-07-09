@@ -1,12 +1,18 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://Scripts/Chest.gd" type="Script" id=1]
 [ext_resource path="res://Tiles/Tile18.png" type="Texture" id=2]
-[ext_resource path="res://Tiles/Tile28.png" type="Texture" id=3]
-[ext_resource path="res://Tiles/Tile27.png" type="Texture" id=4]
+[ext_resource path="res://Tiles/Tile34.png" type="Texture" id=3]
+[ext_resource path="res://Tiles/Tile35.png" type="Texture" id=4]
 [ext_resource path="res://Tiles/Tile29.png" type="Texture" id=5]
-[ext_resource path="res://Tiles/Tile26.png" type="Texture" id=6]
-[ext_resource path="res://Tiles/Tile30.png" type="Texture" id=7]
+[ext_resource path="res://Tiles/Tile28.png" type="Texture" id=6]
+[ext_resource path="res://Tiles/Tile26.png" type="Texture" id=7]
+[ext_resource path="res://Tiles/Tile27.png" type="Texture" id=8]
+[ext_resource path="res://Tiles/Tile30.png" type="Texture" id=9]
+[ext_resource path="res://Tiles/Tile33.png" type="Texture" id=10]
+[ext_resource path="res://Tiles/Tile31.png" type="Texture" id=11]
+[ext_resource path="res://Tiles/Tile36.png" type="Texture" id=12]
+[ext_resource path="res://Tiles/Tile32.png" type="Texture" id=13]
 
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {
@@ -17,12 +23,12 @@ animations = [ {
 }, {
 "frames": [ ExtResource( 3 ) ],
 "loop": true,
-"name": "2",
+"name": "2opened",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 4 ) ],
 "loop": true,
-"name": "1",
+"name": "3opened",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 5 ) ],
@@ -32,12 +38,42 @@ animations = [ {
 }, {
 "frames": [ ExtResource( 6 ) ],
 "loop": true,
-"name": "0",
+"name": "2",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 7 ) ],
 "loop": true,
+"name": "0",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 8 ) ],
+"loop": true,
+"name": "1",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 9 ) ],
+"loop": true,
 "name": "4",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 10 ) ],
+"loop": true,
+"name": "1opened",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 11 ) ],
+"loop": true,
+"name": "defaultopened",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 12 ) ],
+"loop": true,
+"name": "4opened",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 13 ) ],
+"loop": true,
+"name": "0opened",
 "speed": 5.0
 } ]
 

@@ -26,5 +26,6 @@ func _physics_process(delta):
 	var result = space_state.intersect_ray(global_position,global_position+step/40)
 	if result:
 		if result.collider is Enemy:
-			result.collider.take_damage(damage*PlayerVariables.damageMultiplier,damage*linear_velocity*delta)
+			result.collider.take_damage(damage*PlayerVariables.damageMultiplier,
+			damage*linear_velocity*delta*PlayerVariables.knockbackMultiplier)
 			queue_free()
