@@ -67,7 +67,7 @@ func fire_gun():
 		actualBullets -= 1
 		emit_signal("updateGun",self)
 		for i in range(pellets):
-			var spread = rand_range(-radianSpread/2,radianSpread/2)
+			var spread = rand_range(-radianSpread/2,radianSpread/2)*PlayerVariables.accuracyMultiplier
 			var rot2 = atan2(rot.y, rot.x)
 			emit_signal("shoot", Bullet,rot2+spread, self.global_position, bulletVelocity, bulletDamage) 
 		if actualBullets == 0:

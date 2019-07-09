@@ -91,7 +91,7 @@ func _physics_process(delta):
 			accumSpeed += 0.5
 			velocity.y += GRAVITY + accumSpeed
 		elif Input.is_action_pressed("ui_up"):
-			velocity.y = -jumpPower * 1.15
+			velocity.y = -jumpPower * PlayerVariables.jumpMultiplier * 1.15
 			accumSpeed = 0
 		if Input.is_action_pressed("ui_lmbd") and !running:
 			currentGun.fire_gun()
@@ -216,3 +216,10 @@ func _on_Ladder_Entered():
 func _on_Ladder_Exited():
 	onLadder = false
 	currentGun.visible = true
+
+# Add health to player
+func _on_RegenTimer_Timeout():
+	health += 1
+	if health > maxHealth:
+		health = maxHealth
+	HUD.health_update(health,0)
