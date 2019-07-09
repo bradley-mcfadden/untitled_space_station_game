@@ -11,6 +11,8 @@ export var pellets:int
 export var bulletVelocity:int
 export var degreeSpread:int
 export var bulletDamage:int
+#onready var maxDurability:int
+onready var currentDurability:int 
 onready var actualBullets
 onready var canFire
 onready var ReloadTimer
@@ -71,7 +73,10 @@ func fire_gun():
 			var rot2 = atan2(rot.y, rot.x)
 			emit_signal("shoot", Bullet,rot2+spread, self.global_position, bulletVelocity, bulletDamage) 
 		if actualBullets == 0:
-			ReloadTimer.start()
+			if currentDurability > 0:
+				ReloadTimer.start()
+			else:
+				canFire = false
 		else:
 			RateOfFireTimer.start()
 
@@ -82,7 +87,9 @@ func adjust_pos():
 
 # Event handler when reload timer is up	
 func on_ReloadTimer_timeout():
-	actualBullets = int(clipSize*PlayerVariables.clipMultiplier)
+	var potentialClip = int(clipSize*PlayerVariables.clipMultiplier)
+	actualBullets = potentialClip if currentDurability >= potentialClip else currentDurability
+	currentDurability -= actualBullets
 	canFire = true
 	emit_signal("updateGun",self)
 	

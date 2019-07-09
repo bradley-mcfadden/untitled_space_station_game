@@ -17,6 +17,7 @@ onready var gunList = [SMG,Shotgun,Pistol]
 onready var gunRef = [load("res://Guns/SMG.tscn"),
 					  load("res://Guns/Shotgun.tscn"),
 					  load("res://Guns/Pistol.tscn")]
+onready var gunAmmo
 onready var speedCap
 onready var coins:int
 onready var health:int 

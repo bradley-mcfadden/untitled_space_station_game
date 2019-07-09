@@ -25,13 +25,13 @@ func _on_weaponSwap(weapon:Gun):
 		var frames = weapon.get_sprite_frames()
 		var def = frames.get_frame("default",0)
 		$WeaponRect.texture = def
-	$AmmoLabel.text = str(weapon.actualBullets) +"\n"+str(weapon.clipSize)
+	$AmmoLabel.text = str(weapon.actualBullets) +"\n"+str(weapon.currentDurability)
 	$WeaponLabel.text = weapon.gunName
 
 # Updates text of the ammo label to current clip size
 #	Gun to take properties from	
 func _on_updateGun(weapon:Gun):
-	$AmmoLabel.text = str(weapon.actualBullets) +"\n"+str(weapon.clipSize)
+	$AmmoLabel.text = str(weapon.actualBullets) +"\n"+str(weapon.currentDurability)
 
 # Takes an item, and adds it to the GUI of the player inventory
 #	i - Item reference
