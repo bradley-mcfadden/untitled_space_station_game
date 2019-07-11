@@ -13,7 +13,8 @@ script = ExtResource( 1 )
 cell_countw = 700
 roomAttempts = 2000
 batch = 100
-chest_rooms = 15
+chest_rooms = 2
+desiredRooms = 10
 
 [node name="Player" parent="." instance=ExtResource( 3 )]
 position = Vector2( 129.397, 33.8243 )

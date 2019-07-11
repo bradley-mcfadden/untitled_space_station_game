@@ -8,7 +8,8 @@ var PF = load("res://Scenes/PusherFactory.tscn")
 var Room1 = preload("res://PresetRooms/Room1.tscn")
 var ChestRoom = preload("res://PresetRooms/ChestRoom.tscn")
 var SpawnRoom = preload("res://PresetRooms/SpawnRoom.tscn")
-onready var RoomScenes = [SpawnRoom,ChestRoom,Room1]
+var Shop = preload("res://PresetRooms/Shop.tscn")
+onready var RoomScenes = [SpawnRoom,ChestRoom,Shop,Room1]
 onready var roomChildren = []
 export var cell_countw:int
 export var cell_counth:int
@@ -46,10 +47,11 @@ func generate_dungeon_2():
 	isaac_generate()
 	prim_connect()
 	for i in range(rooms.size()):
-		rooms[i].type = int(rand_range(2,RoomScenes.size()))
+		rooms[i].type = int(rand_range(3,RoomScenes.size()))
 	rooms[0].type = 0
+	rooms[1].type = 2
 	for i in range(chest_rooms):
-		rooms[i+1].type = 1
+		rooms[i+2].type = 1
 	display()
 	
 # Initialize arrays and clear tilemap
@@ -316,6 +318,6 @@ func find_player_index(position:Vector2):
 # in that room.
 #	roomIndex - Index to spawn enemies of.
 func spawn_enemies(roomIndex:int):
-	if roomIndex >= chest_rooms+1 && roomChildren[roomIndex].cleared != true:
+	if roomIndex >= chest_rooms+2 && roomChildren[roomIndex].cleared != true:
 		roomChildren[roomIndex].add_child(enemies[roomIndex])
 		lock = true

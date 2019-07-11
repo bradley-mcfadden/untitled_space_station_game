@@ -3,7 +3,7 @@ class_name Player
 
 const GRAVITY = 10
 const STARTING_HEALTH = 100
-const ROOM_JUMP = 450
+const ROOM_JUMP = 420
 const EDGE_JUMP = 450
 var maxHealth = STARTING_HEALTH
 onready var movespeed
@@ -48,7 +48,7 @@ func start(startPosition:Vector2):
 	Anim = $AnimatedSprite
 	direction = 1
 	linearDamping = 0.90
-	jumpPower = 350
+	jumpPower = ROOM_JUMP
 	velocity = Vector2()
 	running = false
 	onLadder = false

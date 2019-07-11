@@ -5,9 +5,6 @@
 [ext_resource path="res://Scripts/Enemies.gd" type="Script" id=3]
 [ext_resource path="res://Enemies/Robot.tscn" type="PackedScene" id=4]
 
-
-
-
 [node name="Room1" type="TileMap"]
 tile_set = ExtResource( 1 )
 cell_size = Vector2( 32, 32 )

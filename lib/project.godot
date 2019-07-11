@@ -94,7 +94,8 @@ _global_script_class_icons={
 
 config/name="/kill_all"
 run/main_scene="res://Scenes/Main.tscn"
-boot_splash/image="res://SpaceManSprites/Spaceman-SpritesA1.png"
+boot_splash/image="res://PresetRooms/IncognitoExchange.png"
+boot_splash/fullsize=false
 config/icon="res://SpaceManSprites/Spaceman-Sprites1.png"
 
 [autoload]
