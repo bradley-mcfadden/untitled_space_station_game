@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://Scripts/Bullet.gd" type="Script" id=1]
-[ext_resource path="res://Guns/GunSprites/bullet.png" type="Texture" id=2]
+[ext_resource path="res://Guns/GunSprites/Altbullet.png" type="Texture" id=2]
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 4.02909
@@ -16,4 +16,9 @@ shape = SubResource( 1 )
 
 [node name="Sprite" type="Sprite" parent="."]
 texture = ExtResource( 2 )
+flip_h = true
 
+[node name="VisibilityNotifier2D" type="VisibilityNotifier2D" parent="."]
+rect = Rect2( -4, -4, 8, 8 )
+
+[connection signal="screen_exited" from="VisibilityNotifier2D" to="." method="_on_VisibilityNotifier2D_screen_exited"]

@@ -1,9 +1,9 @@
 extends KinematicBody2D
 class_name Player
 
-const GRAVITY = 10
+const GRAVITY = 12
 const STARTING_HEALTH = 100
-const ROOM_JUMP = 420
+const ROOM_JUMP = 430
 const EDGE_JUMP = 450
 var maxHealth = STARTING_HEALTH
 onready var movespeed
@@ -95,7 +95,8 @@ func _physics_process(delta):
 		return
 	if !onLadder:
 		if !is_on_floor():
-			accumSpeed += 0.5
+			if accumSpeed < 5:
+				accumSpeed += 0.5
 			velocity.y += GRAVITY + accumSpeed
 		elif Input.is_action_pressed("ui_up"):
 			velocity.y = -jumpPower * PlayerVariables.jumpMultiplier * 1.15

@@ -42,7 +42,7 @@ func _ready():
 	add_child(RateOfFireTimer)
 	actualBullets = 0
 	canFire = false
-	ReloadTimer.start()
+	on_ReloadTimer_timeout()
 	radianSpread = deg2rad(degreeSpread)
 	self.connect("weaponSwap",get_parent().get_node("HUD"),"_on_weaponSwap")
 	self.connect("updateGun",get_parent().get_node("HUD"),"_on_updateGun")

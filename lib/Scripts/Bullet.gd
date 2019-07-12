@@ -4,28 +4,35 @@ var speed
 var count = 0
 var velocity
 var damage:int
+var dead:bool
+var deadBuffer:int
 func _ready():
 	linear_velocity.x = speed * cos(rotation)
 	linear_velocity.y = speed * sin(rotation)
-	
-# Processes frame information, handles despawn of 
-# bullets. Should replace with a timer.
-#	delta - Time since last frame
-func _process(delta):
-	if (count >= 600):
-		queue_free()
-	elif count >= 1:
-		visible = true
-	count += 1
+	dead = false
+	deadBuffer = 3
 	
 # Process and handle collisions	
 #	delta - Time since last frame
 func _physics_process(delta):
+	if dead == true:
+		deadBuffer -= 1
+	if deadBuffer == 0 or linear_velocity.length() < 50:
+		queue_free()
+		
 	var step = linear_velocity * delta
 	var space_state = get_world_2d().direct_space_state
-	var result = space_state.intersect_ray(global_position,global_position+step/40)
+	var result = space_state.intersect_ray(global_position,global_position+step)
 	if result:
 		if result.collider is Enemy:
 			result.collider.take_damage(damage*PlayerVariables.damageMultiplier,
 			damage*linear_velocity*delta*PlayerVariables.knockbackMultiplier)
-			queue_free()
+			dead = true
+			#queue_free()
+		elif result.collider is TileMap:
+			dead = true
+			#queue_free()
+
+# Handles exceptional circumstances when a bullet could fall off screen
+func _on_VisibilityNotifier2D_screen_exited():
+	queue_free()
