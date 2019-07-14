@@ -219,7 +219,19 @@ func add_item(i:Item):
 	i.effect(self)
 	items.append(i)
 	$HUD.add_item(i)
-	
+
+# Returns a vector of the force that the player should exert on a body
+#	body - Body to determine gravity force 
+#	return - Gravity force between player and body
+func pull(body:Node2D) -> Vector2:
+	var force:Vector2 = global_position - body.global_position
+	var distance = force.length()
+	distance = clamp(distance,5,25)
+	force = force.normalized()
+	var strength = 1 / (distance*distance)
+	force *= strength
+	return force
+
 # Event handler for when a player enters a ladder.
 func _on_Ladder_Entered():
 	onLadder = true

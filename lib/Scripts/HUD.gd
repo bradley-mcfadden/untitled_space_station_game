@@ -7,6 +7,11 @@ func _ready():
 	$RestartButton.connect("pressed", get_parent().get_parent(),"new_game")
 	$HealthLabel.text = str(get_parent().health)+"/"+str(get_parent().maxHealth)
 
+# Update number of coins
+#	coins - Number of coins to change text field to
+func coin_update(coins:int):
+	$CoinCountLabel.text = str(coins)
+
 # Update the progress of the health bar
 #	health - New health value
 func health_update(health:int,maxHealth=0):

@@ -16,6 +16,8 @@ batch = 100
 chest_rooms = 2
 desiredRooms = 10
 
+[node name="Coins" type="Node" parent="."]
+
 [node name="Player" parent="." instance=ExtResource( 3 )]
 position = Vector2( 129.397, 33.8243 )
 collision_layer = 17
