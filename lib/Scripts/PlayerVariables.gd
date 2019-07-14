@@ -7,6 +7,7 @@ var clipMultiplier = 1
 var jumpMultiplier = 1
 var accuracyMultiplier = 1
 var knockbackMultiplier = 1
+var pelletMultiplier = 1
 
 # Put all variables back to initial state
 func reset():
@@ -17,3 +18,4 @@ func reset():
 	var jumpMultiplier = 1
 	var accuracyMultiplier = 1
 	var knockbackMultiplier = 1
+	var pelletMultiplier = 1

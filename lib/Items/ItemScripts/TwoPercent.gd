@@ -3,7 +3,7 @@ extends Item
 # Init
 func _init():
 	image = texture
-	title = "TwoPercent"
+	title = "Two Percent"
 	
 # Increment max health and health of Player
 #	p - Player reference	

@@ -8,7 +8,7 @@ var lootPoolWHITE = [preload("res://Items/TwoPercent.tscn"),preload("res://Items
 					 preload("res://Items/Cookies.tscn"), preload("res://Items/Shells.tscn")]
 var lootPoolGREEN = [preload("res://Items/PainPills.tscn"),preload("res://Items/TowerShield.tscn"),
                      preload("res://Items/RollerBlades.tscn"), preload("res://Items/ExtendedMagazine.tscn"),
-					 preload("res://Items/Binoculars.tscn")]
+					 preload("res://Items/Binoculars.tscn"),preload("res://Items/Dilopia.tscn")]
 var lootPoolBLUE = [preload("res://Items/MarineHelmet.tscn"),preload("res://Items/PhoneBook.tscn"),
                     preload("res://Items/Gloves.tscn"), preload("res://Items/ItchyFinger.tscn")]
 var lootPoolPURPLE = [preload("res://Items/ElixirOfLife.tscn"),preload("res://Items/FullMetalJacket.tscn"),
