@@ -1241,10 +1241,10 @@ margin_bottom = 80.0
 texture = ExtResource( 4 )
 
 [node name="CoinCountLabel" type="Label" parent="."]
-margin_left = 1300.0
-margin_top = 45.0
-margin_right = 1350.0
-margin_bottom = 88.0
+margin_left = 1311.0
+margin_top = 44.0
+margin_right = 1336.0
+margin_bottom = 87.0
 rect_rotation = 0.703427
 custom_fonts/font = ExtResource( 2 )
 text = "0"

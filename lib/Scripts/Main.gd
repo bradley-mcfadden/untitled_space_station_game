@@ -1,29 +1,36 @@
 extends Node
 
 onready var Player
-var rob = preload("res://Enemies/Robot.tscn")
-var lootPoolWHITE = [preload("res://Items/TwoPercent.tscn"),preload("res://Items/Coffee.tscn"),
+# var rob = preload("res://Enemies/Robot.tscn")
+const lootPoolWHITE = [preload("res://Items/TwoPercent.tscn"),preload("res://Items/Coffee.tscn"),
                      preload("res://Items/Grease.tscn"),preload("res://Items/TheChain.tscn"),
 					 preload("res://Items/OldJersey.tscn"), preload("res://Items/BeyondMeat.tscn"),
 					 preload("res://Items/Cookies.tscn"), preload("res://Items/Shells.tscn")]
-var lootPoolGREEN = [preload("res://Items/PainPills.tscn"),preload("res://Items/TowerShield.tscn"),
+const lootPoolGREEN = [preload("res://Items/PainPills.tscn"),preload("res://Items/TowerShield.tscn"),
                      preload("res://Items/RollerBlades.tscn"), preload("res://Items/ExtendedMagazine.tscn"),
 					 preload("res://Items/Binoculars.tscn"),preload("res://Items/Dilopia.tscn")]
-var lootPoolBLUE = [preload("res://Items/MarineHelmet.tscn"),preload("res://Items/PhoneBook.tscn"),
+const lootPoolBLUE = [preload("res://Items/MarineHelmet.tscn"),preload("res://Items/PhoneBook.tscn"),
                     preload("res://Items/Gloves.tscn"), preload("res://Items/ItchyFinger.tscn")]
-var lootPoolPURPLE = [preload("res://Items/ElixirOfLife.tscn"),preload("res://Items/FullMetalJacket.tscn"),
+const lootPoolPURPLE = [preload("res://Items/ElixirOfLife.tscn"),preload("res://Items/FullMetalJacket.tscn"),
                       preload("res://Items/Batteries.tscn"),preload("res://Items/DrumClip.tscn"),
 					  preload("res://Items/Deadeye.tscn"), preload("res://Items/SoyMilk.tscn")]
-var lootPoolORANGE = [preload("res://Items/ChiliPepper.tscn"),preload("res://Items/BottleOfRage.tscn"),
+const lootPoolORANGE = [preload("res://Items/ChiliPepper.tscn"),preload("res://Items/BottleOfRage.tscn"),
                       preload("res://Items/MysteryPowder.tscn"), preload("res://Items/Catalyst.tscn"),
 					  preload("res://Items/AlmondMilk.tscn")]
-var Pickup = preload("res://Scenes/Pickup.tscn")
+const Pickup = preload("res://Scenes/Pickup.tscn")
+const Coin = preload("res://Scenes/Coin.tscn")
 
 # Init
 func _ready():
 	Player = $Player
 	Player.position = $RoomGenerator.spawn_room()
-	
+# Process physics of some world objects
+#	delta - Time since last physics step	
+func  _physics_process(delta):
+	var coins = $Coins.get_children()
+	for coin in coins:
+		coin.apply_force(Player.pull(coin))
+		print(Player.pull(coin))
 # Reset player position, enemies, etc
 func new_game():
 	PlayerVariables.reset()
@@ -111,3 +118,12 @@ func _on_Pickup_Entered(pickup,droppedItem):
 		Player.add_item(droppedItem)
 		Player.HUD.fading_message("Picked up '"+droppedItem.title+"'.")
 		pickup.queue_free()
+
+# Handles signal and adds coins to the scene
+#	location - Global position to place coins
+#	numCoins - Number of coins to add
+func _on_Drop_Coins(location:Vector2,numCoins:int):
+	for i in range(numCoins):
+		var c = Coin.instance()
+		c.global_position = location
+		$Coins.add_child(c)

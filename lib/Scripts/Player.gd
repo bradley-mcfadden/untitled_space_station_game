@@ -226,9 +226,9 @@ func add_item(i:Item):
 func pull(body:Node2D) -> Vector2:
 	var force:Vector2 = global_position - body.global_position
 	var distance = force.length()
-	distance = clamp(distance,5,25)
+	distance = clamp(distance,1,70)
 	force = force.normalized()
-	var strength = 1 / (distance*distance)
+	var strength = 50000 / (distance*distance)
 	force *= strength
 	return force
 
