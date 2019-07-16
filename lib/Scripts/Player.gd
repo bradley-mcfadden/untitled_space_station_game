@@ -33,6 +33,7 @@ onready var currentGun
 onready var running:bool
 onready var DamageTimer:Timer
 onready var veganPower:bool
+onready var potentialPurchase
 
 # Init
 func _ready():
@@ -77,6 +78,20 @@ func _process(delta):
 	if (Input.is_action_just_released("ui_x")):
 		rotate_gun_list()	
 		
+	if Input.is_action_just_pressed("ui_e") and potentialPurchase != null:
+		if coins >= potentialPurchase.cost:
+			coins -= potentialPurchase.cost
+			potentialPurchase.purchased = true
+			HUD.fading_message("Picked up '"+potentialPurchase.item.title+"'.")
+			HUD.coin_update(coins)
+			add_item(potentialPurchase.item)
+			potentialPurchase.queue_free()
+			potentialPurchase = null
+		else:
+			HUD.set_message_text("Insufficient funds")
+		
+		
+		
 	var norm = get_global_mouse_position() - self.position
 	norm = norm.normalized()
 	
@@ -90,6 +105,7 @@ func _process(delta):
 	
 # Handles movement of player and input
 #	delta - Time since last frame
+#warning-ignore:unused_argument
 func _physics_process(delta):
 	if health <= 0:
 		return

@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Tiles/mytiles.tres" type="TileSet" id=1]
 [ext_resource path="res://Scenes/LadderWhole.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Scenes/Shopkeeper.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Scenes/Pickup.tscn" type="PackedScene" id=4]
 
 [sub_resource type="StreamTexture" id=1]
 flags = 4
@@ -31,4 +32,9 @@ texture = SubResource( 1 )
 position = Vector2( 506, 315 )
 frame = 1
 playing = true
+
+[node name="Pickup" parent="." instance=ExtResource( 4 )]
+position = Vector2( 218, 336 )
+random = true
+cost = 10
 

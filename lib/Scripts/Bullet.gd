@@ -24,10 +24,11 @@ func _physics_process(delta):
 	var space_state = get_world_2d().direct_space_state
 	var result = space_state.intersect_ray(global_position,global_position+step)
 	if result:
-		if result.collider is Enemy:
+		if result.collider is Enemy && dead == false:
 			result.collider.take_damage(damage*PlayerVariables.damageMultiplier,
 			damage*linear_velocity*delta*PlayerVariables.knockbackMultiplier)
 			dead = true
+			#print(damage,result.collider)
 			#queue_free()
 		elif result.collider is TileMap:
 			dead = true

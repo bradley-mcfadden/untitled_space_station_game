@@ -30,7 +30,7 @@ func  _physics_process(delta):
 	var coins = $Coins.get_children()
 	for coin in coins:
 		coin.apply_force(Player.pull(coin))
-		print(Player.pull(coin))
+		# print(Player.pull(coin))
 # Reset player position, enemies, etc
 func new_game():
 	PlayerVariables.reset()
@@ -115,9 +115,17 @@ func _on_Chest_Entered(chest:Chest,pos:Vector2,lootPool:int):
 #	droppedItem - Item to place in inventory
 func _on_Pickup_Entered(pickup,droppedItem):
 	if droppedItem is Item:
-		Player.add_item(droppedItem)
-		Player.HUD.fading_message("Picked up '"+droppedItem.title+"'.")
-		pickup.queue_free()
+		if pickup.cost == 0:
+			Player.add_item(droppedItem)
+			Player.HUD.fading_message("Picked up '"+droppedItem.title+"'.")
+			pickup.queue_free()
+		else:
+			Player.HUD.set_message_text("Purchase '"+droppedItem.title+"' for "+str(pickup.cost)+"?")
+			Player.potentialPurchase = pickup
+
+# Clear the text in the message label when a Pickup is exited
+func _on_Pickup_Exited():
+	Player.HUD.set_message_text("")
 
 # Handles signal and adds coins to the scene
 #	location - Global position to place coins

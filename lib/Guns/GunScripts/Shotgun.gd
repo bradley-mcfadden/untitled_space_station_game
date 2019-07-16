@@ -12,7 +12,7 @@ func craft():
 	rateOfFire = 0.5
 	reloadTime = 3 
 	clipSize = 2
-	pellets = 8
+	pellets = 5
 	degreeSpread = 15
 	bulletVelocity = 800
 	gunName = "Shotgun"
