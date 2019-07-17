@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Scripts/Main.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/RoomGenerator.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Scenes/Player.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Guns/Shotgun.tscn" type="PackedScene" id=4]
-[ext_resource path="res://Scenes/HUD.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Guns/GunScripts/Shotgun.gd" type="Script" id=5]
+[ext_resource path="res://Scenes/HUD.tscn" type="PackedScene" id=6]
 
 [node name="Main" type="Node"]
 script = ExtResource( 1 )
@@ -23,9 +24,11 @@ position = Vector2( 129.397, 33.8243 )
 collision_layer = 17
 collision_mask = 17
 
-[node name="Shotgun" parent="Player" instance=ExtResource( 4 )]
+[node name="Pistol" type="AnimatedSprite" parent="Player" instance=ExtResource( 4 )]
+centered = false
+script = ExtResource( 5 )
 
-[node name="HUD" parent="Player" instance=ExtResource( 5 )]
+[node name="HUD" parent="Player" instance=ExtResource( 6 )]
 
 [node name="HallTimer" type="Timer" parent="."]
 wait_time = 0.81

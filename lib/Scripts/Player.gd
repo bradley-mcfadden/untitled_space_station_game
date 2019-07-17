@@ -9,14 +9,12 @@ var maxHealth = STARTING_HEALTH
 onready var movespeed
 onready var velocity:Vector2
 onready var jumping:bool
-onready var SMG = load("res://Guns/GunScripts/SMG.gd")
-onready var Shotgun = load("res://Guns/GunScripts/Shotgun.gd")
-onready var Pistol = load("res://Guns/GunScripts/Pistol.gd")
 onready var gunList = [SMG,Shotgun,Pistol]
 onready var gunRef = [load("res://Guns/SMG.tscn"),
 					  load("res://Guns/Shotgun.tscn"),
 					  load("res://Guns/Pistol.tscn")]
-onready var gunInventory
+onready var gunInventory:GunInventory
+onready var completeInventory:GunInventory
 onready var speedCap
 onready var coins:int
 onready var health:int 
@@ -45,7 +43,8 @@ func _ready():
 #	startPosition - Location player starts on respawn
 func start(startPosition:Vector2):
 	veganPower = false
-	gunInventory = []
+	gunInventory = GunInventory.new()
+	completeInventory = GunInventory.new()
 	Anim = $AnimatedSprite
 	direction = 1
 	linearDamping = 0.90
@@ -66,9 +65,11 @@ func start(startPosition:Vector2):
 	$HUD.health_update(health)
 	$DamageTimer.wait_time = 0.5
 	$DamageTimer.start()
-	$Shotgun.craft()
-	currentGun = $Shotgun
-	gunInventory.append(currentGun)
+	currentGun = $Pistol
+	gunInventory.add(currentGun)
+	completeInventory.add(currentGun)
+	for gun in gunRef:
+		completeInventory.add(gun.instance())
 	
 # Handles non-movement related input 
 #	delta - Time since last frame
@@ -77,6 +78,7 @@ func _process(delta):
 		return
 	if (Input.is_action_just_released("ui_x")):
 		rotate_gun_list()	
+		HUD._on_weapon_swap(currentGun)
 		
 	if Input.is_action_just_pressed("ui_e") and potentialPurchase != null:
 		if coins >= potentialPurchase.cost:
@@ -171,23 +173,10 @@ func _physics_process(delta):
 # Switches between absolute roster of guns,
 # for testing purposes
 func rotate_gun_list():
-	var cGun 
-	for child in get_children():
-		if child is Gun:
-			cGun = child
-	var cPos = 0
-	for i in range(gunList.size()):
-		if cGun is gunList[i]:
-			cPos = i
-			cGun.queue_free()
-	# print("CPOS"+str(cPos))
-	var tempGun
-	if cPos == gunList.size()-1:
-		tempGun = gunRef[0].instance()
-	else:
-		tempGun = gunRef[cPos+1].instance()
-	add_child(tempGun)
-	currentGun = tempGun
+	remove_child(currentGun)
+	currentGun = completeInventory.swap_current()
+	add_child(currentGun)
+	currentGun.currentDurability = currentGun.clipSize * 100
 
 # Updates player health and HUD
 #	damage - Amount of damage to take

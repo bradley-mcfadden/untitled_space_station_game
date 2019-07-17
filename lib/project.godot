@@ -39,6 +39,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Scripts/Gun.gd"
 }, {
+"base": "Object",
+"class": "GunInventory",
+"language": "GDScript",
+"path": "res://Scripts/GunInventory.gd"
+}, {
 "base": "Sprite",
 "class": "Item",
 "language": "GDScript",
@@ -91,6 +96,7 @@ _global_script_class_icons={
 "Edge": "",
 "Enemy": "",
 "Gun": "",
+"GunInventory": "",
 "Item": "",
 "Ladder": "",
 "Pickup": "",

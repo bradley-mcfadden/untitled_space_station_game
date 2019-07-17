@@ -44,9 +44,9 @@ func _ready():
 	canFire = false
 	on_ReloadTimer_timeout()
 	radianSpread = deg2rad(degreeSpread)
-	self.connect("weaponSwap",get_parent().get_node("HUD"),"_on_weaponSwap")
-	self.connect("updateGun",get_parent().get_node("HUD"),"_on_updateGun")
-	#emit_signal("weaponSwap",self)
+	self.connect("weaponSwap",get_parent().get_node("HUD"),"_on_weapon_swap")
+	self.connect("updateGun",get_parent().get_node("HUD"),"_on_update_gun")
+	# emit_signal("weaponSwap",self)
 	
 # Update sprite and handle firing input
 #	delta - Time since last frame
