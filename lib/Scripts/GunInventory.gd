@@ -38,6 +38,7 @@ func swap_current() -> Gun:
 			current += 1
 		else:
 			current = 0
+		# guns[current].canFire = true
 		return guns[current]
 	return null
 
@@ -47,3 +48,11 @@ func get_current() -> Gun:
 	if current >= 0:
 		return guns[current]
 	return null
+
+# Removes current gun from inventory
+func remove_current():
+	var oldCurrent = current
+	swap_current()
+	guns.remove(oldCurrent)
+	if oldCurrent == current:
+		current = -1

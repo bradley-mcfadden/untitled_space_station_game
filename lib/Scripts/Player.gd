@@ -9,7 +9,6 @@ var maxHealth = STARTING_HEALTH
 onready var movespeed
 onready var velocity:Vector2
 onready var jumping:bool
-onready var gunList = [SMG,Shotgun,Pistol]
 onready var gunRef = [load("res://Guns/SMG.tscn"),
 					  load("res://Guns/Shotgun.tscn"),
 					  load("res://Guns/Pistol.tscn")]
@@ -119,7 +118,7 @@ func _physics_process(delta):
 		elif Input.is_action_pressed("ui_up"):
 			velocity.y = -jumpPower * PlayerVariables.jumpMultiplier * 1.15
 			accumSpeed = 0
-		if Input.is_action_pressed("ui_lmbd") and !running:
+		if Input.is_action_pressed("ui_lmbd") and !running and currentGun != null:
 			currentGun.fire_gun()
 		if velocity.x == 0:
 			$AnimatedSprite.play("idle")

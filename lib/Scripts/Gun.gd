@@ -15,8 +15,8 @@ export var bulletDamage:int
 onready var currentDurability:int 
 onready var actualBullets
 onready var canFire
-onready var ReloadTimer
-onready var RateOfFireTimer
+onready var ReloadTimer:Timer
+onready var RateOfFireTimer:Timer
 onready var radianSpread
 onready var gunName
 onready var rot
@@ -73,13 +73,19 @@ func fire_gun():
 			var spread = rand_range(-radianSpread/2,radianSpread/2)*PlayerVariables.accuracyMultiplier
 			var rot2 = atan2(rot.y, rot.x)
 			emit_signal("shoot", Bullet,rot2+spread, self.global_position, bulletVelocity, bulletDamage) 
-		if actualBullets == 0:
+		if actualBullets <= 0:
 			if currentDurability > 0:
 				ReloadTimer.start()
 			else:
 				canFire = false
+				if get_parent().gunInventory.guns.size() > 1:
+					get_parent().gunInventory.remove_current()
+					get_parent().currentGun = get_parent().gunInventory.get_current()
+					queue_free()
 		else:
 			RateOfFireTimer.start()
+	elif !canFire && currentDurability > 0 && ReloadTimer.paused == false:
+		ReloadTimer.start()
 
 # Meant to adjust position of gun in character's
 # hand when sprite flips.

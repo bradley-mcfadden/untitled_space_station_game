@@ -9,7 +9,7 @@ func _ready():
 
 # Sets the properties of the pistol
 func craft():
-	rateOfFire = 0.5
+	rateOfFire = 1.0/2.0
 	reloadTime = 1
 	clipSize = 6
 	pellets = 1
