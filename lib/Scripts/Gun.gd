@@ -84,7 +84,7 @@ func fire_gun():
 					queue_free()
 		else:
 			RateOfFireTimer.start()
-	elif !canFire && currentDurability > 0 && ReloadTimer.paused == false:
+	elif !canFire && currentDurability > 0 && ReloadTimer.paused == false && actualBullets == 0:
 		ReloadTimer.start()
 
 # Meant to adjust position of gun in character's

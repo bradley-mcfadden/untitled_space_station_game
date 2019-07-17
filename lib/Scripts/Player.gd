@@ -75,7 +75,11 @@ func start(startPosition:Vector2):
 func _process(delta):
 	if health <= 0:
 		return
-	if (Input.is_action_just_released("ui_x")):
+	if ((Input.is_action_just_pressed("reload") && currentGun.currentDurability > 0) 
+    && currentGun.ReloadTimer.paused == false):
+		currentGun.ReloadTimer.start()
+		
+	if Input.is_action_just_released("ui_x"):
 		rotate_gun_list()	
 		HUD._on_weapon_swap(currentGun)
 		
@@ -90,8 +94,6 @@ func _process(delta):
 			potentialPurchase = null
 		else:
 			HUD.set_message_text("Insufficient funds")
-		
-		
 		
 	var norm = get_global_mouse_position() - self.position
 	norm = norm.normalized()
