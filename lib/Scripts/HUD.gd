@@ -25,11 +25,7 @@ func health_update(health:int,maxHealth=0):
 # Replaces the image in the gun image
 #	Gun to set image to
 func _on_weapon_swap(weapon:Gun):
-	if weapon is AnimatedSprite:
-		#print("yes")
-		var frames = weapon.get_sprite_frames()
-		var def = frames.get_frame("default",0)
-		$WeaponRect.texture = def
+	$WeaponRect.texture = weapon.texture
 	$AmmoLabel.text = str(weapon.actualBullets) +"\n"+str(weapon.currentDurability)
 	$WeaponLabel.text = weapon.gunName
 

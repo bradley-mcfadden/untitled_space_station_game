@@ -9,9 +9,6 @@ var maxHealth = STARTING_HEALTH
 onready var movespeed
 onready var velocity:Vector2
 onready var jumping:bool
-onready var gunRef = [load("res://Guns/SMG.tscn"),
-					  load("res://Guns/Shotgun.tscn"),
-					  load("res://Guns/Pistol.tscn")]
 onready var gunInventory:GunInventory
 onready var completeInventory:GunInventory
 onready var speedCap
@@ -67,7 +64,7 @@ func start(startPosition:Vector2):
 	currentGun = $Pistol
 	gunInventory.add(currentGun)
 	completeInventory.add(currentGun)
-	for gun in gunRef:
+	for gun in GlobalVariables.gunRef:
 		completeInventory.add(gun.instance())
 	
 # Handles non-movement related input 
@@ -83,13 +80,28 @@ func _process(delta):
 		rotate_gun_list()	
 		HUD._on_weapon_swap(currentGun)
 		
+	if Input.is_action_just_pressed("switch_guns"):
+		remove_child(currentGun)
+		currentGun = gunInventory.swap_current()
+		add_child(currentGun)
+		HUD._on_weapon_swap(currentGun)
+		
 	if Input.is_action_just_pressed("ui_e") and potentialPurchase != null:
 		if coins >= potentialPurchase.cost:
 			coins -= potentialPurchase.cost
 			potentialPurchase.purchased = true
 			HUD.fading_message("Picked up '"+potentialPurchase.item.title+"'.")
 			HUD.coin_update(coins)
-			add_item(potentialPurchase.item)
+			if potentialPurchase.item is Item:
+				add_item(potentialPurchase.item)
+			elif potentialPurchase.item is Gun:
+				gunInventory.add(potentialPurchase.item)
+				remove_child(currentGun)
+				currentGun = gunInventory.swap_current()
+				add_child(currentGun)
+				HUD._on_weapon_swap(currentGun)
+			# elif potentialPurchase is ActiveItem:
+			#	pass
 			potentialPurchase.queue_free()
 			potentialPurchase = null
 		else:
@@ -178,6 +190,7 @@ func rotate_gun_list():
 	currentGun = completeInventory.swap_current()
 	add_child(currentGun)
 	currentGun.currentDurability = currentGun.clipSize * 100
+	currentGun.on_ReloadTimer_timeout()
 
 # Updates player health and HUD
 #	damage - Amount of damage to take

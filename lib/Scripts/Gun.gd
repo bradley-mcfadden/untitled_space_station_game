@@ -1,9 +1,10 @@
-extends AnimatedSprite
+extends Sprite
 class_name Gun
 signal shoot(bullet, direction, origin, speed, damage)
 signal weaponSwap(weapon)
 signal updateGun(weapon)
 var Bullet = load("res://Scenes/Bullet.tscn")
+var title:String
 export var rateOfFire:float
 export var reloadTime:float
 export var clipSize:int
@@ -77,14 +78,13 @@ func fire_gun():
 			if currentDurability > 0:
 				ReloadTimer.start()
 			else:
-				canFire = false
 				if get_parent().gunInventory.guns.size() > 1:
 					get_parent().gunInventory.remove_current()
 					get_parent().currentGun = get_parent().gunInventory.get_current()
 					queue_free()
 		else:
 			RateOfFireTimer.start()
-	elif !canFire && currentDurability > 0 && ReloadTimer.paused == false && actualBullets == 0:
+	elif !canFire && currentDurability > 0 && ReloadTimer.paused == true && actualBullets == 0:
 		ReloadTimer.start()
 
 # Meant to adjust position of gun in character's

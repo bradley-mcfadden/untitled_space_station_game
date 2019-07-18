@@ -30,7 +30,6 @@ texture = SubResource( 1 )
 
 [node name="AnimatedSprite" parent="." instance=ExtResource( 3 )]
 position = Vector2( 506, 315 )
-frame = 1
 playing = true
 
 [node name="Pickup" parent="." instance=ExtResource( 4 )]

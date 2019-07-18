@@ -26,7 +26,6 @@ func add(g:Gun):
 func contains(g:Gun) -> int:
 	for i in range(guns.size()):
 		if g.get_script() == guns[i].get_script():
-			print (g.get_script()," ",guns[i].get_script())
 			return i
 	return -1
 

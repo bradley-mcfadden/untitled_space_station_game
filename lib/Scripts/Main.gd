@@ -114,14 +114,13 @@ func _on_Chest_Entered(chest:Chest,pos:Vector2,lootPool:int):
 #	pickup - Reference to pickup scene
 #	droppedItem - Item to place in inventory
 func _on_Pickup_Entered(pickup,droppedItem):
-	if droppedItem is Item:
-		if pickup.cost == 0:
-			Player.add_item(droppedItem)
-			Player.HUD.fading_message("Picked up '"+droppedItem.title+"'.")
-			pickup.queue_free()
-		else:
-			Player.HUD.set_message_text("Purchase '"+droppedItem.title+"' for "+str(pickup.cost)+"?")
-			Player.potentialPurchase = pickup
+	if pickup.cost == 0:
+		Player.add_item(droppedItem)
+		Player.HUD.fading_message("Picked up '"+droppedItem.title+"'.")
+		pickup.queue_free()
+	else:
+		Player.HUD.set_message_text("Purchase '"+droppedItem.title+"' for "+str(pickup.cost)+"?")
+		Player.potentialPurchase = pickup
 
 # Clear the text in the message label when a Pickup is exited
 func _on_Pickup_Exited():

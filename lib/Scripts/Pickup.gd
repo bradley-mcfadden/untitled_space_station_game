@@ -14,7 +14,9 @@ signal exit()
 func _ready():
 	if random == true:
 		var mainRef = get_parent().get_parent().get_parent()
-		set_item(mainRef.lootPoolWHITE[0].instance())
+		var itemIndex = int(rand_range(0,GlobalVariables.gunRef.size()))
+		var itemContained = GlobalVariables.gunRef[itemIndex].instance()
+		set_item(itemContained)
 		connect("pickup",mainRef,"_on_Pickup_Entered")
 		connect("exit",mainRef,"_on_Pickup_Exited")
 		$Label.visible = true

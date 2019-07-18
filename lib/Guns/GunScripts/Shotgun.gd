@@ -1,10 +1,12 @@
 extends Gun
 
 # Init
+func _init():
+	title = "Shotgun"
+
+# Init
 func _ready():
-	var GunSpriteFrames = preload("res://Guns/GunSprites/Shotgun.tres")
 	position.y += 4
-	set_sprite_frames(GunSpriteFrames)
 	emit_signal("weaponSwap",self)
 
 # Sets properties of gun
