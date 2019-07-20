@@ -24,6 +24,7 @@ onready var accumSpeed
 onready var onLadder
 onready var Anim:AnimatedSprite
 onready var currentGun
+onready var activeItem:ActiveItem
 onready var running:bool
 onready var DamageTimer:Timer
 onready var veganPower:bool
@@ -73,6 +74,14 @@ func start(startPosition:Vector2):
 func _process(delta):
 	if health <= 0:
 		return
+
+	if Input.is_action_just_pressed("use_item") && activeItem != null:
+		activeItem.active_effect()
+		activeItem.isReady = false
+		$CDTimer.start()
+		HUD.get_node("ActiveItem").inverted = true
+		HUD.get_node("CDTimer").start()
+	
 	if ((Input.is_action_just_pressed("reload") && currentGun.currentDurability > 0) 
     && currentGun.ReloadTimer.paused == false):
 		currentGun.ReloadTimer.start()
@@ -101,8 +110,14 @@ func _process(delta):
 				currentGun = gunInventory.swap_current()
 				add_child(currentGun)
 				HUD._on_weapon_swap(currentGun)
-			# elif potentialPurchase is ActiveItem:
-			#	pass
+			elif potentialPurchase is ActiveItem:
+				if activeItem != null:
+					var drop = Pickup.instance()
+					drop.item = activeItem
+					drop.global_position = global_position
+					get_parent().add_child(drop)
+				activeItem = potentialPurchase.item
+				$CDTimer.wait_time = potentialPurchase.item.cooldown
 			potentialPurchase.queue_free()
 			potentialPurchase = null
 		else:
@@ -271,3 +286,10 @@ func _on_RegenTimer_Timeout():
 	if health > maxHealth:
 		health = maxHealth
 	HUD.health_update(health,0)
+
+# Allow item to be used again, and stop the looping timer.
+func _on_CDTimer_timeout():
+	activeItem.isReady = true
+	HUD.get_node("ActiveItem").inverted = false
+	HUD.get_node("CDTimer").stop()
+	HUD.get_node("CDText").text = ""

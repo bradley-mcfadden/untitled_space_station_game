@@ -34,6 +34,12 @@ func _on_weapon_swap(weapon:Gun):
 func _on_update_gun(weapon:Gun):
 	$AmmoLabel.text = str(weapon.actualBullets) +"\n"+str(weapon.currentDurability)
 
+# Update the HUD for a new ActiveItem
+#	item - Item to update with
+func active_item_swtich(item:ActiveItem):
+	$ActiveLabel.text = item.title
+	$ActiveItemLabel.texture = item.texture
+
 # Takes an item, and adds it to the GUI of the player inventory
 #	i - Item reference
 func add_item(i:Item):
@@ -66,3 +72,7 @@ func set_message_text(text:String):
 func _on_Timer_timeout():
 	$MessageLabel.visible = false
 	$MessageLabel.text = ''
+
+# Updates the time count of the active item label
+func _on_CDTimer_timeout():
+	$CDText.text = int(get_parent().get_node("CDTimer").time_left)
