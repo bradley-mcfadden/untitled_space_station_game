@@ -27,6 +27,7 @@ onready var currentGun
 onready var running:bool
 onready var DamageTimer:Timer
 onready var veganPower:bool
+onready var ironSkin:bool
 onready var potentialPurchase
 
 # Init
@@ -196,7 +197,7 @@ func rotate_gun_list():
 #	damage - Amount of damage to take
 #	norm - Direction of incoming damage
 func take_damage(damage:int, norm:Vector2):
-	if hitShield:
+	if hitShield || ironSkin:
 		return
 	if veganPower:
 		PlayerVariables.damageMultiplier *= 2
