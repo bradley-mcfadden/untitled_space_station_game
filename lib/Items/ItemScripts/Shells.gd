@@ -13,4 +13,4 @@ func effect(p):
 		if child is Gun:
 			cGun = child
 	cGun.currentDurability += cGun.clipSize * 2
-	p.HUD._on_updateGun(cGun)
+	p.HUD._on_update_gun(cGun)

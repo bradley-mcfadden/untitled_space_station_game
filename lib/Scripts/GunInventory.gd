@@ -32,7 +32,7 @@ func contains(g:Gun) -> int:
 # Rotate through inventory and return the next gun
 #	return - Next gun in inventory or null if set is empty
 func swap_current() -> Gun:
-	if guns.size() > 1:
+	if guns.size() >= 1:
 		if current+1 < guns.size():
 			current += 1
 		else:

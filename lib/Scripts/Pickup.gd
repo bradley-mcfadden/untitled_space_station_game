@@ -13,9 +13,14 @@ signal exit()
 # Init
 func _ready():
 	if random == true:
+		var itemContained:Sprite
+		if (randi() % 2) - 1 < 0:
+			var itemIndex = int(rand_range(0,GlobalVariables.gunRef.size()))
+			itemContained = GlobalVariables.gunRef[itemIndex].instance()
+		else:
+			var itemIndex = int(rand_range(0,GlobalVariables.lootPoolACTIVE.size()))
+			itemContained = GlobalVariables.lootPoolACTIVE[itemIndex].instance()
 		var mainRef = get_parent().get_parent().get_parent()
-		var itemIndex = int(rand_range(0,GlobalVariables.gunRef.size()))
-		var itemContained = GlobalVariables.gunRef[itemIndex].instance()
 		set_item(itemContained)
 		connect("pickup",mainRef,"_on_Pickup_Entered")
 		connect("exit",mainRef,"_on_Pickup_Exited")

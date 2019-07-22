@@ -1335,8 +1335,7 @@ align = 1
 [node name="ActiveItem" type="Polygon2D" parent="."]
 position = Vector2( -8, -8 )
 color = Color( 1, 1, 1, 0.2 )
-invert_enable = true
-invert_border = 1.0
+invert_border = 0.1
 polygon = PoolVector2Array( 104, 672, 104, 728, 240, 728, 240, 672 )
 
 [connection signal="timeout" from="FadingMessageTimer" to="." method="_on_Timer_timeout"]

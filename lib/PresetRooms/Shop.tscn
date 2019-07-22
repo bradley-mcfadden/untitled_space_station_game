@@ -30,10 +30,31 @@ texture = SubResource( 1 )
 
 [node name="AnimatedSprite" parent="." instance=ExtResource( 3 )]
 position = Vector2( 506, 315 )
+frame = 1
 playing = true
 
 [node name="Pickup" parent="." instance=ExtResource( 4 )]
-position = Vector2( 218, 336 )
+position = Vector2( 224, 336 )
+random = true
+cost = 10
+
+[node name="Pickup3" parent="." instance=ExtResource( 4 )]
+position = Vector2( 416, 336 )
+random = true
+cost = 10
+
+[node name="Pickup4" parent="." instance=ExtResource( 4 )]
+position = Vector2( 608, 336 )
+random = true
+cost = 10
+
+[node name="Pickup5" parent="." instance=ExtResource( 4 )]
+position = Vector2( 704, 336 )
+random = true
+cost = 10
+
+[node name="Pickup2" parent="." instance=ExtResource( 4 )]
+position = Vector2( 320, 336 )
 random = true
 cost = 10
 

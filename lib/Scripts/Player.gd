@@ -1,6 +1,5 @@
 extends KinematicBody2D
 class_name Player
-
 const GRAVITY = 12
 const STARTING_HEALTH = 100
 const ROOM_JUMP = 430
@@ -40,6 +39,7 @@ func _ready():
 # Reset player position on death	
 #	startPosition - Location player starts on respawn
 func start(startPosition:Vector2):
+	activeItem = null
 	veganPower = false
 	gunInventory = GunInventory.new()
 	completeInventory = GunInventory.new()
@@ -110,14 +110,15 @@ func _process(delta):
 				currentGun = gunInventory.swap_current()
 				add_child(currentGun)
 				HUD._on_weapon_swap(currentGun)
-			elif potentialPurchase is ActiveItem:
+			elif potentialPurchase.item is ActiveItem:
 				if activeItem != null:
-					var drop = Pickup.instance()
+					var drop = load("res://Scenes/Pickup.tscn").instance()
 					drop.item = activeItem
 					drop.global_position = global_position
 					get_parent().add_child(drop)
 				activeItem = potentialPurchase.item
 				$CDTimer.wait_time = potentialPurchase.item.cooldown
+				HUD.active_item_swtich(potentialPurchase.item)
 			potentialPurchase.queue_free()
 			potentialPurchase = null
 		else:
@@ -290,6 +291,6 @@ func _on_RegenTimer_Timeout():
 # Allow item to be used again, and stop the looping timer.
 func _on_CDTimer_timeout():
 	activeItem.isReady = true
-	HUD.get_node("ActiveItem").inverted = false
+	HUD.get_node("ActiveItem").invert_enable = false
 	HUD.get_node("CDTimer").stop()
 	HUD.get_node("CDText").text = ""

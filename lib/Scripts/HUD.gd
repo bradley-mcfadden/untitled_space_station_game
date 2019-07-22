@@ -60,7 +60,7 @@ func add_item(i:Item):
 func fading_message(text:String):
 	$MessageLabel.visible = true
 	$MessageLabel.text = text
-	$Timer.start()
+	$FadingMessageTimer.start()
 
 # Setter for text in the message label
 #	text - Text to set the label to

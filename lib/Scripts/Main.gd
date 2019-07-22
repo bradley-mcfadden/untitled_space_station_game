@@ -17,6 +17,7 @@ const lootPoolPURPLE = [preload("res://Items/ElixirOfLife.tscn"),preload("res://
 const lootPoolORANGE = [preload("res://Items/ChiliPepper.tscn"),preload("res://Items/BottleOfRage.tscn"),
                       preload("res://Items/MysteryPowder.tscn"), preload("res://Items/Catalyst.tscn"),
 					  preload("res://Items/AlmondMilk.tscn")]
+const lootPoolACTIVE = [preload("res://ActiveItems/IronSkin.tscn")]
 const Pickup = preload("res://Scenes/Pickup.tscn")
 const Coin = preload("res://Scenes/Coin.tscn")
 
@@ -91,7 +92,7 @@ func _on_HallTimer_timeout():
 # Event handler for a chest being opened.
 #	pos - Position of chest.
 #	lootPool - Tier of the chest, determines what can drop from it.
-func _on_Chest_Entered(chest:Chest,pos:Vector2,lootPool:int):
+func _on_Chest_Entered(chest,pos:Vector2,lootPool:int):
 	var drop = Pickup.instance()
 	drop.global_position = chest.global_position
 	var chestContents

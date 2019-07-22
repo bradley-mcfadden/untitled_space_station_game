@@ -130,6 +130,8 @@ GlobalVariables="*res://Scripts/GlobalVariables.gd"
 [debug]
 
 settings/stdout/print_fps=true
+gdscript/warnings/return_value_discarded=false
+gdscript/warnings/integer_division=false
 
 [display]
 
