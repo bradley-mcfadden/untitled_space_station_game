@@ -1,14 +1,15 @@
-extends Node
+extends Object
 class_name Edge
 var a:Rect
 var b:Rect
+
 
 # Create a new edge between two rects
 #	a1 - First rect
 #	a2 - Second rect
 func _init(a1:Rect, b2:Rect): 
-	var magA = sqrt((a1.low.x*a1.low.x)+(a1.low.y*a1.low.y))  
-	var magB = sqrt((b2.low.x*b2.low.x)+(b2.low.y*b2.low.y))  
+	var magA:float = sqrt((a1.low.x*a1.low.x)+(a1.low.y*a1.low.y))  
+	var magB:float = sqrt((b2.low.x*b2.low.x)+(b2.low.y*b2.low.y))  
 	if magB <= magA:
       self.a = b2.copy()
       self.b = a1.copy()
@@ -16,24 +17,28 @@ func _init(a1:Rect, b2:Rect):
       self.a = a1.copy()
       self.b = b2.copy()
 
+
 # Returns a copy
 #	return - Copy of self
 func copy():
 	var copy = get_script().new(a,b)
 	return copy
-	
+
+
 # Compares two edges
-# e - Edge to compare to
-# return - Are these edges equal?
+#	e - Edge to compare to
+#	return - Are these edges equal?
 func equals(e) -> bool:
 	if e.a == a && e.b == b:
 		return true
 	return false
 
+
 # Prints the states of the two rects
-# return - Description of edge
+#	return - Description of edge
 func to_string() -> String:
 	return "Edge "+a.to_string() +" "+ b.to_string()
+
 
 # Returns a door normal of the room that contains this edge
 #	r - Room to check
@@ -73,7 +78,8 @@ func get_door_normals(r:Rect) -> Vector2:
 		# Case 7
 		else:
 			return Vector2(0,-1)
-	
+
+
 # If this edge contains the r, return the door inside r
 #	r - Which room's door?
 #	return - Map vector location of door
@@ -109,11 +115,11 @@ func get_doors(r:Rect) -> Vector2:
 		# Case 7
 		else:
 			return Vector2(a.low.x+(a.xsize/2),b.low.y)
-		
+
 
 # Sets interior of the edges of the tile map to a dark tile which is passable
-# tm - TileMap to project on
-# doorsClosed - Whether or not door closed tiles are created
+#	tm - TileMap to project on
+#	doorsClosed - Whether or not door closed tiles are created
 func image_empty(tm:TileMap,doorsClosed:bool):
 	if a.low.x < b.low.x:
 		if a.low.y == b.low.y:
@@ -222,10 +228,10 @@ func image_empty(tm:TileMap,doorsClosed:bool):
 				else:
 					tm.set_cell(a.low.x+(a.xsize/2),i,2)
 					tm.set_cell(a.low.x+(a.xsize/2)+1,i,11)
-			
+
 
 # Draws the walls of the edges to an impassable tile
-# tm - TileMap to project on
+#	tm - TileMap to project on
 func image_walls(tm:TileMap):
 	if a.low.x > b.low.x:
 		if a.low.y < b.low.y:
@@ -253,10 +259,11 @@ func image_walls(tm:TileMap):
 			tm.set_cell(a.low.x+(a.xsize/2)-1,i,0)
 			tm.set_cell(a.low.x+(a.xsize/2)+2,i,0)
 
+
 # Checks a and b fields to determine whether edge contains r
 #	r - Rect to search for
 #	return _ Was the rect found?
-func contains(r:Rect)->bool:
+func contains(r:Rect) -> bool:
 	if r == null:
 		return false
 	if r.equals(a) || r.equals(b):

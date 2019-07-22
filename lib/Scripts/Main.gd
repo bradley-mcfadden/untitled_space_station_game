@@ -1,48 +1,52 @@
 extends Node
-
-onready var Player
-# var rob = preload("res://Enemies/Robot.tscn")
-const lootPoolWHITE = [preload("res://Items/TwoPercent.tscn"),preload("res://Items/Coffee.tscn"),
+onready var player:KinematicBody2D
+const LOOT_POOL_WHITE = [preload("res://Items/TwoPercent.tscn"),preload("res://Items/Coffee.tscn"),
                      preload("res://Items/Grease.tscn"),preload("res://Items/TheChain.tscn"),
 					 preload("res://Items/OldJersey.tscn"), preload("res://Items/BeyondMeat.tscn"),
 					 preload("res://Items/Cookies.tscn"), preload("res://Items/Shells.tscn")]
-const lootPoolGREEN = [preload("res://Items/PainPills.tscn"),preload("res://Items/TowerShield.tscn"),
+const LOOT_POOL_GREEN = [preload("res://Items/PainPills.tscn"),preload("res://Items/TowerShield.tscn"),
                      preload("res://Items/RollerBlades.tscn"), preload("res://Items/ExtendedMagazine.tscn"),
 					 preload("res://Items/Binoculars.tscn"),preload("res://Items/Dilopia.tscn")]
-const lootPoolBLUE = [preload("res://Items/MarineHelmet.tscn"),preload("res://Items/PhoneBook.tscn"),
+const LOOT_POOL_BLUE = [preload("res://Items/MarineHelmet.tscn"),preload("res://Items/PhoneBook.tscn"),
                     preload("res://Items/Gloves.tscn"), preload("res://Items/ItchyFinger.tscn")]
-const lootPoolPURPLE = [preload("res://Items/ElixirOfLife.tscn"),preload("res://Items/FullMetalJacket.tscn"),
+const LOOT_POOL_PURPLE = [preload("res://Items/ElixirOfLife.tscn"),preload("res://Items/FullMetalJacket.tscn"),
                       preload("res://Items/Batteries.tscn"),preload("res://Items/DrumClip.tscn"),
 					  preload("res://Items/Deadeye.tscn"), preload("res://Items/SoyMilk.tscn")]
-const lootPoolORANGE = [preload("res://Items/ChiliPepper.tscn"),preload("res://Items/BottleOfRage.tscn"),
+const LOOT_POOL_ORANGE = [preload("res://Items/ChiliPepper.tscn"),preload("res://Items/BottleOfRage.tscn"),
                       preload("res://Items/MysteryPowder.tscn"), preload("res://Items/Catalyst.tscn"),
 					  preload("res://Items/AlmondMilk.tscn")]
-const lootPoolACTIVE = [preload("res://ActiveItems/IronSkin.tscn")]
-const Pickup = preload("res://Scenes/Pickup.tscn")
-const Coin = preload("res://Scenes/Coin.tscn")
+const LOOT_POOL_ACTIVE = [preload("res://ActiveItems/IronSkin.tscn")]
+const PICKUP = preload("res://Scenes/Pickup.tscn")
+const COIN = preload("res://Scenes/Coin.tscn")
+
 
 # Init
 func _ready():
-	Player = $Player
-	Player.position = $RoomGenerator.spawn_room()
+	player = $Player
+	player.position = $RoomGenerator.spawn_room()
+
+
 # Process physics of some world objects
 #	delta - Time since last physics step	
 func  _physics_process(delta):
-	var coins = $Coins.get_children()
+	var coins:Array = $Coins.get_children()
 	for coin in coins:
-		coin.apply_force(Player.pull(coin))
-		# print(Player.pull(coin))
+		coin.apply_force(player.pull(coin))
+
+
 # Reset player position, enemies, etc
 func new_game():
 	PlayerVariables.reset()
 	$RoomGenerator.generate_dungeon_2()
-	Player.start($RoomGenerator.spawn_room())
+	player.start($RoomGenerator.spawn_room())
 	$Player/HUD/DeathLabel.visible = false
 	$Player/HUD/RestartButton.visible = false
-	
+
+
 # Called when character dies
 func game_over():
 	pass
+
 
 # Event handler when Gun is fired
 #	bullet - Bullet to place on screen
@@ -50,88 +54,92 @@ func game_over():
 #	location - Location to spawn bullet
 #	vel - Movement speed of bullet 
 #	damage - Amount of damage of the bullet
-func on_Gun_shoot(bullet, direction, location, vel, damage):
-	var child = bullet.instance()
+func on_Gun_shoot(bullet:Bullet, direction:float, location:Vector2, vel:float, damage:int):
+	var child:Bullet = bullet.instance()
 	child.rotation = direction
 	child.position = location
 	child.speed = vel
 	child.damage = damage
 	add_child(child)
 
+
 # Determines the tiles adjacent to the player, above, below, and in front
 func update_tiles():
-	var tpos = $RoomGenerator.world_to_map($Player.position)
-	var floor_tile = $RoomGenerator.get_cellv(Vector2(tpos.x, tpos.y + 1))
+	var tpos:Vector2 = $RoomGenerator.world_to_map($Player.position)
+	var floor_tile:int = $RoomGenerator.get_cellv(Vector2(tpos.x, tpos.y + 1))
 	if floor_tile == 7 || floor_tile == 8:
 		$RoomGenerator.open_doors($Player.position)
-		# print(floor_tile)
-	var front_tile = $RoomGenerator.get_cellv(Vector2(tpos.x+$Player.direction, tpos.y))
+	var front_tile:int = $RoomGenerator.get_cellv(Vector2(tpos.x+$Player.direction, tpos.y))
 	if front_tile == 5 || front_tile == 6:
 		$RoomGenerator.open_doors($Player.position)
-		# print(front_tile)
-	var ceiling_tile = $RoomGenerator.get_cellv(Vector2(tpos.x, tpos.y-2))
+	var ceiling_tile:int = $RoomGenerator.get_cellv(Vector2(tpos.x, tpos.y-2))
 	if ceiling_tile == 7 || ceiling_tile == 8:
 		$RoomGenerator.open_doors($Player.position)
-		# print(ceiling_tile)
+
 
 # Method so that children can start hall timer.
 func start_hall_timer():
 	$HallTimer.start()
-	Player.toggle_damping()
-	
+	player.toggle_damping()
+
+
 # Event handler for when hall time runs out.
 # Closes all doors if player is in a room
 func _on_HallTimer_timeout():
-	var playerRoom = $RoomGenerator.find_player_index($Player.position)
+	var playerRoom:int = $RoomGenerator.find_player_index($Player.position)
 	if playerRoom != -1:
 		$HallTimer.stop()
 		$RoomGenerator.close_doors()
-		Player.toggle_damping()
+		player.toggle_damping()
 		$RoomGenerator.spawn_enemies(playerRoom)
+
 
 # Event handler for a chest being opened.
 #	pos - Position of chest.
-#	lootPool - Tier of the chest, determines what can drop from it.
-func _on_Chest_Entered(chest,pos:Vector2,lootPool:int):
-	var drop = Pickup.instance()
+#	loot_pool - Tier of the chest, determines what can drop from it.
+func _on_Chest_Entered(chest,pos:Vector2,loot_pool:int):
+	var drop:Pickup = PICKUP.instance()
 	drop.global_position = chest.global_position
-	var chestContents
-	if lootPool == Chest.WHITE:
-		chestContents = lootPoolWHITE[int(rand_range(0,lootPoolWHITE.size()))].instance()
-	elif lootPool == Chest.GREEN:
-		chestContents = lootPoolGREEN[int(rand_range(0,lootPoolGREEN.size()))].instance()
-	elif lootPool == Chest.BLUE:
-		chestContents = lootPoolBLUE[int(rand_range(0,lootPoolBLUE.size()))].instance()
-	elif lootPool == Chest.PURPLE:
-		chestContents = lootPoolPURPLE[int(rand_range(0,lootPoolPURPLE.size()))].instance()
-	elif lootPool == Chest.ORANGE:
-		chestContents = lootPoolORANGE[int(rand_range(0,lootPoolORANGE.size()))].instance()
+	var chestContents:Item
+	if loot_pool == Chest.WHITE:
+		chestContents = LOOT_POOL_WHITE[int(rand_range(0,LOOT_POOL_WHITE.size()))].instance()
+	elif loot_pool == Chest.GREEN:
+		chestContents = LOOT_POOL_GREEN[int(rand_range(0,LOOT_POOL_GREEN.size()))].instance()
+	elif loot_pool == Chest.BLUE:
+		chestContents = LOOT_POOL_BLUE[int(rand_range(0,LOOT_POOL_BLUE.size()))].instance()
+	elif loot_pool == Chest.PURPLE:
+		chestContents = LOOT_POOL_PURPLE[int(rand_range(0,LOOT_POOL_PURPLE.size()))].instance()
+	elif loot_pool == Chest.ORANGE:
+		chestContents = LOOT_POOL_ORANGE[int(rand_range(0,LOOT_POOL_ORANGE.size()))].instance()
 	drop.set_item(chestContents)
 	drop.connect("pickup",self,"_on_Pickup_Entered")
 	call_deferred("add_child",drop)
 	chest.disconnect("chest_entered",self,"_on_Chest_Entered")
 	
+	
 # When a pickup is entered, add it to Player inventory or prompt to swap active items.
 #	pickup - Reference to pickup scene
-#	droppedItem - Item to place in inventory
-func _on_Pickup_Entered(pickup,droppedItem):
+#	dropped_item - Item to place in inventory
+func _on_Pickup_Entered(pickup:Pickup,dropped_item):
 	if pickup.cost == 0:
-		Player.add_item(droppedItem)
-		Player.HUD.fading_message("Picked up '"+droppedItem.title+"'.")
+		player.add_item(dropped_item)
+		player.HUD.fading_message("Picked up '"+dropped_item.title+"'.")
 		pickup.queue_free()
 	else:
-		Player.HUD.set_message_text("Purchase '"+droppedItem.title+"' for "+str(pickup.cost)+"?")
-		Player.potentialPurchase = pickup
+		player.HUD.set_message_text("Purchase '"+dropped_item.title+"' for "+str(pickup.cost)+"?")
+		player.potentialPurchase = pickup
+
 
 # Clear the text in the message label when a Pickup is exited
 func _on_Pickup_Exited():
-	Player.HUD.set_message_text("")
+	player.HUD.set_message_text("")
+
 
 # Handles signal and adds coins to the scene
 #	location - Global position to place coins
-#	numCoins - Number of coins to add
-func _on_Drop_Coins(location:Vector2,numCoins:int):
-	for i in range(numCoins):
-		var c = Coin.instance()
+#	num_coins - Number of coins to add
+func _on_Drop_Coins(location:Vector2,num_coins:int):
+	for i in range(num_coins):
+		var c:Coin = COIN.instance()
 		c.global_position = location
 		$Coins.add_child(c)

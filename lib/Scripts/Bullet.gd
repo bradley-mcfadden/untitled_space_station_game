@@ -1,23 +1,28 @@
 extends RigidBody2D
 class_name Bullet
-var speed
-var count = 0
-var velocity
+
+
+var speed:float
+var count := 0
+var velocity:Vector2
 var damage:int
 var dead:bool
-var deadBuffer:int
+var dead_buffer:int
+
+
 func _ready():
 	linear_velocity.x = speed * cos(rotation)
 	linear_velocity.y = speed * sin(rotation)
 	dead = false
-	deadBuffer = 3
-	
+	dead_buffer = 3
+
+
 # Process and handle collisions	
 #	delta - Time since last frame
 func _physics_process(delta):
 	if dead == true:
-		deadBuffer -= 1
-	if deadBuffer == 0 or linear_velocity.length() < 50:
+		dead_buffer -= 1
+	if dead_buffer == 0 or linear_velocity.length() < 50:
 		queue_free()
 		
 	var step = linear_velocity * delta
@@ -33,6 +38,7 @@ func _physics_process(delta):
 		elif result.collider is TileMap:
 			dead = true
 			#queue_free()
+
 
 # Handles exceptional circumstances when a bullet could fall off screen
 func _on_VisibilityNotifier2D_screen_exited():

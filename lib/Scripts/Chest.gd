@@ -4,14 +4,14 @@ enum {WHITE,GREEN,BLUE,PURPLE,ORANGE}
 signal chest_entered(chest,pos,lootPool)
 onready var type:int
 
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	var x = get_parent().get_parent().get_parent()
-	if x is Node:
+	var x:Node = get_parent().get_parent().get_parent()
+	if x.get_script() == load("res://Scripts/Main.gd"):
 		self.connect("chest_entered",x,"_on_Chest_Entered")
-		
 	randomize()
-	var rng = rand_range(0,1)
+	var rng:float = rand_range(0,1)
 	if rng < 0.35:
 		type = WHITE
 	elif rng < 0.65:
@@ -25,9 +25,10 @@ func _ready():
 	# print(rng," ",type)
 	$AnimatedSprite.animation = str(type)
 
+
 # Event handler for when chest is passed through
 #	body - What passed through it?
-func _on_Chest_body_entered(body):
+func _on_Chest_body_entered(body:PhysicsBody2D):
 	if body is Player:
 		emit_signal("chest_entered",self,position,type)
 		$AnimatedSprite.play(str(type)+"opened")

@@ -1,105 +1,109 @@
 extends Sprite
 class_name Gun
-signal shoot(bullet, direction, origin, speed, damage)
-signal weaponSwap(weapon)
-signal updateGun(weapon)
-var Bullet = load("res://Scenes/Bullet.tscn")
+signal bullet_fired(bullet, direction, origin, speed, damage)
+signal weapon_changed(weapon)
+signal ammo_changed(weapon)
+const BULLET = preload("res://Scenes/Bullet.tscn")
 var title:String
-export var rateOfFire:float
-export var reloadTime:float
-export var clipSize:int
+export var rate_of_fire:float
+export var reload_time:float
+export var clip_size:int
 export var pellets:int
-export var bulletVelocity:int
-export var degreeSpread:int
-export var bulletDamage:int
-#onready var maxDurability:int
-onready var currentDurability:int 
-onready var actualBullets
-onready var canFire
-onready var ReloadTimer:Timer
-onready var RateOfFireTimer:Timer
-onready var radianSpread
-onready var gunName
-onready var rot
+export var bullet_velocity:int
+export var degree_spread:int
+export var bullet_damage:int
+onready var current_durability:int 
+onready var actual_bullets:int
+onready var can_fire:bool
+onready var reload_timer:Timer
+onready var rate_of_fire_timer:Timer
+onready var radian_spread:float
+onready var gunName:String
+onready var mouse_vector:Vector2
 
 # Init
 func _ready():
 	position.y += 12
 	flip_h = true
 	craft()
-	self.connect("shoot",get_parent().get_parent(), "on_Gun_shoot")
-	ReloadTimer = Timer.new()
+	self.connect("bullet_fired",get_parent().get_parent(), "on_Gun_shoot")
+	reload_timer = Timer.new()
 	centered = true
-	ReloadTimer.wait_time = reloadTime * PlayerVariables.reloadMultiplier
-	ReloadTimer.one_shot = true
+	reload_timer.wait_time = reload_time * PlayerVariables.reloadMultiplier
+	reload_timer.one_shot = true
 	# on reload 
-	ReloadTimer.connect("timeout",self,"on_ReloadTimer_timeout")
-	add_child(ReloadTimer)
-	RateOfFireTimer = Timer.new()
-	RateOfFireTimer.wait_time = rateOfFire * PlayerVariables.fireRateMultiplier
-	RateOfFireTimer.one_shot = true
+	reload_timer.connect("timeout",self,"on_ReloadTimer_timeout")
+	add_child(reload_timer)
+	rate_of_fire_timer = Timer.new()
+	rate_of_fire_timer.wait_time = rate_of_fire * PlayerVariables.fireRateMultiplier
+	rate_of_fire_timer.one_shot = true
 	# on rate of fire refresh 
-	RateOfFireTimer.connect("timeout",self,"on_RateOfFireTimer_timeout")
-	add_child(RateOfFireTimer)
-	actualBullets = 0
-	canFire = false
+	rate_of_fire_timer.connect("timeout",self,"on_RateOfFireTimer_timeout")
+	add_child(rate_of_fire_timer)
+	actual_bullets = 0
+	can_fire = false
 	on_ReloadTimer_timeout()
-	radianSpread = deg2rad(degreeSpread)
-	self.connect("weaponSwap",get_parent().get_node("HUD"),"_on_weapon_swap")
-	self.connect("updateGun",get_parent().get_node("HUD"),"_on_update_gun")
-	# emit_signal("weaponSwap",self)
-	
+	radian_spread = deg2rad(degree_spread)
+	self.connect("weapon_changed",get_parent().get_node("HUD"),"_on_weapon_swap")
+	self.connect("ammo_changed",get_parent().get_node("HUD"),"_on_update_gun")
+
+
 # Update sprite and handle firing input
 #	delta - Time since last frame
 func _process(delta):
 	if get_parent().health > 0 and !get_parent().onLadder:
 		look_at(get_global_mouse_position())
-		rot = get_global_mouse_position() - global_position
+		mouse_vector = get_global_mouse_position() - global_position
 		adjust_pos() 
-		if rot.x > 0:
+		if mouse_vector.x > 0:
 			flip_v = false
 		else:
 			flip_v = true
+
+
 # Placeholder function to be replaced by child classes
 func craft():
 	pass
 
-# Spawn a bullet
+
+# Spawn a BULLET
 func fire_gun():
-	if canFire && rot != null:
-		canFire = false
-		actualBullets -= 1
-		emit_signal("updateGun",self)
+	if can_fire && mouse_vector != null:
+		can_fire = false
+		actual_bullets -= 1
+		emit_signal("ammo_changed",self)
 		for i in range(int(pellets*PlayerVariables.pelletMultiplier)):
-			var spread = rand_range(-radianSpread/2,radianSpread/2)*PlayerVariables.accuracyMultiplier
-			var rot2 = atan2(rot.y, rot.x)
-			emit_signal("shoot", Bullet,rot2+spread, self.global_position, bulletVelocity, bulletDamage) 
-		if actualBullets <= 0:
-			if currentDurability > 0:
-				ReloadTimer.start()
+			var spread = rand_range(-radian_spread/2,radian_spread/2)*PlayerVariables.accuracyMultiplier
+			var rot2 = atan2(mouse_vector.y, mouse_vector.x)
+			emit_signal("bullet_fired", BULLET,rot2+spread, self.global_position, bullet_velocity, bullet_damage) 
+		if actual_bullets <= 0:
+			if current_durability > 0:
+				reload_timer.start()
 			else:
 				if get_parent().gunInventory.guns.size() > 1:
 					get_parent().gunInventory.remove_current()
 					get_parent().currentGun = get_parent().gunInventory.get_current()
 					queue_free()
 		else:
-			RateOfFireTimer.start()
-	elif !canFire && currentDurability > 0 && ReloadTimer.paused == true && actualBullets == 0:
-		ReloadTimer.start()
+			rate_of_fire_timer.start()
+	elif !can_fire && current_durability > 0 && reload_timer.paused == true && actual_bullets == 0:
+		reload_timer.start()
+
 
 # Meant to adjust position of gun in character's
 # hand when sprite flips.
 func adjust_pos():
 	pass
 
+
 # Event handler when reload timer is up	
 func on_ReloadTimer_timeout():
-	var potentialClip = int(clipSize*PlayerVariables.clipMultiplier)
-	actualBullets = potentialClip if currentDurability >= potentialClip else currentDurability
-	currentDurability -= actualBullets
-	canFire = true
-	emit_signal("updateGun",self)
+	var potentialClip = int(clip_size*PlayerVariables.clipMultiplier)
+	actual_bullets = potentialClip if current_durability >= potentialClip else current_durability
+	current_durability -= actual_bullets
+	can_fire = true
+	emit_signal("ammo_changed",self)
 	
 # Event handler for when rate of fire timer is up
 func on_RateOfFireTimer_timeout():
-	canFire = true
+	can_fire = true

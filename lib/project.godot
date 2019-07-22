@@ -29,7 +29,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Scripts/Coin.gd"
 }, {
-"base": "Node",
+"base": "Object",
 "class": "Edge",
 "language": "GDScript",
 "path": "res://Scripts/Edge.gd"

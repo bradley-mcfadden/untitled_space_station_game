@@ -1,14 +1,16 @@
 extends Sprite
 class_name ActiveItem
 var title:String
-var p
+var player:Player
 var cooldown:int
-var isReady:bool
+var is_ready:bool
+
 
 # Used to initialize variables necessary for script
 func init():
-	p = get_parent()
-	isReady = true	
+	player = get_parent()
+	is_ready = true	
+
 
 # Abstract function to be extended
 func active_effect():

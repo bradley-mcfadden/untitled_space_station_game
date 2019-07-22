@@ -1,4 +1,6 @@
 extends Node2D
-onready var numEnemies:int
+onready var num_enemies:int
+
+
 func _ready():
-	numEnemies = get_child_count()
+	num_enemies = get_child_count()
