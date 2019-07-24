@@ -2,8 +2,8 @@ extends KinematicBody2D
 class_name Player
 const GRAVITY = 12
 const STARTING_HEALTH = 100
-const ROOM_JUMP = 430
-const EDGE_JUMP = 450
+const ROOM_JUMP = 495
+const EDGE_JUMP = 518
 var max_health:int = STARTING_HEALTH
 onready var movespeed:float
 onready var velocity:Vector2
@@ -36,16 +36,16 @@ func _ready():
 	start(Vector2(0,0))
 	hud = $HUD
 	damage_timer = $DamageTimer
+	animated_sprite = $AnimatedSprite
 
 
 # Reset player position on death	
-#	startPosition - Location player starts on respawn
-func start(startPosition:Vector2):
+#	start_position - Location player starts on respawn
+func start(start_position:Vector2):
 	active_item = null
 	has_vegan_power = false
 	gun_inventory = GunInventory.new()
 	complete_inventory = GunInventory.new()
-	animated_sprite = $AnimatedSprite
 	direction = 1
 	horizontal_damping = 0.90
 	jump_power = ROOM_JUMP
@@ -55,11 +55,10 @@ func start(startPosition:Vector2):
 	terminal_velocity = 0
 	speed_cap = 200
 	movespeed = 24
-	PlayerVariables.damage_multiplier = 1
 	coins = 0
 	jumping = false
 	has_hit_shield = false
-	self.position = startPosition
+	position = start_position
 	max_health = STARTING_HEALTH
 	health = max_health
 	$HUD.health_update(health)
@@ -151,7 +150,7 @@ func _physics_process(delta):
 				terminal_velocity += 0.5
 			velocity.y += GRAVITY + terminal_velocity
 		elif Input.is_action_pressed("ui_up"):
-			velocity.y = -jump_power * PlayerVariables.jump_multiplier * 1.15
+			velocity.y = -jump_power * PlayerVariables.jump_multiplier
 			terminal_velocity = 0
 		if Input.is_action_pressed("ui_lmbd") and !running and equipped_gun != null:
 			equipped_gun.fire_gun()
@@ -304,7 +303,7 @@ func _on_RegenTimer_Timeout():
 
 # Allow item to be used again, and stop the looping timer.
 func _on_CDTimer_timeout():
-	active_item.isReady = true
+	active_item.is_ready = true
 	hud.get_node("ActiveItem").invert_enable = false
 	hud.get_node("CDTimer").stop()
 	hud.get_node("CDText").text = ""
