@@ -4,5 +4,5 @@ class_name Item
 var image:Texture
 var title:String
 
-func effect(player:Player):
+func effect(player:KinematicBody2D):
 	pass

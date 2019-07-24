@@ -5,32 +5,34 @@ export var cost:int = 0
 onready var count:float
 onready var step:float
 onready var item:Sprite
-onready var isCarryable:bool
+onready var is_carryable:bool
 onready var purchased:bool
-signal pickup(dropped,contents)
-signal exit()
+signal pickup_entered(dropped,contents)
+signal pickup_exited()
+
 
 # Init
 func _ready():
 	if random == true:
-		var itemContained:Sprite
+		var item_contained:Sprite
 		if (randi() % 2) - 1 < 0:
-			var itemIndex = int(rand_range(0,GlobalVariables.gunRef.size()))
-			itemContained = GlobalVariables.gunRef[itemIndex].instance()
+			var itemIndex = int(rand_range(0,GlobalVariables.GUN_REF.size()))
+			item_contained = GlobalVariables.gunRef[itemIndex].instance()
 		else:
-			var itemIndex = int(rand_range(0,GlobalVariables.lootPoolACTIVE.size()))
-			itemContained = GlobalVariables.lootPoolACTIVE[itemIndex].instance()
-		var mainRef = get_parent().get_parent().get_parent()
-		set_item(itemContained)
-		connect("pickup",mainRef,"_on_Pickup_Entered")
-		connect("exit",mainRef,"_on_Pickup_Exited")
+			var itemIndex = int(rand_range(0,GlobalVariables.LOOT_POOL_ACTIVE.size()))
+			item_contained = GlobalVariables.LOOT_POOL_ACTIVE[itemIndex].instance()
+		var main_reference = get_parent().get_parent().get_parent()
+		set_item(item_contained)
+		connect("pickup_entered",main_reference,"_on_Pickup_Entered")
+		connect("pickup_exited",main_reference,"_on_Pickup_Exited")
 		$Label.visible = true
 		$Label.text = str(cost)
 	purchased = false
 	count = 50.0 
 	step = 2.0
-	isCarryable = false
+	is_carryable = false
 	$PickupDelay.start()
+
 
 # Makes sprite bob up and down
 #	delta - Time since last frame
@@ -42,22 +44,26 @@ func _process(delta):
 	count -= step
 	position.y -= step/10
 
+
 # Setter for item
 #	i - Either an item or an active Item
 func set_item(i):
 	$Sprite.texture = i.texture
 	item = i
 
+
 # Allows for item to be picked up after some initial delay
 func _on_PickupDelay_timeout():
-	isCarryable = true
+	is_carryable = true
+
 
 # Sends out a signal when item is entered
-func _on_Area2D_body_entered(body):
-	if isCarryable and body is Player:
-		emit_signal("pickup",self,item)
+func _on_Area2D_body_entered(body:PhysicsBody2D):
+	if is_carryable == true and body.get_script() == load("res://Scripts/Player.gd"):
+		emit_signal("pickup_entered",self,item)
+
 
 # Send out a signal when item exited
-func _on_Area2D_body_exited(body):
-	if isCarryable and body is Player and cost > 0 and purchased == false:
-		emit_signal("exit")
+func _on_Area2D_body_exited(body:PhysicsBody2D):
+	if is_carryable == true and body.get_script() == load("res://Scripts/Player.gd") and cost > 0 and purchased == false:
+		emit_signal("pickup_exited")

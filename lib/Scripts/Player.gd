@@ -4,153 +4,157 @@ const GRAVITY = 12
 const STARTING_HEALTH = 100
 const ROOM_JUMP = 430
 const EDGE_JUMP = 450
-var maxHealth = STARTING_HEALTH
-onready var movespeed
+var max_health:int = STARTING_HEALTH
+onready var movespeed:float
 onready var velocity:Vector2
 onready var jumping:bool
-onready var gunInventory:GunInventory
-onready var completeInventory:GunInventory
-onready var speedCap
+onready var gun_inventory:GunInventory
+onready var complete_inventory:GunInventory
+onready var speed_cap:float
 onready var coins:int
 onready var health:int 
-onready var hitShield:bool
-onready var direction
-onready var linearDamping
-onready var jumpPower
-onready var items = []
-onready var HUD
-onready var accumSpeed
-onready var onLadder
-onready var Anim:AnimatedSprite
-onready var currentGun
-onready var activeItem:ActiveItem
+onready var has_hit_shield:bool
+onready var direction:int
+onready var horizontal_damping:float
+onready var jump_power:float
+onready var items:Array = []
+onready var hud:CanvasLayer
+onready var terminal_velocity:int
+onready var is_on_ladder:bool
+onready var animated_sprite:AnimatedSprite
+onready var equipped_gun:Gun
+onready var active_item:ActiveItem
 onready var running:bool
-onready var DamageTimer:Timer
-onready var veganPower:bool
-onready var ironSkin:bool
-onready var potentialPurchase
+onready var damage_timer:Timer
+onready var has_vegan_power:bool
+onready var has_iron_skin:bool
+onready var potential_purchase:Pickup
+
 
 # Init
 func _ready():
 	start(Vector2(0,0))
-	HUD = $HUD
-	DamageTimer = $DamageTimer
+	hud = $HUD
+	damage_timer = $DamageTimer
+
 
 # Reset player position on death	
 #	startPosition - Location player starts on respawn
 func start(startPosition:Vector2):
-	activeItem = null
-	veganPower = false
-	gunInventory = GunInventory.new()
-	completeInventory = GunInventory.new()
-	Anim = $AnimatedSprite
+	active_item = null
+	has_vegan_power = false
+	gun_inventory = GunInventory.new()
+	complete_inventory = GunInventory.new()
+	animated_sprite = $AnimatedSprite
 	direction = 1
-	linearDamping = 0.90
-	jumpPower = ROOM_JUMP
+	horizontal_damping = 0.90
+	jump_power = ROOM_JUMP
 	velocity = Vector2()
 	running = false
-	onLadder = false
-	accumSpeed = 0
-	speedCap = 200
+	is_on_ladder = false
+	terminal_velocity = 0
+	speed_cap = 200
 	movespeed = 24
-	PlayerVariables.damageMultiplier = 1
+	PlayerVariables.damage_multiplier = 1
 	coins = 0
 	jumping = false
-	hitShield = false
+	has_hit_shield = false
 	self.position = startPosition
-	maxHealth = STARTING_HEALTH
-	health = maxHealth
+	max_health = STARTING_HEALTH
+	health = max_health
 	$HUD.health_update(health)
 	$DamageTimer.wait_time = 0.5
 	$DamageTimer.start()
-	currentGun = $Pistol
-	gunInventory.add(currentGun)
-	completeInventory.add(currentGun)
-	for gun in GlobalVariables.gunRef:
-		completeInventory.add(gun.instance())
-	
+	equipped_gun = $Pistol
+	gun_inventory.add(equipped_gun)
+	complete_inventory.add(equipped_gun)
+	for gun in GlobalVariables.GUNREF:
+		complete_inventory.add(gun.instance())
+
+
 # Handles non-movement related input 
 #	delta - Time since last frame
 func _process(delta):
 	if health <= 0:
 		return
 
-	if Input.is_action_just_pressed("use_item") && activeItem != null:
-		activeItem.active_effect()
-		activeItem.isReady = false
+	if Input.is_action_just_pressed("use_item") && active_item != null:
+		active_item.active_effect()
+		active_item.isReady = false
 		$CDTimer.start()
-		HUD.get_node("ActiveItem").inverted = true
-		HUD.get_node("CDTimer").start()
+		hud.get_node("ActiveItem").inverted = true
+		hud.get_node("CDTimer").start()
 	
-	if ((Input.is_action_just_pressed("reload") && currentGun.currentDurability > 0) 
-    && currentGun.ReloadTimer.paused == false):
-		currentGun.ReloadTimer.start()
+	if ((Input.is_action_just_pressed("reload") && equipped_gun.current_durability > 0) 
+    && equipped_gun.reload_timer.paused == false):
+		equipped_gun.reload_timer.start()
 		
 	if Input.is_action_just_released("ui_x"):
 		rotate_gun_list()	
-		HUD._on_weapon_swap(currentGun)
+		hud._on_weapon_swap(equipped_gun)
 		
 	if Input.is_action_just_pressed("switch_guns"):
-		remove_child(currentGun)
-		currentGun = gunInventory.swap_current()
-		add_child(currentGun)
-		HUD._on_weapon_swap(currentGun)
+		remove_child(equipped_gun)
+		equipped_gun = gun_inventory.swap_current()
+		add_child(equipped_gun)
+		hud._on_weapon_swap(equipped_gun)
 		
-	if Input.is_action_just_pressed("ui_e") and potentialPurchase != null:
-		if coins >= potentialPurchase.cost:
-			coins -= potentialPurchase.cost
-			potentialPurchase.purchased = true
-			HUD.fading_message("Picked up '"+potentialPurchase.item.title+"'.")
-			HUD.coin_update(coins)
-			if potentialPurchase.item is Item:
-				add_item(potentialPurchase.item)
-			elif potentialPurchase.item is Gun:
-				gunInventory.add(potentialPurchase.item)
-				remove_child(currentGun)
-				currentGun = gunInventory.swap_current()
-				add_child(currentGun)
-				HUD._on_weapon_swap(currentGun)
-			elif potentialPurchase.item is ActiveItem:
-				if activeItem != null:
-					var drop = load("res://Scenes/Pickup.tscn").instance()
-					drop.item = activeItem
+	if Input.is_action_just_pressed("ui_e") and potential_purchase != null:
+		if coins >= potential_purchase.cost:
+			coins -= potential_purchase.cost
+			potential_purchase.purchased = true
+			hud.fading_message("Picked up '"+potential_purchase.item.title+"'.")
+			hud.coin_update(coins)
+			if potential_purchase.item is Item:
+				add_item(potential_purchase.item)
+			elif potential_purchase.item is Gun:
+				gun_inventory.add(potential_purchase.item)
+				remove_child(equipped_gun)
+				equipped_gun = gun_inventory.swap_current()
+				add_child(equipped_gun)
+				hud._on_weapon_swap(equipped_gun)
+			elif potential_purchase.item is ActiveItem:
+				if active_item != null:
+					var drop:Pickup = load("res://Scenes/Pickup.tscn").instance()
+					drop.item = active_item
 					drop.global_position = global_position
 					get_parent().add_child(drop)
-				activeItem = potentialPurchase.item
-				$CDTimer.wait_time = potentialPurchase.item.cooldown
-				HUD.active_item_swtich(potentialPurchase.item)
-			potentialPurchase.queue_free()
-			potentialPurchase = null
+				active_item = potential_purchase.item
+				$CDTimer.wait_time = potential_purchase.item.cooldown
+				hud.active_item_swtich(potential_purchase.item)
+			potential_purchase.queue_free()
+			potential_purchase = null
 		else:
-			HUD.set_message_text("Insufficient funds")
+			hud.set_message_text("Insufficient funds")
 		
-	var norm = get_global_mouse_position() - self.position
+	var norm:Vector2 = get_global_mouse_position() - self.position
 	norm = norm.normalized()
 	
-	var rot = atan2(norm.y, norm.x)
-	if rot > -PI/2 && rot < PI/2:
+	var mouse_tangent:float = atan2(norm.y, norm.x)
+	if mouse_tangent > -PI/2 && mouse_tangent < PI/2:
 		$AnimatedSprite.flip_h = false
 		direction = 1
 	else:
 		$AnimatedSprite.flip_h = true
 		direction = -1	
-	
+
+
 # Handles movement of player and input
 #	delta - Time since last frame
 #warning-ignore:unused_argument
 func _physics_process(delta):
 	if health <= 0:
 		return
-	if !onLadder:
+	if !is_on_ladder:
 		if !is_on_floor():
-			if accumSpeed < 5:
-				accumSpeed += 0.5
-			velocity.y += GRAVITY + accumSpeed
+			if terminal_velocity < 5:
+				terminal_velocity += 0.5
+			velocity.y += GRAVITY + terminal_velocity
 		elif Input.is_action_pressed("ui_up"):
-			velocity.y = -jumpPower * PlayerVariables.jumpMultiplier * 1.15
-			accumSpeed = 0
-		if Input.is_action_pressed("ui_lmbd") and !running and currentGun != null:
-			currentGun.fire_gun()
+			velocity.y = -jump_power * PlayerVariables.jump_multiplier * 1.15
+			terminal_velocity = 0
+		if Input.is_action_pressed("ui_lmbd") and !running and equipped_gun != null:
+			equipped_gun.fire_gun()
 		if velocity.x == 0:
 			$AnimatedSprite.play("idle")
 		elif abs(velocity.x) < 10:
@@ -159,7 +163,7 @@ func _physics_process(delta):
 			$AnimatedSprite.play("walk")
 		get_parent().update_tiles()
 		
-	elif onLadder:
+	elif is_on_ladder:
 		velocity.y = 0
 		if Input.is_action_pressed("ui_up"):
 			velocity.y -= 96
@@ -171,56 +175,58 @@ func _physics_process(delta):
 			$AnimatedSprite.play("climb_idle")
 			
 	if Input.is_action_pressed("ui_shift"):
-		if onLadder:
+		if is_on_ladder:
 			pass
 		else:
-			if abs(velocity.x)+movespeed < speedCap * 2:
+			if abs(velocity.x)+movespeed < speed_cap * 2:
 				if Input.is_action_pressed("ui_left"):
 					velocity.x -= movespeed * 1.5
 				elif Input.is_action_pressed("ui_right"):
 					velocity.x += movespeed * 1.5
 				else:
-					velocity.x *= linearDamping
+					velocity.x *= horizontal_damping
 			running = true 
-			currentGun.visible = false
+			equipped_gun.visible = false
 	elif Input.is_action_just_released("ui_shift"):
-		if onLadder:
+		if is_on_ladder:
 			pass
 		else:
 			running = false
-			currentGun.visible = true
+			equipped_gun.visible = true
 	else:
-		if abs(velocity.x)+movespeed < speedCap:
+		if abs(velocity.x)+movespeed < speed_cap:
 			if Input.is_action_pressed("ui_left"):
 				velocity.x -= movespeed
 			elif Input.is_action_pressed("ui_right"):
 				velocity.x += movespeed
 			else:
-				velocity.x *= linearDamping
-	velocity.x *= linearDamping
+				velocity.x *= horizontal_damping
+	velocity.x *= horizontal_damping
 	velocity = move_and_slide(velocity,Vector2(0,-1))
+
 
 # Switches between absolute roster of guns,
 # for testing purposes
 func rotate_gun_list():
-	remove_child(currentGun)
-	currentGun = completeInventory.swap_current()
-	add_child(currentGun)
-	currentGun.currentDurability = currentGun.clipSize * 100
-	currentGun.on_ReloadTimer_timeout()
+	remove_child(equipped_gun)
+	equipped_gun = complete_inventory.swap_current()
+	add_child(equipped_gun)
+	equipped_gun.current_durability = equipped_gun.clip_size * 100
+	equipped_gun.on_ReloadTimer_timeout()
 
-# Updates player health and HUD
+
+# Updates player health and hud
 #	damage - Amount of damage to take
 #	norm - Direction of incoming damage
 func take_damage(damage:int, norm:Vector2):
-	if hitShield || ironSkin:
+	if has_hit_shield || has_iron_skin:
 		return
-	if veganPower:
-		PlayerVariables.damageMultiplier *= 2
-	hitShield = true
+	if has_vegan_power:
+		PlayerVariables.damage_multiplier *= 2
+	has_hit_shield = true
 	$DamageTimer.start()
 	if health - damage <= 0:
-		hitShield = true
+		has_hit_shield = true
 		health = 0
 		get_parent().game_over()
 		$HUD/DeathLabel.visible = true
@@ -231,23 +237,26 @@ func take_damage(damage:int, norm:Vector2):
 	$HUD.health_update(health)
 	velocity = move_and_slide(norm)
 
+
 # Event handler for expiry of damage timer
 func _on_DamageTimer_timeout():
-	hitShield = false
-	if veganPower:
-		PlayerVariables.damageMultiplier /= 2
+	has_hit_shield = false
+	if has_vegan_power:
+		PlayerVariables.damage_multiplier /= 2
+
 
 # Toggles linear damping on or off and increases jump power when damping is off
 func toggle_damping():
-	if linearDamping == 1:
-		linearDamping = 0.9
+	if horizontal_damping == 1:
+		horizontal_damping = 0.9
 	else:
-		linearDamping = 1
-	if jumpPower == EDGE_JUMP:
-		jumpPower = ROOM_JUMP
+		horizontal_damping = 1
+	if jump_power == EDGE_JUMP:
+		jump_power = ROOM_JUMP
 	else:
-		jumpPower = EDGE_JUMP 
-	# print("called"," ",linearDamping," ",jumpPower)
+		jump_power = EDGE_JUMP 
+	# print("called"," ",horizontal_damping," ",jump_power)
+
 
 # Add an item to the HUD's inventory
 # i - Item to add
@@ -256,41 +265,46 @@ func add_item(i:Item):
 	items.append(i)
 	$HUD.add_item(i)
 
+
 # Returns a vector of the force that the player should exert on a body
 #	body - Body to determine gravity force 
 #	return - Gravity force between player and body
 func pull(body:Node2D) -> Vector2:
 	var force:Vector2 = global_position - body.global_position
-	var distance = force.length()
+	var distance:float = force.length()
 	distance = clamp(distance,1,70)
 	force = force.normalized()
-	var strength = 50000 / (distance*distance)
+	var strength:float = 50000.0 / (distance*distance)
 	force *= strength
 	return force
 
+
 # Event handler for when a player enters a ladder.
 func _on_Ladder_Entered():
-	onLadder = true
-	Anim.play("climb")
-	currentGun.visible = false
-	# print(Player.onLadder)
+	is_on_ladder = true
+	animated_sprite.play("climb")
+	equipped_gun.visible = false
+	# print(Player.is_on_ladder)
+
 
 # Handler for when player exits a ladder.
 func _on_Ladder_Exited():
 	running = false
-	onLadder = false
-	currentGun.visible = true
+	is_on_ladder = false
+	equipped_gun.visible = true
+
 
 # Add health to player
 func _on_RegenTimer_Timeout():
 	health += 1
-	if health > maxHealth:
-		health = maxHealth
-	HUD.health_update(health,0)
+	if health > max_health:
+		health = max_health
+	hud.health_update(health,0)
+
 
 # Allow item to be used again, and stop the looping timer.
 func _on_CDTimer_timeout():
-	activeItem.isReady = true
-	HUD.get_node("ActiveItem").invert_enable = false
-	HUD.get_node("CDTimer").stop()
-	HUD.get_node("CDText").text = ""
+	active_item.isReady = true
+	hud.get_node("ActiveItem").invert_enable = false
+	hud.get_node("CDTimer").stop()
+	hud.get_node("CDText").text = ""
