@@ -73,7 +73,7 @@ func isaac_generate():
 	for w in range(px):
 		for h in range(py):
 			var p = Point.new(w*(MEAN_WIDTH+GlobalVariables.BORDER),
-			        h*(MEAN_HEIGHT+GlobalVariables.BORDER))
+					h*(MEAN_HEIGHT+GlobalVariables.BORDER))
 			rooms.append(Rect.new(MEAN_WIDTH,MEAN_HEIGHT,p,true))
 	# Mix up order of array so there isn't any bias
 	rooms.shuffle()

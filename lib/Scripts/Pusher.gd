@@ -6,9 +6,6 @@ class_name Pusher
 onready var dir:Vector2
 const SPEED = 100
 
-# Init
-func _ready():
-	pass
 
 # Set the position and direction of the pusher
 #	ps - TileMap position of this pusher
@@ -17,8 +14,9 @@ func create(ps:Vector2,dir:Vector2):
 	self.position = ps
 	self.dir = dir
 
+
 # Called when a body enters the pusher
 #	body - Body to push
-func _on_Pusher_body_entered(body):
+func _on_Pusher_body_entered(body:PhysicsBody2D):
 	if body is KinematicBody2D:
 		body.velocity += dir * SPEED

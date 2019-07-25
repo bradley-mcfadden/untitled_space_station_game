@@ -1,23 +1,22 @@
-extends Node
-
+extends Object
 class_name Rect
+
 var low:Point
 var high:Point
 var xsize:int
 var ysize:int
 var overlap = false
 var prefab:int
-var border 
+var border:int 
 var type:int
-var visited = true
-var cleared
-# var room = load("res://Scenes/Room1.tscn")
+var visited:bool = true
+var cleared:bool
 
 # Create a new Rect
 #	xsize - Width of the rect
 #	ysize - Height of the rect
 #	low - Top left corner of the rect
-func _init(xsize,ysize,low,hasBorder=false):
+func _init(xsize:int,ysize:int,low,hasBorder=false):
 	self.low = low.copy()
 	self.xsize = xsize
 	self.ysize = ysize

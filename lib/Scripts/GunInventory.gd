@@ -2,6 +2,8 @@
 # position. You can rotate through it, but only in one way
 extends Object
 class_name GunInventory
+
+
 var guns:Array
 var current:int
 
@@ -17,7 +19,7 @@ func _init():
 func add(g:Gun):
 	var duplicate:int = contains(g)
 	if duplicate >= 0:
-		guns[duplicate].currentDurability += g.currentDurability
+		guns[duplicate].current_durability += g.current_durability
 	else:
 		guns.append(g)
 		if guns.size() == 1:
@@ -37,7 +39,7 @@ func contains(g:Gun) -> int:
 #	return - Next gun in inventory or null if set is empty
 func swap_current() -> Gun:
 	if guns.size() >= 1:
-		if current+1 < guns.size():
+		if current + 1 < guns.size():
 			current += 1
 		else:
 			current = 0
@@ -55,8 +57,8 @@ func get_current() -> Gun:
 
 # Removes current gun from inventory
 func remove_current():
-	var oldCurrent:int = current
+	var old_current:int = current
 	swap_current()
-	guns.remove(oldCurrent)
-	if oldCurrent == current:
+	guns.remove(old_current)
+	if old_current == current:
 		current = -1

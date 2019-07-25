@@ -1,5 +1,7 @@
 extends Sprite
 class_name ActiveItem
+
+
 var title:String
 var player:KinematicBody2D
 var cooldown:int

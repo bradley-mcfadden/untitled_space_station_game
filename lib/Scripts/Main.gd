@@ -1,4 +1,6 @@
 extends Node
+
+
 onready var player:KinematicBody2D
 const LOOT_POOL_WHITE = [preload("res://Items/TwoPercent.tscn"),preload("res://Items/Coffee.tscn"),
                      preload("res://Items/Grease.tscn"),preload("res://Items/TheChain.tscn"),
@@ -69,10 +71,10 @@ func update_tiles():
 	var floor_tile:int = $RoomGenerator.get_cellv(Vector2(tpos.x, tpos.y + 1))
 	if floor_tile == 7 || floor_tile == 8:
 		$RoomGenerator.open_doors($Player.position)
-	var front_tile:int = $RoomGenerator.get_cellv(Vector2(tpos.x+$Player.direction, tpos.y))
+	var front_tile:int = $RoomGenerator.get_cellv(Vector2(tpos.x + $Player.direction, tpos.y))
 	if front_tile == 5 || front_tile == 6:
 		$RoomGenerator.open_doors($Player.position)
-	var ceiling_tile:int = $RoomGenerator.get_cellv(Vector2(tpos.x, tpos.y-2))
+	var ceiling_tile:int = $RoomGenerator.get_cellv(Vector2(tpos.x, tpos.y - 2))
 	if ceiling_tile == 7 || ceiling_tile == 8:
 		$RoomGenerator.open_doors($Player.position)
 
@@ -86,47 +88,47 @@ func start_hall_timer():
 # Event handler for when hall time runs out.
 # Closes all doors if player is in a room
 func _on_HallTimer_timeout():
-	var playerRoom:int = $RoomGenerator.find_player_index($Player.position)
-	if playerRoom != -1:
+	var player_room:int = $RoomGenerator.find_player_index($Player.position)
+	if player_room != -1:
 		$HallTimer.stop()
 		$RoomGenerator.close_doors()
 		player.toggle_damping()
-		$RoomGenerator.spawn_enemies(playerRoom)
+		$RoomGenerator.spawn_enemies(player_room)
 
 
 # Event handler for a chest being opened.
 #	pos - Position of chest.
 #	loot_pool - Tier of the chest, determines what can drop from it.
-func _on_Chest_Entered(chest,pos:Vector2,loot_pool:int):
+func _on_Chest_Entered(chest,pos:Vector2, loot_pool:int):
 	var drop:Pickup = PICKUP.instance()
 	drop.global_position = chest.global_position
 	var chestContents:Item
 	if loot_pool == Chest.WHITE:
-		chestContents = LOOT_POOL_WHITE[int(rand_range(0,LOOT_POOL_WHITE.size()))].instance()
+		chestContents = LOOT_POOL_WHITE[int(rand_range(0, LOOT_POOL_WHITE.size()))].instance()
 	elif loot_pool == Chest.GREEN:
-		chestContents = LOOT_POOL_GREEN[int(rand_range(0,LOOT_POOL_GREEN.size()))].instance()
+		chestContents = LOOT_POOL_GREEN[int(rand_range(0, LOOT_POOL_GREEN.size()))].instance()
 	elif loot_pool == Chest.BLUE:
-		chestContents = LOOT_POOL_BLUE[int(rand_range(0,LOOT_POOL_BLUE.size()))].instance()
+		chestContents = LOOT_POOL_BLUE[int(rand_range(0, LOOT_POOL_BLUE.size()))].instance()
 	elif loot_pool == Chest.PURPLE:
-		chestContents = LOOT_POOL_PURPLE[int(rand_range(0,LOOT_POOL_PURPLE.size()))].instance()
+		chestContents = LOOT_POOL_PURPLE[int(rand_range(0, LOOT_POOL_PURPLE.size()))].instance()
 	elif loot_pool == Chest.ORANGE:
-		chestContents = LOOT_POOL_ORANGE[int(rand_range(0,LOOT_POOL_ORANGE.size()))].instance()
+		chestContents = LOOT_POOL_ORANGE[int(rand_range(0, LOOT_POOL_ORANGE.size()))].instance()
 	drop.set_item(chestContents)
-	drop.connect("pickup",self,"_on_Pickup_Entered")
-	call_deferred("add_child",drop)
-	chest.disconnect("chest_entered",self,"_on_Chest_Entered")
+	drop.connect("pickup", self, "_on_Pickup_Entered")
+	call_deferred("add_child", drop)
+	chest.disconnect("chest_entered", self, "_on_Chest_Entered")
 	
 	
 # When a pickup is entered, add it to Player inventory or prompt to swap active items.
 #	pickup - Reference to pickup scene
 #	dropped_item - Item to place in inventory
-func _on_Pickup_Entered(pickup:Pickup,dropped_item):
+func _on_Pickup_Entered(pickup:Pickup, dropped_item:Item):
 	if pickup.cost == 0:
 		player.add_item(dropped_item)
-		player.HUD.fading_message("Picked up '"+dropped_item.title+"'.")
+		player.HUD.fading_message("Picked up '" + dropped_item.title + "'.")
 		pickup.queue_free()
 	else:
-		player.HUD.set_message_text("Purchase '"+dropped_item.title+"' for "+str(pickup.cost)+"?")
+		player.HUD.set_message_text("Purchase '" + dropped_item.title + "' for "+str(pickup.cost) + "?")
 		player.potentialPurchase = pickup
 
 
@@ -138,7 +140,7 @@ func _on_Pickup_Exited():
 # Handles signal and adds coins to the scene
 #	location - Global position to place coins
 #	num_coins - Number of coins to add
-func _on_Drop_Coins(location:Vector2,num_coins:int):
+func _on_Drop_Coins(location:Vector2, num_coins:int):
 	for i in range(num_coins):
 		var c:Coin = COIN.instance()
 		c.global_position = location

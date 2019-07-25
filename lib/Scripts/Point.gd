@@ -1,5 +1,5 @@
 # Describes a Point on a grid
-extends Node
+extends Object
 
 class_name Point
 

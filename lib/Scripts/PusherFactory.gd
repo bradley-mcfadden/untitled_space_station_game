@@ -3,79 +3,82 @@
 extends Node
 class_name PusherFactory
 
-onready var tm:TileMap
-onready var ef:TileMap
-onready var tmps:Vector2
-onready var pushers = []
-onready var flowStack = []
-onready var dir:Vector2
-var PSHR = load("res://Scenes/Pusher.tscn")
-onready var hp:int
-onready var vp:int
-onready var dg:int
-onready var newPos:Vector2
-onready var visited = UnsortedSet.new()
-onready var vDir = []
+
+const PUSHER = preload("res://Scenes/Pusher.tscn")
+onready var tilemap:TileMap
+onready var effects_tilemap:TileMap
+onready var tilemap_position:Vector2
+onready var pushers:Array = []
+onready var direction:Vector2
+onready var horizontal_pull_tile:int
+onready var vertical_pull_tile:int
+onready var searchable_tile:int
+onready var visited_tiles:UnsortedSet = UnsortedSet.new()
+onready var visited_direction:Array = []
+
+
 # Init
 func _ready():
-	tm = get_parent()
-	ef = tm.Effects
-	hp = ef.tile_set.find_tile_by_name("HorizontalPull")
-	vp = ef.tile_set.find_tile_by_name("VerticalPull")
-	
+	tilemap = get_parent()
+	effects_tilemap = tilemap.Effects
+	horizontal_pull_tile = effects_tilemap.tile_set.find_tile_by_name("HorizontalPull")
+	vertical_pull_tile = effects_tilemap.tile_set.find_tile_by_name("VerticalPull")
+
+
 # Depth first search that spreads down a certain tile
 #	brick - Tile to spread down
 func dfs_spread(brick:int,debug=false):
-	dg = brick
-	vDir.append(dir)
-	dfs_flood(tmps,dir)
-	# print(visited.data.size()," ",vDir.size())
-	for i in range(visited.data.size()):
-		var pPos = tm.map_to_world(visited.data[i])
-		var push = PSHR.instance()
-		push.create(pPos,vDir[i])
-		pushers.append(push)
-		add_child(push,true)
-		if debug:
-			if vDir[i].x == 1:
-				ef.set_cellv(visited.data[i],4)
-			elif vDir[i].x == -1:
-				ef.set_cellv(visited.data[i],6)
-			elif vDir[i].y == -1:
-				ef.set_cellv(visited.data[i],3)
-			elif vDir[i].y == 1:
-				ef.set_cellv(visited.data[i],5)
+	searchable_tile = brick
+	visited_direction.append(direction)
+	dfs_flood(tilemap_position,direction)
+	for i in range(visited_tiles.data.size()):
+		var potential_position:Vector2 = tilemap.map_to_world(visited_tiles.data[i])
+		var pusher:Pusher = PUSHER.instance()
+		pusher.create(potential_position,visited_direction[i])
+		pushers.append(pusher)
+		add_child(pusher,true)
+		if debug == true:
+			if visited_direction[i].x == 1:
+				effects_tilemap.set_cellv(visited_tiles.data[i],4)
+			elif visited_direction[i].x == -1:
+				effects_tilemap.set_cellv(visited_tiles.data[i],6)
+			elif visited_direction[i].y == -1:
+				effects_tilemap.set_cellv(visited_tiles.data[i],3)
+			elif visited_direction[i].y == 1:
+				effects_tilemap.set_cellv(visited_tiles.data[i],5)
 		else:
-			if vDir[i].x != 0:
-				ef.set_cellv(visited.data[i],hp)
+			if visited_direction[i].x != 0:
+				effects_tilemap.set_cellv(visited_tiles.data[i],horizontal_pull_tile)
 			else:
-				ef.set_cellv(visited.data[i],vp)
+				effects_tilemap.set_cellv(visited_tiles.data[i],vertical_pull_tile)
+
 
 # Recursive flood function that spreads down a tile
 #	pos - Position of current tile
-#	dir - Direction of current tile
-func dfs_flood(pos:Vector2,dir:Vector2):
-	visited.add(pos)
-	var normal = Vector2(dir.y,dir.x)
+#	direction - Direction of current tile
+func dfs_flood(pos:Vector2,direction:Vector2):
+	visited_tiles.add(pos)
+	var normal:Vector2 = Vector2(direction.y,direction.x)
 	for i in range(1,3):
-		if tm.get_cellv(pos+(dir*i)) == dg:
-			if visited.contains(pos+(dir*i)):
+		if tilemap.get_cellv(pos+(direction*i)) == searchable_tile:
+			if visited_tiles.contains(pos+(direction*i)):
 				pass
 			else:
-				vDir.append(dir)
-				dfs_flood(pos+(dir*i),dir)
-		if tm.get_cellv(pos+(normal*i)) == dg:
-			if visited.contains(pos+(normal*i)):
+				visited_direction.append(direction)
+				dfs_flood(pos+(direction*i),direction)
+		if tilemap.get_cellv(pos+(normal*i)) == searchable_tile:
+			if visited_tiles.contains(pos+(normal*i)):
 				pass
 			else:
-				vDir.append(normal)
+				visited_direction.append(normal)
 				dfs_flood(pos+(normal*i),normal)
-		if tm.get_cellv(pos-(normal*i)) == dg:
-			if visited.contains(pos-(normal*i)):
+		if tilemap.get_cellv(pos-(normal*i)) == searchable_tile:
+			if visited_tiles.contains(pos-(normal*i)):
 				pass
 			else:
-				vDir.append(-normal)
+				visited_direction.append(-normal)
 				dfs_flood(pos-(normal*i),-normal)
+
 
 # Cleanup function that destroys all children and this node
 func purge():

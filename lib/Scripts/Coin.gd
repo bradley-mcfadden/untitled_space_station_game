@@ -7,7 +7,7 @@ var active:bool
 
 # Init
 func _ready():
-	velocity = Vector2(rand_range(-2,2),rand_range(-2,2))
+	velocity = Vector2(rand_range(-2, 2), rand_range(-2, 2))
 	active = false
 
 
@@ -15,7 +15,7 @@ func _ready():
 #	delta - Time since last physics step
 func _physics_process(delta):
 	position += velocity
-	rotation = atan2(velocity.y,velocity.x)
+	rotation = atan2(velocity.y, velocity.x)
 
 
 # Apply some acceleration force to this coin

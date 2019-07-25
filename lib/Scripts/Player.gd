@@ -131,10 +131,10 @@ func _process(delta):
 	
 	var mouse_tangent:float = atan2(norm.y, norm.x)
 	if mouse_tangent > -PI/2 && mouse_tangent < PI/2:
-		$AnimatedSprite.flip_h = false
+		animated_sprite.flip_h = false
 		direction = 1
 	else:
-		$AnimatedSprite.flip_h = true
+		animated_sprite.flip_h = true
 		direction = -1	
 
 
@@ -155,23 +155,23 @@ func _physics_process(delta):
 		if Input.is_action_pressed("ui_lmbd") and !running and equipped_gun != null:
 			equipped_gun.fire_gun()
 		if velocity.x == 0:
-			$AnimatedSprite.play("idle")
+			animated_sprite.play("idle")
 		elif abs(velocity.x) < 10:
 			velocity.x = 0
 		else:
-			$AnimatedSprite.play("walk")
+			animated_sprite.play("walk")
 		get_parent().update_tiles()
 		
 	elif is_on_ladder:
 		velocity.y = 0
 		if Input.is_action_pressed("ui_up"):
 			velocity.y -= 96
-			$AnimatedSprite.play("climb")
+			animated_sprite.play("climb")
 		elif Input.is_action_pressed("ui_down"):
 			velocity.y += 96
-			$AnimatedSprite.play("climb")
+			animated_sprite.play("climb")
 		else:
-			$AnimatedSprite.play("climb_idle")
+			animated_sprite.play("climb_idle")
 			
 	if Input.is_action_pressed("ui_shift"):
 		if is_on_ladder:
@@ -223,7 +223,7 @@ func take_damage(damage:int, norm:Vector2):
 	if has_vegan_power:
 		PlayerVariables.damage_multiplier *= 2
 	has_hit_shield = true
-	$DamageTimer.start()
+	damage_timer.start()
 	if health - damage <= 0:
 		has_hit_shield = true
 		health = 0
@@ -233,7 +233,7 @@ func take_damage(damage:int, norm:Vector2):
 		
 	else:
 		health -= damage
-	$HUD.health_update(health)
+	hud.health_update(health)
 	velocity = move_and_slide(norm)
 
 
@@ -262,7 +262,7 @@ func toggle_damping():
 func add_item(i:Item):
 	i.effect(self)
 	items.append(i)
-	$HUD.add_item(i)
+	hud.add_item(i)
 
 
 # Returns a vector of the force that the player should exert on a body
