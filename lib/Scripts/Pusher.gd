@@ -10,7 +10,7 @@ const SPEED = 100
 # Set the position and direction of the pusher
 #	ps - TileMap position of this pusher
 #	dir - Direction objects will be pushed
-func create(ps:Vector2,dir:Vector2):
+func create(ps:Vector2, dir:Vector2):
 	self.position = ps
 	self.dir = dir
 

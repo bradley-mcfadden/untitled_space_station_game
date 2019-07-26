@@ -1,10 +1,10 @@
 # An UnsortedSet is a data structure that contains no duplicates
 # It ensures that any object added is not already in the set.
 # Its elements are in no special order
-extends Node
+extends Object
 
 class_name UnsortedSet
-var data = []
+var data:Array = []
 
 # Does the set contain this object already?
 #	return - Contain or not
@@ -27,7 +27,7 @@ func add(t) -> bool:
 # Grab a random element from the set.
 #	return - Random element from set.
 func grab():
-	return data[int(rand_range(0,data.size()))]
+	return data[int(rand_range(0, data.size()))]
 
 # Calls to_string for every object in the set	
 # return - State of the set

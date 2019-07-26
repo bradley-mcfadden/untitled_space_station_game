@@ -16,15 +16,15 @@ func _ready():
 	if random == true:
 		var item_contained:Sprite
 		if (randi() % 2) - 1 < 0:
-			var itemIndex = int(rand_range(0,GlobalVariables.GUN_REF.size()))
-			item_contained = GlobalVariables.gunRef[itemIndex].instance()
+			var item_index:int = int(rand_range(0, GlobalVariables.GUN_REF.size()))
+			item_contained = GlobalVariables.gunRef[item_index].instance()
 		else:
-			var itemIndex = int(rand_range(0,GlobalVariables.LOOT_POOL_ACTIVE.size()))
-			item_contained = GlobalVariables.LOOT_POOL_ACTIVE[itemIndex].instance()
-		var main_reference = get_parent().get_parent().get_parent()
+			var item_index = int(rand_range(0, GlobalVariables.LOOT_POOL_ACTIVE.size()))
+			item_contained = GlobalVariables.LOOT_POOL_ACTIVE[item_index].instance()
+		var main_reference:Node = get_parent().get_parent().get_parent()
 		set_item(item_contained)
-		connect("pickup_entered",main_reference,"_on_Pickup_Entered")
-		connect("pickup_exited",main_reference,"_on_Pickup_Exited")
+		connect("pickup_entered", main_reference, "_on_Pickup_Entered")
+		connect("pickup_exited", main_reference, "_on_Pickup_Exited")
 		$Label.visible = true
 		$Label.text = str(cost)
 	purchased = false
@@ -47,7 +47,7 @@ func _process(delta):
 
 # Setter for item
 #	i - Either an item or an active Item
-func set_item(i):
+func set_item(i:Item):
 	$Sprite.texture = i.texture
 	item = i
 
@@ -60,7 +60,7 @@ func _on_PickupDelay_timeout():
 # Sends out a signal when item is entered
 func _on_Area2D_body_entered(body:PhysicsBody2D):
 	if is_carryable == true and body.get_script() == load("res://Scripts/Player.gd"):
-		emit_signal("pickup_entered",self,item)
+		emit_signal("pickup_entered", self, item)
 
 
 # Send out a signal when item exited

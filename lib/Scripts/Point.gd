@@ -9,7 +9,7 @@ var y:int
 # Create a point
 #	x - X value of point
 #	y - Y value of point
-func _init(x:int,y:int):
+func _init(x:int, y:int):
 	self.x = x
 	self.y = y
 	

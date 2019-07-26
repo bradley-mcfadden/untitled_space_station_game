@@ -33,7 +33,7 @@ onready var potential_purchase:Pickup
 
 # Init
 func _ready():
-	start(Vector2(0,0))
+	start(Vector2(0, 0))
 	hud = $HUD
 	damage_timer = $DamageTimer
 	animated_sprite = $AnimatedSprite
@@ -79,7 +79,7 @@ func _process(delta):
 
 	if Input.is_action_just_pressed("use_item") && active_item != null:
 		active_item.active_effect()
-		active_item.isReady = false
+		active_item.is_ready = false
 		$CDTimer.start()
 		hud.get_node("ActiveItem").inverted = true
 		hud.get_node("CDTimer").start()
@@ -102,7 +102,7 @@ func _process(delta):
 		if coins >= potential_purchase.cost:
 			coins -= potential_purchase.cost
 			potential_purchase.purchased = true
-			hud.fading_message("Picked up '"+potential_purchase.item.title+"'.")
+			hud.fading_message("Picked up '" + potential_purchase.item.title + "'.")
 			hud.coin_update(coins)
 			if potential_purchase.item is Item:
 				add_item(potential_purchase.item)
@@ -130,7 +130,7 @@ func _process(delta):
 	norm = norm.normalized()
 	
 	var mouse_tangent:float = atan2(norm.y, norm.x)
-	if mouse_tangent > -PI/2 && mouse_tangent < PI/2:
+	if mouse_tangent > -PI / 2 && mouse_tangent < PI / 2:
 		animated_sprite.flip_h = false
 		direction = 1
 	else:
@@ -152,7 +152,7 @@ func _physics_process(delta):
 		elif Input.is_action_pressed("ui_up"):
 			velocity.y = -jump_power * PlayerVariables.jump_multiplier
 			terminal_velocity = 0
-		if Input.is_action_pressed("ui_lmbd") and !running and equipped_gun != null:
+		if Input.is_action_pressed("ui_lmbd") && !running && equipped_gun != null:
 			equipped_gun.fire_gun()
 		if velocity.x == 0:
 			animated_sprite.play("idle")
@@ -201,7 +201,7 @@ func _physics_process(delta):
 			else:
 				velocity.x *= horizontal_damping
 	velocity.x *= horizontal_damping
-	velocity = move_and_slide(velocity,Vector2(0,-1))
+	velocity = move_and_slide(velocity, Vector2(0, -1))
 
 
 # Switches between absolute roster of guns,
@@ -271,7 +271,7 @@ func add_item(i:Item):
 func pull(body:Node2D) -> Vector2:
 	var force:Vector2 = global_position - body.global_position
 	var distance:float = force.length()
-	distance = clamp(distance,1,70)
+	distance = clamp(distance, 1, 70)
 	force = force.normalized()
 	var strength:float = 50000.0 / (distance*distance)
 	force *= strength
@@ -298,7 +298,7 @@ func _on_RegenTimer_Timeout():
 	health += 1
 	if health > max_health:
 		health = max_health
-	hud.health_update(health,0)
+	hud.health_update(health, 0)
 
 
 # Allow item to be used again, and stop the looping timer.
