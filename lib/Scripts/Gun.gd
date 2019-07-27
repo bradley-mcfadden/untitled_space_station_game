@@ -1,5 +1,7 @@
 extends Sprite
 class_name Gun
+
+
 signal bullet_fired(bullet, direction, origin, speed, damage)
 signal weapon_changed(weapon)
 signal ammo_changed(weapon)
@@ -18,7 +20,6 @@ onready var can_fire:bool
 onready var reload_timer:Timer
 onready var rate_of_fire_timer:Timer
 onready var radian_spread:float
-onready var gun_name:String
 onready var mouse_vector:Vector2
 
 # Init
@@ -29,13 +30,13 @@ func _ready():
 	self.connect("bullet_fired", get_parent().get_parent(), "on_Gun_shoot")
 	reload_timer = Timer.new()
 	centered = true
-	reload_timer.wait_time = reload_time * PlayerVariables.reloadMultiplier
+	reload_timer.wait_time = reload_time * PlayerVariables.reload_multiplier
 	reload_timer.one_shot = true
 	# on reload 
 	reload_timer.connect("timeout", self, "on_ReloadTimer_timeout")
 	add_child(reload_timer)
 	rate_of_fire_timer = Timer.new()
-	rate_of_fire_timer.wait_time = rate_of_fire * PlayerVariables.fireRateMultiplier
+	rate_of_fire_timer.wait_time = rate_of_fire * PlayerVariables.fire_rate_multiplier
 	rate_of_fire_timer.one_shot = true
 	# on rate of fire refresh 
 	rate_of_fire_timer.connect("timeout", self, "on_RateOfFireTimer_timeout")
@@ -50,8 +51,8 @@ func _ready():
 
 # Update sprite and handle firing input
 #	delta - Time since last frame
-func _process(delta):
-	if get_parent().health > 0 && !get_parent().onLadder:
+func _process(delta:float):
+	if get_parent().health > 0 && !get_parent().is_on_ladder:
 		look_at(get_global_mouse_position())
 		mouse_vector = get_global_mouse_position() - global_position
 		adjust_pos() 
@@ -72,8 +73,8 @@ func fire_gun():
 		can_fire = false
 		actual_bullets -= 1
 		emit_signal("ammo_changed", self)
-		for i in range(int(pellets * PlayerVariables.pelletMultiplier)):
-			var spread:float = rand_range(-radian_spread / 2, radian_spread / 2) * PlayerVariables.accuracyMultiplier
+		for i in range(int(pellets * PlayerVariables.pellet_multiplier)):
+			var spread:float = rand_range(-radian_spread / 2, radian_spread / 2) * PlayerVariables.accuracy_multiplier
 			var rot2:float = atan2(mouse_vector.y, mouse_vector.x)
 			emit_signal("bullet_fired", BULLET, rot2 + spread, self.global_position, bullet_velocity, bullet_damage) 
 		if actual_bullets <= 0:

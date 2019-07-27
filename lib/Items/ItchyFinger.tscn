@@ -1,7 +1,9 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://Items/ItemSprites/ItchyFinger.png" type="Texture" id=1]
-[ext_resource path="res://Items/ItemScripts/ItchyFinger.gd" type="Script" id=2]
+[ext_resource path="res://Items/Sprites/ItchyFinger.png" type="Texture" id=1]
+[ext_resource path="res://Items/Scripts/ItchyFinger.gd" type="Script" id=2]
+
+
 
 [node name="Item" type="Sprite"]
 texture = ExtResource( 1 )

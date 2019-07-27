@@ -73,7 +73,7 @@ func start(start_position:Vector2):
 
 # Handles non-movement related input 
 #	delta - Time since last frame
-func _process(delta):
+func _process(delta:float):
 	if health <= 0:
 		return
 
@@ -141,7 +141,7 @@ func _process(delta):
 # Handles movement of player and input
 #	delta - Time since last frame
 #warning-ignore:unused_argument
-func _physics_process(delta):
+func _physics_process(delta:float):
 	if health <= 0:
 		return
 	if !is_on_ladder:
@@ -177,7 +177,7 @@ func _physics_process(delta):
 		if is_on_ladder:
 			pass
 		else:
-			if abs(velocity.x)+movespeed < speed_cap * 2:
+			if abs(velocity.x) + movespeed < speed_cap * 2:
 				if Input.is_action_pressed("ui_left"):
 					velocity.x -= movespeed * 1.5
 				elif Input.is_action_pressed("ui_right"):
@@ -273,7 +273,7 @@ func pull(body:Node2D) -> Vector2:
 	var distance:float = force.length()
 	distance = clamp(distance, 1, 70)
 	force = force.normalized()
-	var strength:float = 50000.0 / (distance*distance)
+	var strength:float = 50000.0 / (distance * distance)
 	force *= strength
 	return force
 

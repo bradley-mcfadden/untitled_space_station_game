@@ -13,7 +13,7 @@ func _ready():
 
 # Update location of object
 #	delta - Time since last physics step
-func _physics_process(delta):
+func _physics_process(delta:float):
 	position += velocity
 	rotation = atan2(velocity.y, velocity.x)
 

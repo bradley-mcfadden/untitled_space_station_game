@@ -68,8 +68,8 @@ func isaac_generate():
 	var rooms_lenghts:int = cell_counth / (MEAN_HEIGHT + GlobalVariables.BORDER)
 	for w in range(rooms_widths):
 		for h in range(rooms_lenghts):
-			var p = Point.new(w * (MEAN_WIDTH + GlobalVariables.BORDER),
-					h*(MEAN_HEIGHT + GlobalVariables.BORDER))
+			var p:Point = Point.new(w * (MEAN_WIDTH + GlobalVariables.BORDER),
+						h * (MEAN_HEIGHT + GlobalVariables.BORDER))
 			room_instances.append(Rect.new(MEAN_WIDTH, MEAN_HEIGHT, p, true))
 	# Mix up order of array so there isn't any bias
 	room_instances.shuffle()

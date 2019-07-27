@@ -1,7 +1,9 @@
 extends Area2D
 class_name Chest
+
+
 enum {WHITE, GREEN, BLUE, PURPLE, ORANGE}
-signal chest_entered(chest, pos, loot_pool)
+signal chest_entered(chest, loot_pool)
 onready var type:int
 
 
@@ -29,5 +31,5 @@ func _ready():
 #	body - What passed through it?
 func _on_Chest_body_entered(body:PhysicsBody2D):
 	if body is Player:
-		emit_signal("chest_entered", self, position,type)
+		emit_signal("chest_entered", self, type)
 		$AnimatedSprite.play(str(type) + "opened")

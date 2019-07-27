@@ -31,7 +31,7 @@ func health_update(health:int, max_health=0):
 func _on_weapon_swap(weapon:Gun):
 	$WeaponRect.texture = weapon.texture
 	$AmmoLabel.text = str(weapon.actual_bullets) + "\n" + str(weapon.current_durability)
-	$WeaponLabel.text = weapon.gun_name
+	$WeaponLabel.text = weapon.title
 
 
 # Updates text of the ammo label to current clip size

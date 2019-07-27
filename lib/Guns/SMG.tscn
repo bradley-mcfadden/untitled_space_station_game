@@ -1,7 +1,9 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://Guns/GunSprites/SMG.png" type="Texture" id=1]
-[ext_resource path="res://Guns/GunScripts/SMG.gd" type="Script" id=2]
+[ext_resource path="res://Guns/Sprites/SMG.png" type="Texture" id=1]
+[ext_resource path="res://Guns/Scripts/SMG.gd" type="Script" id=2]
+
+
 
 [node name="SMG" type="Sprite"]
 texture = ExtResource( 1 )

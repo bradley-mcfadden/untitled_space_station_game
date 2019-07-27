@@ -30,7 +30,8 @@ func _ready():
 
 # Process physics of some world objects
 #	delta - Time since last physics step	
-func  _physics_process(delta):
+#warning-ignore:unused_argument
+func  _physics_process(delta:float):
 	var coins:Array = $Coins.get_children()
 	for coin in coins:
 		coin.apply_force(player.pull(coin))
@@ -97,23 +98,23 @@ func _on_HallTimer_timeout():
 
 
 # Event handler for a chest being opened.
-#	pos - Position of chest.
+#	chest - Reference to chest
 #	loot_pool - Tier of the chest, determines what can drop from it.
-func _on_Chest_Entered(chest,pos:Vector2, loot_pool:int):
+func _on_Chest_Entered(chest:Chest, loot_pool:int):
 	var drop:Pickup = PICKUP.instance()
 	drop.global_position = chest.global_position
-	var chestContents:Item
+	var chest_contents:Item
 	if loot_pool == Chest.WHITE:
-		chestContents = LOOT_POOL_WHITE[int(rand_range(0, LOOT_POOL_WHITE.size()))].instance()
+		chest_contents = LOOT_POOL_WHITE[randi() % LOOT_POOL_WHITE.size()].instance()
 	elif loot_pool == Chest.GREEN:
-		chestContents = LOOT_POOL_GREEN[int(rand_range(0, LOOT_POOL_GREEN.size()))].instance()
+		chest_contents = LOOT_POOL_GREEN[randi() % LOOT_POOL_GREEN.size()].instance()
 	elif loot_pool == Chest.BLUE:
-		chestContents = LOOT_POOL_BLUE[int(rand_range(0, LOOT_POOL_BLUE.size()))].instance()
+		chest_contents = LOOT_POOL_BLUE[randi() % LOOT_POOL_BLUE.size()].instance()
 	elif loot_pool == Chest.PURPLE:
-		chestContents = LOOT_POOL_PURPLE[int(rand_range(0, LOOT_POOL_PURPLE.size()))].instance()
+		chest_contents = LOOT_POOL_PURPLE[randi() % LOOT_POOL_PURPLE.size()].instance()
 	elif loot_pool == Chest.ORANGE:
-		chestContents = LOOT_POOL_ORANGE[int(rand_range(0, LOOT_POOL_ORANGE.size()))].instance()
-	drop.set_item(chestContents)
+		chest_contents = LOOT_POOL_ORANGE[randi() % LOOT_POOL_ORANGE.size()].instance()
+	drop.set_item(chest_contents)
 	drop.connect("pickup", self, "_on_Pickup_Entered")
 	call_deferred("add_child", drop)
 	chest.disconnect("chest_entered", self, "_on_Chest_Entered")
@@ -129,7 +130,7 @@ func _on_Pickup_Entered(pickup:Pickup, dropped_item:Item):
 		pickup.queue_free()
 	else:
 		player.HUD.set_message_text("Purchase '" + dropped_item.title + "' for "+str(pickup.cost) + "?")
-		player.potentialPurchase = pickup
+		player.potential_purchase = pickup
 
 
 # Clear the text in the message label when a Pickup is exited
@@ -141,6 +142,7 @@ func _on_Pickup_Exited():
 #	location - Global position to place coins
 #	num_coins - Number of coins to add
 func _on_Drop_Coins(location:Vector2, num_coins:int):
+#warning-ignore:unused_variable
 	for i in range(num_coins):
 		var c:Coin = COIN.instance()
 		c.global_position = location

@@ -19,25 +19,21 @@ func _ready():
 
 # Process and handle collisions	
 #	delta - Time since last frame
-func _physics_process(delta):
+func _physics_process(delta:float):
 	if dead == true:
 		dead_buffer -= 1
-	if dead_buffer == 0 or linear_velocity.length() < 50:
+	if dead_buffer == 0 || linear_velocity.length() < 50:
 		queue_free()
-		
-	var step = linear_velocity * delta
-	var space_state = get_world_2d().direct_space_state
-	var result = space_state.intersect_ray(global_position,global_position+step)
-	if result:
+	var step:Vector2 = linear_velocity * delta
+	var space_state:Physics2DDirectSpaceState = get_world_2d().direct_space_state
+	var result:Dictionary = space_state.intersect_ray(global_position,global_position+step)
+	if result != null:
 		if result.collider is Enemy && dead == false:
-			result.collider.take_damage(damage*PlayerVariables.damageMultiplier,
-			damage*linear_velocity*delta*PlayerVariables.knockbackMultiplier)
+			result.collider.take_damage(damage * PlayerVariables.damage_multiplier,
+			damage * linear_velocity * delta * PlayerVariables.knockback_multiplier)
 			dead = true
-			#print(damage,result.collider)
-			#queue_free()
 		elif result.collider is TileMap:
 			dead = true
-			#queue_free()
 
 
 # Handles exceptional circumstances when a bullet could fall off screen

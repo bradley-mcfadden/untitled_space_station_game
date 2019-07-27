@@ -1,7 +1,9 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://Items/ItemSprites/Coffee.png" type="Texture" id=1]
-[ext_resource path="res://Items/ItemScripts/Coffee.gd" type="Script" id=2]
+[ext_resource path="res://Items/Sprites/Coffee.png" type="Texture" id=1]
+[ext_resource path="res://Items/Scripts/Coffee.gd" type="Script" id=2]
+
+
 
 
 

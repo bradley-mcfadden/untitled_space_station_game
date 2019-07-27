@@ -10,7 +10,6 @@ export var direction:int = -1
 signal hit(damage)
 signal dropped_coins(position, num_coins)
 const GRAVITY = 450
-onready var velocity:Vector2
 onready var sprite_anim:AnimatedSprite
 onready var collision_shape:CollisionShape2D
 onready var front_cast:RayCast2D
@@ -32,19 +31,19 @@ func take_damage(dmg:int, normal:Vector2):
 	# If I'm dead
 	if health <= 0:
 		collision_shape.disabled = true
-		get_parent().numEnemies -= 1
+		get_parent().num_enemies -= 1
 		emit_signal("drop_coins", global_position, int(rand_range(value - 2, value + 2)))
 		# If there are no other enemies,
 		# then mark the room as cleared, 
 		# unlock the world.
-		if get_parent().numEnemies <= 0:
+		if get_parent().num_enemies <= 0:
 			get_parent().get_parent().cleared = true
 			get_parent().get_parent().get_parent().lock = false
 		queue_free()
-	move_and_slide(normal,Vector2(0, -1))
+	move_and_slide(normal, Vector2(0, -1))
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #	delta - Time since last frame
-func _process(delta):
+func _process(delta:float):
 	pass

@@ -16,10 +16,10 @@ func _ready():
 	if random == true:
 		var item_contained:Sprite
 		if (randi() % 2) - 1 < 0:
-			var item_index:int = int(rand_range(0, GlobalVariables.GUN_REF.size()))
-			item_contained = GlobalVariables.gunRef[item_index].instance()
+			var item_index:int = randi() % GlobalVariables.GUNREF.size()
+			item_contained = GlobalVariables.GUNREF[item_index].instance()
 		else:
-			var item_index = int(rand_range(0, GlobalVariables.LOOT_POOL_ACTIVE.size()))
+			var item_index:int = randi() % GlobalVariables.LOOT_POOL_ACTIVE.size()
 			item_contained = GlobalVariables.LOOT_POOL_ACTIVE[item_index].instance()
 		var main_reference:Node = get_parent().get_parent().get_parent()
 		set_item(item_contained)
@@ -36,18 +36,19 @@ func _ready():
 
 # Makes sprite bob up and down
 #	delta - Time since last frame
-func _process(delta):
+#warning-ignore:unused_argument
+func _process(delta:float):
 	if count == 0:
 		step = -2.0
 	elif count == 50:
 		step = 2.0
 	count -= step
-	position.y -= step/10
+	position.y -= step / 10
 
 
 # Setter for item
 #	i - Either an item or an active Item
-func set_item(i:Item):
+func set_item(i:Sprite):
 	$Sprite.texture = i.texture
 	item = i
 
@@ -59,11 +60,11 @@ func _on_PickupDelay_timeout():
 
 # Sends out a signal when item is entered
 func _on_Area2D_body_entered(body:PhysicsBody2D):
-	if is_carryable == true and body.get_script() == load("res://Scripts/Player.gd"):
+	if is_carryable == true && body.get_script() == load("res://Scripts/Player.gd"):
 		emit_signal("pickup_entered", self, item)
 
 
 # Send out a signal when item exited
 func _on_Area2D_body_exited(body:PhysicsBody2D):
-	if is_carryable == true and body.get_script() == load("res://Scripts/Player.gd") and cost > 0 and purchased == false:
+	if is_carryable == true && body.get_script() == load("res://Scripts/Player.gd") && cost > 0 && purchased == false:
 		emit_signal("pickup_exited")
