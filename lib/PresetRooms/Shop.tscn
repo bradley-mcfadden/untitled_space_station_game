@@ -10,6 +10,7 @@ flags = 4
 load_path = "res://.import/IncognitoExchange.png-95cbb43f22da24badad71c7fdf0e691d.stex"
 
 [node name="Shop" type="TileMap"]
+use_parent_material = true
 tile_set = ExtResource( 1 )
 cell_size = Vector2( 32, 32 )
 format = 1
@@ -30,7 +31,6 @@ texture = SubResource( 1 )
 
 [node name="AnimatedSprite" parent="." instance=ExtResource( 3 )]
 position = Vector2( 506, 315 )
-frame = 1
 playing = true
 
 [node name="Pickup" parent="." instance=ExtResource( 4 )]

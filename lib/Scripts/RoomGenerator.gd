@@ -269,17 +269,17 @@ func open_doors(position:Vector2):
 	if d != null:
 		for i in range(d.size()):
 			var pf:Node = PUSHER_FACTORY.instance()
-			pf.tmps = d[i]
-			pf.dir = dn[i]
+			pf.tilemap_position = d[i]
+			pf.direction = dn[i]
 			pushers.append(pf)
 			add_child(pf)
 			pf.dfs_spread(dfs_spreadable_one)
 			var pf2:Node = PUSHER_FACTORY.instance()
 			if dn[i].x != 0:
-				pf2.tmps = Vector2(d[i].x, d[i].y + 1)
+				pf2.tilemap_position = Vector2(d[i].x, d[i].y + 1)
 			else:
-				pf2.tmps = Vector2(d[i].x + 1, d[i].y)
-			pf2.dir = dn[i]
+				pf2.tilemap_position = Vector2(d[i].x + 1, d[i].y)
+			pf2.direction = dn[i]
 			pushers.append(pf2)
 			add_child(pf2)
 			pf2.dfs_spread(dfs_spreadable_two)

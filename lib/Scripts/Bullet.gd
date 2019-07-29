@@ -26,13 +26,14 @@ func _physics_process(delta:float):
 		queue_free()
 	var step:Vector2 = linear_velocity * delta
 	var space_state:Physics2DDirectSpaceState = get_world_2d().direct_space_state
-	var result:Dictionary = space_state.intersect_ray(global_position,global_position+step)
-	if result != null:
-		if result.collider is Enemy && dead == false:
-			result.collider.take_damage(damage * PlayerVariables.damage_multiplier,
+	var result:Dictionary = space_state.intersect_ray(global_position, global_position + step)
+	if !result.empty():
+		print(result)
+		if result["collider"] is Enemy && dead == false:
+			result["collider"].take_damage(damage * PlayerVariables.damage_multiplier,
 			damage * linear_velocity * delta * PlayerVariables.knockback_multiplier)
 			dead = true
-		elif result.collider is TileMap:
+		elif result["collider"] is TileMap:
 			dead = true
 
 

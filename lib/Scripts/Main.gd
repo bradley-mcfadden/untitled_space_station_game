@@ -57,7 +57,7 @@ func game_over():
 #	location - Location to spawn bullet
 #	vel - Movement speed of bullet 
 #	damage - Amount of damage of the bullet
-func on_Gun_shoot(bullet:Bullet, direction:float, location:Vector2, vel:float, damage:int):
+func on_Gun_shoot(bullet:PackedScene, direction:float, location:Vector2, vel:float, damage:int):
 	var child:Bullet = bullet.instance()
 	child.rotation = direction
 	child.position = location

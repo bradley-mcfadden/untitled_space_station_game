@@ -1,10 +1,13 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://Enemies/EnemyScripts/Robot.gd" type="Script" id=1]
+[ext_resource path="res://Shaders/Negative.tres" type="Material" id=1]
+[ext_resource path="res://Enemies/EnemyScripts/Robot.gd" type="Script" id=2]
 
 [node name="Robot" type="KinematicBody2D"]
+material = ExtResource( 1 )
+use_parent_material = true
 position = Vector2( 89.4737, 64.2105 )
-script = ExtResource( 1 )
+script = ExtResource( 2 )
 health = 400
 damage = 10
 movespeed = 50

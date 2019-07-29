@@ -3,6 +3,7 @@
 [ext_resource path="res://Tiles/mytiles.tres" type="TileSet" id=1]
 
 [node name="SpawnRoom" type="TileMap"]
+use_parent_material = true
 tile_set = ExtResource( 1 )
 cell_size = Vector2( 32, 32 )
 format = 1

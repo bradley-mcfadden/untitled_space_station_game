@@ -27,6 +27,7 @@ func _ready():
 	front_floor_cast.cast_to = Vector2(-5, 30)
 	front_floor_cast.enabled = true
 	add_child(front_floor_cast)
+	material = load("res://Shaders/Negative.tres")
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

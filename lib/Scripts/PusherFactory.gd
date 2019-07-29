@@ -20,7 +20,7 @@ onready var visited_direction:Array = []
 # Init
 func _ready():
 	tilemap = get_parent()
-	effects_tilemap = tilemap.Effects
+	effects_tilemap = tilemap.get_node("Effects")
 	horizontal_pull_tile = effects_tilemap.tile_set.find_tile_by_name("HorizontalPull")
 	vertical_pull_tile = effects_tilemap.tile_set.find_tile_by_name("VerticalPull")
 

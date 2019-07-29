@@ -21,6 +21,7 @@ onready var back_floor_cast:RayCast2D
 # Init
 func _ready():
 	connect("drop_coins", get_parent().get_parent().get_parent().get_parent(), "_on_Drop_Coins")
+	material = get_parent().material
 
 
 # Setter for health, and handles knockback
