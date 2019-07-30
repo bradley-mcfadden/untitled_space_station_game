@@ -13,6 +13,7 @@ cell_countw = 300
 cell_counth = 300
 
 [node name="Effects" type="TileMap" parent="."]
+use_parent_material = true
 tile_set = ExtResource( 3 )
 cell_size = Vector2( 32, 32 )
 collision_layer = 0

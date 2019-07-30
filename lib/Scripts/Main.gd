@@ -115,7 +115,7 @@ func _on_Chest_Entered(chest:Chest, loot_pool:int):
 	elif loot_pool == Chest.ORANGE:
 		chest_contents = LOOT_POOL_ORANGE[randi() % LOOT_POOL_ORANGE.size()].instance()
 	drop.set_item(chest_contents)
-	drop.connect("pickup", self, "_on_Pickup_Entered")
+	drop.connect("pickup_entered", self, "_on_Pickup_Entered")
 	call_deferred("add_child", drop)
 	chest.disconnect("chest_entered", self, "_on_Chest_Entered")
 	
@@ -126,10 +126,10 @@ func _on_Chest_Entered(chest:Chest, loot_pool:int):
 func _on_Pickup_Entered(pickup:Pickup, dropped_item:Item):
 	if pickup.cost == 0:
 		player.add_item(dropped_item)
-		player.HUD.fading_message("Picked up '" + dropped_item.title + "'.")
+		player.hud.fading_message("Picked up '" + dropped_item.title + "'.")
 		pickup.queue_free()
 	else:
-		player.HUD.set_message_text("Purchase '" + dropped_item.title + "' for "+str(pickup.cost) + "?")
+		player.hud.set_message_text("Purchase '" + dropped_item.title + "' for "+str(pickup.cost) + "?")
 		player.potential_purchase = pickup
 
 

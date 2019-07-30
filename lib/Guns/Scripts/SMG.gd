@@ -10,7 +10,7 @@ func _init():
 func _ready():
 	position.y += 3
 	position.x += 2
-	emit_signal("weapon_swap",self)
+	emit_signal("weapon_changed",self)
 
 
 # Sets properties of Gun on creation

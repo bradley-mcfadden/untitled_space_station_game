@@ -13,9 +13,9 @@ script = ExtResource( 1 )
 [node name="RoomGenerator" parent="." instance=ExtResource( 2 )]
 material = ExtResource( 3 )
 cell_countw = 700
-chest_rooms = 2
 
-[node name="Coins" type="Node" parent="."]
+[node name="Coins" type="Node2D" parent="."]
+use_parent_material = true
 
 [node name="Player" parent="." instance=ExtResource( 4 )]
 position = Vector2( 129.397, 33.8243 )
@@ -28,5 +28,9 @@ collision_mask = 17
 
 [node name="HallTimer" type="Timer" parent="."]
 wait_time = 0.81
+
+[node name="DroppedItems" type="Node2D" parent="."]
+
+[node name="Bullets" type="Node2D" parent="."]
 
 [connection signal="timeout" from="HallTimer" to="." method="_on_HallTimer_timeout"]

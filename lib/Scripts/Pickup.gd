@@ -59,12 +59,12 @@ func _on_PickupDelay_timeout():
 
 
 # Sends out a signal when item is entered
-func _on_Area2D_body_entered(body:PhysicsBody2D):
-	if is_carryable == true && body.get_script() == load("res://Scripts/Player.gd"):
+func _on_Area2D_body_entered(body:CollisionObject2D):
+	if is_carryable == true && body is KinematicBody2D:
 		emit_signal("pickup_entered", self, item)
 
 
 # Send out a signal when item exited
-func _on_Area2D_body_exited(body:PhysicsBody2D):
-	if is_carryable == true && body.get_script() == load("res://Scripts/Player.gd") && cost > 0 && purchased == false:
+func _on_Area2D_body_exited(body:CollisionObject2D):
+	if is_carryable == true && body is KinematicBody2D && cost > 0 && purchased == false:
 		emit_signal("pickup_exited")

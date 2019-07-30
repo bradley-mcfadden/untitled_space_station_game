@@ -16,7 +16,7 @@ func effect(player:KinematicBody2D):
 	for child in player.get_children():
 		if child is Gun:
 			c_gun = child
-	c_gun.ReloadTimer.wait_time *= 0.90
+	c_gun.reload_timer.wait_time *= 0.90
 	
 	PlayerVariables.fire_rate_multiplier *= 0.85
 	c_gun.rate_of_fire_timer.wait_time *= 0.85

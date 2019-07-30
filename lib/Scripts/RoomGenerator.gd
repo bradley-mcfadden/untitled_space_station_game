@@ -324,6 +324,7 @@ func find_player_index(position:Vector2):
 # in that room.
 #	room_index - Index to spawn enemies of.
 func spawn_enemies(room_index:int):
-	if room_index >= chest_rooms+2 && room_children[room_index].cleared != true:
+	if room_index >= chest_rooms + 2 && room_children[room_index].cleared != true:
 		room_children[room_index].add_child(enemies[room_index])
+		enemies[room_index].update_material(self.material)
 		lock = true

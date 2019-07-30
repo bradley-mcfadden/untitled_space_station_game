@@ -4,6 +4,7 @@
 [ext_resource path="res://Tiles/Ladder.png" type="Texture" id=2]
 
 [node name="Ladder" type="Area2D"]
+use_parent_material = true
 position = Vector2( 16, 16 )
 script = ExtResource( 1 )
 __meta__ = {
@@ -11,6 +12,7 @@ __meta__ = {
 }
 
 [node name="Sprite" type="Sprite" parent="."]
+use_parent_material = true
 texture = ExtResource( 2 )
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]

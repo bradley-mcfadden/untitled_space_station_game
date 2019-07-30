@@ -25,11 +25,13 @@ position = Vector2( 864, 64 )
 length = 14
 
 [node name="Sprite" type="Sprite" parent="."]
+use_parent_material = true
 position = Vector2( 464, 240 )
 scale = Vector2( 1, 0.9 )
 texture = SubResource( 1 )
 
 [node name="AnimatedSprite" parent="." instance=ExtResource( 3 )]
+use_parent_material = true
 position = Vector2( 506, 315 )
 playing = true
 

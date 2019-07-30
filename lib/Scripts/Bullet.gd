@@ -28,7 +28,7 @@ func _physics_process(delta:float):
 	var space_state:Physics2DDirectSpaceState = get_world_2d().direct_space_state
 	var result:Dictionary = space_state.intersect_ray(global_position, global_position + step)
 	if !result.empty():
-		print(result)
+		# print(result)
 		if result["collider"] is Enemy && dead == false:
 			result["collider"].take_damage(damage * PlayerVariables.damage_multiplier,
 			damage * linear_velocity * delta * PlayerVariables.knockback_multiplier)
