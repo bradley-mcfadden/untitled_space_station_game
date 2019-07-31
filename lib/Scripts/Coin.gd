@@ -35,5 +35,5 @@ func _on_ActiveTimer_timeout():
 func _on_Coin_body_entered(body:PhysicsBody2D):
 	if body is Player && active == true:
 		body.coins += 1
-		body.HUD.coin_update(body.coins)
+		body.hud.coin_update(body.coins)
 		queue_free()

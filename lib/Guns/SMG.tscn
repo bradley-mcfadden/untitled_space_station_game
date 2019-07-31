@@ -3,9 +3,8 @@
 [ext_resource path="res://Guns/Sprites/SMG.png" type="Texture" id=1]
 [ext_resource path="res://Guns/Scripts/SMG.gd" type="Script" id=2]
 
-
-
 [node name="SMG" type="Sprite"]
+use_parent_material = true
 texture = ExtResource( 1 )
 script = ExtResource( 2 )
 

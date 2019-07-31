@@ -20,7 +20,7 @@ onready var back_floor_cast:RayCast2D
 
 # Init
 func _ready():
-	connect("drop_coins", get_parent().get_parent().get_parent().get_parent(), "_on_Drop_Coins")
+	connect("dropped_coins", get_parent().get_parent().get_parent().get_parent(), "_on_Drop_Coins")
 	material = get_parent().material
 
 
@@ -33,7 +33,7 @@ func take_damage(dmg:int, normal:Vector2):
 	if health <= 0:
 		collision_shape.disabled = true
 		get_parent().num_enemies -= 1
-		emit_signal("drop_coins", global_position, int(rand_range(value - 2, value + 2)))
+		emit_signal("dropped_coins", global_position, int(rand_range(value - 2, value + 2)))
 		# If there are no other enemies,
 		# then mark the room as cleared, 
 		# unlock the world.

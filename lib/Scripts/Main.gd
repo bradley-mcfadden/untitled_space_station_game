@@ -63,7 +63,7 @@ func on_Gun_shoot(bullet:PackedScene, direction:float, location:Vector2, vel:flo
 	child.position = location
 	child.speed = vel
 	child.damage = damage
-	add_child(child)
+	$Bullets.add_child(child)
 
 
 # Determines the tiles adjacent to the player, above, below, and in front
@@ -116,7 +116,7 @@ func _on_Chest_Entered(chest:Chest, loot_pool:int):
 		chest_contents = LOOT_POOL_ORANGE[randi() % LOOT_POOL_ORANGE.size()].instance()
 	drop.set_item(chest_contents)
 	drop.connect("pickup_entered", self, "_on_Pickup_Entered")
-	call_deferred("add_child", drop)
+	$DroppedItems.call_deferred("add_child", drop)
 	chest.disconnect("chest_entered", self, "_on_Chest_Entered")
 	
 	

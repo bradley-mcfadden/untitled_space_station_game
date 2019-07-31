@@ -1,36 +1,36 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Scripts/Main.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/RoomGenerator.tscn" type="PackedScene" id=2]
-[ext_resource path="res://Shaders/Negative.tres" type="Material" id=3]
-[ext_resource path="res://Scenes/Player.tscn" type="PackedScene" id=4]
-[ext_resource path="res://Scenes/HUD.tscn" type="PackedScene" id=5]
-[ext_resource path="res://Guns/Pistol.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Scenes/Player.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Scenes/HUD.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Guns/Pistol.tscn" type="PackedScene" id=5]
 
 [node name="Main" type="Node"]
 script = ExtResource( 1 )
 
 [node name="RoomGenerator" parent="." instance=ExtResource( 2 )]
-material = ExtResource( 3 )
 cell_countw = 700
 
 [node name="Coins" type="Node2D" parent="."]
-use_parent_material = true
 
-[node name="Player" parent="." instance=ExtResource( 4 )]
+[node name="Player" parent="." instance=ExtResource( 3 )]
+material = null
 position = Vector2( 129.397, 33.8243 )
 collision_layer = 17
 collision_mask = 17
 
-[node name="HUD" parent="Player" instance=ExtResource( 5 )]
+[node name="HUD" parent="Player" instance=ExtResource( 4 )]
 
-[node name="Pistol" parent="Player" instance=ExtResource( 6 )]
+[node name="Pistol" parent="Player" instance=ExtResource( 5 )]
 
 [node name="HallTimer" type="Timer" parent="."]
 wait_time = 0.81
 
 [node name="DroppedItems" type="Node2D" parent="."]
+use_parent_material = true
 
 [node name="Bullets" type="Node2D" parent="."]
+use_parent_material = true
 
 [connection signal="timeout" from="HallTimer" to="." method="_on_HallTimer_timeout"]

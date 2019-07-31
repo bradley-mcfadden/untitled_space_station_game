@@ -3,9 +3,8 @@
 [ext_resource path="res://Guns/Sprites/Shotgun.png" type="Texture" id=1]
 [ext_resource path="res://Guns/Scripts/Shotgun.gd" type="Script" id=2]
 
-
-
 [node name="Shotgun" type="Sprite"]
+use_parent_material = true
 texture = ExtResource( 1 )
 centered = false
 script = ExtResource( 2 )
