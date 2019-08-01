@@ -11,4 +11,4 @@ func _init():
 #	player - Player target
 func effect(player:KinematicBody2D):
 	player.health += 70
-	player.HUD.health_update(player.health)
+	player.hud.health_update(player.health)

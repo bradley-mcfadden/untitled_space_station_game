@@ -8,9 +8,10 @@ func _init():
 
 # Define the function to be called when active item is pressed
 func active_effect():
-	player.iron_skin = true
+	player.has_iron_skin = true
 	player.movespeed *= 0.9
 	player.speed_cap *= 0.8
+	player.material = load("res://Shaders/Grayscale.tres")
 	$Timer.start()
 
 

@@ -83,7 +83,7 @@ func _process(delta:float):
 		active_item.active_effect()
 		active_item.is_ready = false
 		$CDTimer.start()
-		hud.get_node("ActiveItem").inverted = true
+		hud.get_node("ActiveItem").invert_enable = false
 		hud.get_node("CDTimer").start()
 	
 	if ((Input.is_action_just_pressed("reload") && equipped_gun.current_durability > 0) 
@@ -122,7 +122,7 @@ func _process(delta:float):
 					get_parent().add_child(drop)
 				active_item = potential_purchase.item
 				$CDTimer.wait_time = potential_purchase.item.cooldown
-				hud.active_item_swtich(potential_purchase.item)
+				hud.active_item_switch(potential_purchase.item)
 			potential_purchase.queue_free()
 			potential_purchase = null
 		else:

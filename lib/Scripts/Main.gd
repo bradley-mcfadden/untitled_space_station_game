@@ -2,6 +2,7 @@ extends Node
 
 
 onready var player:KinematicBody2D
+onready var world:TileMap
 const LOOT_POOL_WHITE = [preload("res://Items/TwoPercent.tscn"),preload("res://Items/Coffee.tscn"),
                      preload("res://Items/Grease.tscn"),preload("res://Items/TheChain.tscn"),
 					 preload("res://Items/OldJersey.tscn"), preload("res://Items/BeyondMeat.tscn"),
@@ -25,6 +26,7 @@ const COIN = preload("res://Scenes/Coin.tscn")
 # Init
 func _ready():
 	player = $Player
+	world = $RoomGenerator
 	player.position = $RoomGenerator.spawn_room()
 
 
@@ -123,7 +125,7 @@ func _on_Chest_Entered(chest:Chest, loot_pool:int):
 # When a pickup is entered, add it to Player inventory or prompt to swap active items.
 #	pickup - Reference to pickup scene
 #	dropped_item - Item to place in inventory
-func _on_Pickup_Entered(pickup:Pickup, dropped_item:Item):
+func _on_Pickup_Entered(pickup:Pickup, dropped_item:Sprite):
 	if pickup.cost == 0:
 		player.add_item(dropped_item)
 		player.hud.fading_message("Picked up '" + dropped_item.title + "'.")
@@ -135,7 +137,7 @@ func _on_Pickup_Entered(pickup:Pickup, dropped_item:Item):
 
 # Clear the text in the message label when a Pickup is exited
 func _on_Pickup_Exited():
-	player.HUD.set_message_text("")
+	player.hud.set_message_text("")
 
 
 # Handles signal and adds coins to the scene

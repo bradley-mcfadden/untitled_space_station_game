@@ -10,7 +10,7 @@ func _init():
 # Make player magazine size larger, fire gun faster
 #	player - Player
 func effect(player:KinematicBody2D):
-	PlayerVariables.clipMultiplier *= 1.2
+	PlayerVariables.clip_size_multiplier *= 1.2
 	var c_gun:Gun 
 	for child in player.get_children():
 		if child is Gun:

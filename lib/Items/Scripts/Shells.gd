@@ -15,4 +15,4 @@ func effect(player:KinematicBody2D):
 		if child is Gun:
 			c_gun = child
 	c_gun.current_durability += c_gun.clip_size * 2
-	player.HUD._on_update_gun(c_gun)
+	player.hud._on_update_gun(c_gun)

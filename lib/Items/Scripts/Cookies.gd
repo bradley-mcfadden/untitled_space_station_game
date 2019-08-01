@@ -13,5 +13,5 @@ func effect(player:KinematicBody2D):
 	player.health += int(player.health * 0.15)
 	if player.health > player.max_health:
 		player.health = player.max_health
-	player.HUD.health_update(player.health, 0)
+	player.hud.health_update(player.health, 0)
 

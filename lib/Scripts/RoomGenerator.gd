@@ -328,3 +328,11 @@ func spawn_enemies(room_index:int):
 		room_children[room_index].add_child(enemies[room_index])
 		enemies[room_index].update_material(self.material)
 		lock = true
+
+
+# Kill every enemy in a room of the specified index
+#	room_index - Room index to kill enemies in
+func kill_enemies(room_index:int):
+	if room_index >= chest_rooms + 2 && room_children[room_index].cleared != true:
+		for enemy in enemies[room_index].get_children():
+			enemy.take_damage(1000000, Vector2(0, 0))
