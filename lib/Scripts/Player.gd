@@ -80,11 +80,11 @@ func _process(delta:float):
 		return
 
 	if Input.is_action_just_pressed("use_item") && active_item != null:
-		active_item.active_effect()
-		active_item.is_ready = false
-		$CDTimer.start()
-		hud.get_node("ActiveItem").invert_enable = false
-		hud.get_node("CDTimer").start()
+		if active_item.is_ready == true:
+			active_item.active_effect()
+			active_item.is_ready = false
+			$EffectTimer.start()
+			hud.get_node("ActiveItem").invert_enable = false
 	
 	if ((Input.is_action_just_pressed("reload") && equipped_gun.current_durability > 0) 
     && equipped_gun.reload_timer.paused == false):
@@ -120,9 +120,7 @@ func _process(delta:float):
 					drop.item = active_item
 					drop.global_position = global_position
 					get_parent().add_child(drop)
-				active_item = potential_purchase.item
-				$CDTimer.wait_time = potential_purchase.item.cooldown
-				hud.active_item_switch(potential_purchase.item)
+				add_active_item(potential_purchase.item)
 			potential_purchase.queue_free()
 			potential_purchase = null
 		else:
@@ -267,6 +265,18 @@ func add_item(i:Item):
 	hud.add_item(i)
 
 
+# Handles adding active items to player inventory
+#	ai - Active Item to add
+func add_active_item(ai:ActiveItem):
+	active_item = ai
+	$CDTimer.wait_time = ai.cooldown
+	hud.active_item_switch(ai)
+	ai.player = self
+	if ai.duration > 0:
+		$EffectTimer.wait_time = ai.duration
+		$EffectTimer.connect("timeout", ai, "_on_Timer_timeout")
+
+
 # Returns a vector of the force that the player should exert on a body
 #	body - Body to determine gravity force 
 #	return - Gravity force between player and body
@@ -306,6 +316,7 @@ func _on_RegenTimer_Timeout():
 # Allow item to be used again, and stop the looping timer.
 func _on_CDTimer_timeout():
 	active_item.is_ready = true
-	hud.get_node("ActiveItem").invert_enable = false
+	hud.get_node("ActiveItem").invert_enable = true
 	hud.get_node("CDTimer").stop()
 	hud.get_node("CDText").text = ""
+	material = null

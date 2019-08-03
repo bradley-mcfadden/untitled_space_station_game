@@ -42,7 +42,7 @@ func _on_update_gun(weapon:Gun):
 
 # Update the HUD for a new ActiveItem
 #	item - Item to update with
-func active_item_swtich(item:ActiveItem):
+func active_item_switch(item:ActiveItem):
 	$ActiveLabel.text = item.title
 	$ActiveItemLabel.texture = item.texture
 
@@ -81,4 +81,4 @@ func _on_Timer_timeout():
 
 # Updates the time count of the active item label
 func _on_CDTimer_timeout():
-	$CDText.text = int(get_parent().get_node("CDTimer").time_left)
+	$CDText.text = str(int(get_parent().get_node("CDTimer").time_left))

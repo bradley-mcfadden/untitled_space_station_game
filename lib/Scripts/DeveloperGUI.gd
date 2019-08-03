@@ -10,8 +10,7 @@ func _on_Control_button_up():
 #	index - Index of item to add
 func _on_ActiveItems_index_pressed(index:int):
 	var player:Player = get_parent().get_parent()
-	player.active_item = GlobalVariables.LOOT_POOL_ACTIVE[index].instance()
-	player.hud.active_item_switch(player.active_item)
+	player.add_active_item(GlobalVariables.LOOT_POOL_ACTIVE[index].instance())
 
 
 # Adds item to player's inventory after being added

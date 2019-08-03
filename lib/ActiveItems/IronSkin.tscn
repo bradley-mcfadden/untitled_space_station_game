@@ -3,8 +3,6 @@
 [ext_resource path="res://ActiveItems/Sprites/IronSkin.png" type="Texture" id=1]
 [ext_resource path="res://ActiveItems/Scripts/IronSkin.gd" type="Script" id=2]
 
-
-
 [node name="ActiveItem" type="Sprite"]
 texture = ExtResource( 1 )
 script = ExtResource( 2 )
