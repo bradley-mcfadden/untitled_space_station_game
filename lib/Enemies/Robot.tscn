@@ -3,7 +3,6 @@
 [ext_resource path="res://Enemies/EnemyScripts/Robot.gd" type="Script" id=1]
 
 [node name="Robot" type="KinematicBody2D"]
-use_parent_material = true
 position = Vector2( 89.4737, 64.2105 )
 script = ExtResource( 1 )
 health = 400

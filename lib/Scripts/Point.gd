@@ -1,10 +1,11 @@
 # Describes a Point on a grid
 extends Object
-
 class_name Point
+
 
 var x:int
 var y:int
+
 
 # Create a point
 #	x - X value of point

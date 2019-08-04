@@ -9,8 +9,8 @@
 [ext_resource path="res://SpaceManSprites/Spaceman-SpritesA6.png" type="Texture" id=7]
 [ext_resource path="res://SpaceManSprites/Spaceman-SpritesA7.png" type="Texture" id=8]
 [ext_resource path="res://SpaceManSprites/Spaceman-SpritesA8.png" type="Texture" id=9]
-[ext_resource path="res://SpaceManSprites/Spaceman-SpritesA9.png" type="Texture" id=10]
-[ext_resource path="res://SpaceManSprites/Spaceman-SpritesA10.png" type="Texture" id=11]
+[ext_resource path="res://SpaceManSprites/Spaceman-SpritesA10.png" type="Texture" id=10]
+[ext_resource path="res://SpaceManSprites/Spaceman-SpritesA9.png" type="Texture" id=11]
 [ext_resource path="res://SpaceManSprites/Spaceman-SpritesA11.png" type="Texture" id=12]
 
 [sub_resource type="StreamTexture" id=1]
@@ -29,15 +29,15 @@ animations = [ {
 "name": "walk",
 "speed": 12.0
 }, {
-"frames": [ ExtResource( 10 ), ExtResource( 11 ), ExtResource( 12 ), ExtResource( 11 ) ],
-"loop": true,
-"name": "climb",
-"speed": 2.0
-}, {
-"frames": [ ExtResource( 11 ) ],
+"frames": [ ExtResource( 10 ) ],
 "loop": true,
 "name": "climb_idle",
 "speed": 5.0
+}, {
+"frames": [ ExtResource( 11 ), ExtResource( 10 ), ExtResource( 12 ), ExtResource( 10 ) ],
+"loop": true,
+"name": "climb",
+"speed": 2.0
 } ]
 
 [sub_resource type="RectangleShape2D" id=3]

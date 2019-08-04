@@ -5,7 +5,6 @@ extends Button
 func _on_Control_button_up():
 	$Options.popup()
 
-
 # Adds activeitem to inventory after player clicks it
 #	index - Index of item to add
 func _on_ActiveItems_index_pressed(index:int):

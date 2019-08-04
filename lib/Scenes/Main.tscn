@@ -24,10 +24,10 @@ collision_mask = 17
 [node name="HUD" parent="Player" instance=ExtResource( 4 )]
 
 [node name="Control" parent="Player/HUD" instance=ExtResource( 5 )]
-margin_left = 1420.28
-margin_top = 1.57117
-margin_right = -0.719971
-margin_bottom = -731.429
+margin_left = 1420.0
+margin_top = 2.0
+margin_right = -1.0
+margin_bottom = -727.0
 
 [node name="Pistol" parent="Player" instance=ExtResource( 6 )]
 

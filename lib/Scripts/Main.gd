@@ -3,22 +3,6 @@ extends Node
 
 onready var player:KinematicBody2D
 onready var world:TileMap
-const LOOT_POOL_WHITE = [preload("res://Items/TwoPercent.tscn"),preload("res://Items/Coffee.tscn"),
-                     preload("res://Items/Grease.tscn"),preload("res://Items/TheChain.tscn"),
-					 preload("res://Items/OldJersey.tscn"), preload("res://Items/BeyondMeat.tscn"),
-					 preload("res://Items/Cookies.tscn"), preload("res://Items/Shells.tscn")]
-const LOOT_POOL_GREEN = [preload("res://Items/PainPills.tscn"),preload("res://Items/TowerShield.tscn"),
-                     preload("res://Items/RollerBlades.tscn"), preload("res://Items/ExtendedMagazine.tscn"),
-					 preload("res://Items/Binoculars.tscn"),preload("res://Items/Dilopia.tscn")]
-const LOOT_POOL_BLUE = [preload("res://Items/MarineHelmet.tscn"),preload("res://Items/PhoneBook.tscn"),
-                    preload("res://Items/Gloves.tscn"), preload("res://Items/ItchyFinger.tscn")]
-const LOOT_POOL_PURPLE = [preload("res://Items/ElixirOfLife.tscn"),preload("res://Items/FullMetalJacket.tscn"),
-                      preload("res://Items/Batteries.tscn"),preload("res://Items/DrumClip.tscn"),
-					  preload("res://Items/Deadeye.tscn"), preload("res://Items/SoyMilk.tscn")]
-const LOOT_POOL_ORANGE = [preload("res://Items/ChiliPepper.tscn"),preload("res://Items/BottleOfRage.tscn"),
-                      preload("res://Items/MysteryPowder.tscn"), preload("res://Items/Catalyst.tscn"),
-					  preload("res://Items/AlmondMilk.tscn")]
-const LOOT_POOL_ACTIVE = [preload("res://ActiveItems/IronSkin.tscn")]
 const PICKUP = preload("res://Scenes/Pickup.tscn")
 const COIN = preload("res://Scenes/Coin.tscn")
 
@@ -107,15 +91,15 @@ func _on_Chest_Entered(chest:Chest, loot_pool:int):
 	drop.global_position = chest.global_position
 	var chest_contents:Item
 	if loot_pool == Chest.WHITE:
-		chest_contents = LOOT_POOL_WHITE[randi() % LOOT_POOL_WHITE.size()].instance()
+		chest_contents = GlobalVariables.LOOT_POOL_WHITE[randi() % GlobalVariables.LOOT_POOL_WHITE.size()].instance()
 	elif loot_pool == Chest.GREEN:
-		chest_contents = LOOT_POOL_GREEN[randi() % LOOT_POOL_GREEN.size()].instance()
+		chest_contents = GlobalVariables.LOOT_POOL_GREEN[randi() % GlobalVariables.LOOT_POOL_GREEN.size()].instance()
 	elif loot_pool == Chest.BLUE:
-		chest_contents = LOOT_POOL_BLUE[randi() % LOOT_POOL_BLUE.size()].instance()
+		chest_contents = GlobalVariables.LOOT_POOL_BLUE[randi() % GlobalVariables.LOOT_POOL_BLUE.size()].instance()
 	elif loot_pool == Chest.PURPLE:
-		chest_contents = LOOT_POOL_PURPLE[randi() % LOOT_POOL_PURPLE.size()].instance()
+		chest_contents = GlobalVariables.LOOT_POOL_PURPLE[randi() % GlobalVariables.LOOT_POOL_PURPLE.size()].instance()
 	elif loot_pool == Chest.ORANGE:
-		chest_contents = LOOT_POOL_ORANGE[randi() % LOOT_POOL_ORANGE.size()].instance()
+		chest_contents = GlobalVariables.LOOT_POOL_ORANGE[randi() % GlobalVariables.LOOT_POOL_ORANGE.size()].instance()
 	drop.set_item(chest_contents)
 	drop.connect("pickup_entered", self, "_on_Pickup_Entered")
 	$DroppedItems.call_deferred("add_child", drop)

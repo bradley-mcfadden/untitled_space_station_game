@@ -78,13 +78,7 @@ func isaac_generate():
 # Starting with a random room, create a spanning tree of rooms that 
 # is more weighted around the starting room. Edges never overlap.
 func prim_connect():
-	var weighted_matrix:Array = []
-	for i in range(room_instances.size()):
-		weighted_matrix.append([])
-#warning-ignore:unused_variable
-		for j in range(room_instances.size()):
-			weighted_matrix[i].append(0)
-		
+	var weighted_matrix:Array = build_2d_array(room_instances.size(), room_instances.size())
 	for i in range(weighted_matrix.size()):
 		var r:Node = room_instances[i]
 		for j in range(weighted_matrix[i].size()):
@@ -92,12 +86,7 @@ func prim_connect():
 				weighted_matrix[i][j] = 1000000
 			else:
 				weighted_matrix[i][j] = r.dist_adjacency(room_instances[j])
-	var adjacency_matrix:Array = []
-	for i in range(room_instances.size()):
-		adjacency_matrix.append([])
-#warning-ignore:unused_variable
-		for j in range(room_instances.size()):
-			adjacency_matrix[i].append(0)
+	var adjacency_matrix:Array = build_2d_array(room_instances.size(), room_instances.size())
 	var root:int = int(rand_range(0, room_instances.size()))
 	var tree:Array = []
 	tree.append(root)
@@ -127,7 +116,6 @@ func prim_connect():
 					weighted_matrix[parent][child] = 100000
 					weighted_matrix[child][parent] = 100000
 					break
-
 	# If the tree does not contain a room, mark as visited
 	for i in range(room_instances.size()):
 		for j in range(tree.size()):
@@ -139,15 +127,8 @@ func prim_connect():
 	for i in range(1, rs + 1):
 		if room_instances[rs - i].visited:
 			room_instances.remove(rs - i)
-			
 	# Add in back edges
-	weighted_matrix = []
-	for i in range(room_instances.size()):
-		weighted_matrix.append([])
-#warning-ignore:unused_variable
-		for j in range(room_instances.size()):
-			weighted_matrix[i].append(0)
-			
+	weighted_matrix = build_2d_array(room_instances.size(), room_instances.size())
 	for i in range(weighted_matrix.size()):
 		var r:Node = room_instances[i]
 		for j in range(weighted_matrix.size()):
@@ -255,7 +236,6 @@ func open_doors(position:Vector2):
 		pusher.queue_free()
 	pushers = []
 	$Effects.clear()
-	
 	var current_room_index:int = find_player_index(position)
 	var current_room:Node = room_instances[current_room_index]
 	var d:Array = []
@@ -263,7 +243,6 @@ func open_doors(position:Vector2):
 	for edge in edge_set.data:
 		edge.image_empty(self,false)
 		if edge.contains(current_room):
-			#edge.image_empty(self,false)
 			d.append(edge.get_doors(current_room))
 			dn.append(edge.get_door_normals(current_room))
 	if d != null:
@@ -283,7 +262,6 @@ func open_doors(position:Vector2):
 			pushers.append(pf2)
 			add_child(pf2)
 			pf2.dfs_spread(dfs_spreadable_two)
-					
 	for room in room_instances:
 		room.image_int(self)
 
@@ -336,3 +314,34 @@ func kill_enemies(room_index:int):
 	if room_index >= chest_rooms + 2 && room_children[room_index].cleared != true:
 		for enemy in enemies[room_index].get_children():
 			enemy.take_damage(1000000, Vector2(0, 0))
+
+
+# Take an array and turn it into an 2d array of zero
+#	width - Number of rows in array
+#	height - Number of cols in array
+#	return - 2d filled with 0
+func build_2d_array(width:int, height:int) -> Array:
+	assert width > 0 
+	assert height > 0
+	var arr:Array = []
+	#warning-ignore:unused_variable
+	for i in range(width):
+		arr.append([])
+	#warning-ignore:unused_variable
+		for j in range(height):
+			arr[i].append(0)
+	return arr
+
+
+# Takes in an array of rooms an will create a weighted adjacency matrix
+#	return - Weighted adjacency matrix
+func fill_weighted_matrix() -> Array:
+	var weighted_matrix:Array = build_2d_array(room_instances.size(), room_instances.size())
+	for i in range(weighted_matrix.size()):
+		var r:Node = room_instances[i]
+		for j in range(weighted_matrix[i].size()):
+			if i == j:
+				weighted_matrix[i][j] = 1000000
+			else:
+				weighted_matrix[i][j] = r.dist_adjacency(room_instances[j])
+	return weighted_matrix
