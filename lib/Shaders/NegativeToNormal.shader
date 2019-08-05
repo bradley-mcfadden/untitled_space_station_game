@@ -9,7 +9,7 @@ void fragment(){
 	COLOR.rgb = (adjust * sin(TIME) * amplitude) + vertical_shift;
 	
 	// Remove me to make effect loop
-	if (TIME >= 4.712) {
-		COLOR.rgb = c;
-	}
+	//if (TIME >= 4.712) {
+	//	COLOR.rgb = c;
+	//}
 }

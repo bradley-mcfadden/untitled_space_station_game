@@ -1,5 +1,7 @@
 extends Node2D
 class_name Pickup
+
+
 export var random:bool = false
 export var cost:int = 0
 onready var count:float

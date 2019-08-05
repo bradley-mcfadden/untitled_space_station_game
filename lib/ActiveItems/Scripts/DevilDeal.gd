@@ -5,7 +5,7 @@ extends ActiveItem
 func _init():
 	title = "Devil's Deal"
 	cooldown = 2
-	duration = 40
+	duration = 1
 	is_ready = true
 
 
@@ -19,7 +19,7 @@ func active_effect():
 		var enemies:Array = main.world.enemies[player_room].get_children()
 		if enemies.size() == 0:
 			return
-		player.material = load("res://Shaders/OscillatingRed.shader")
+		player.set_material(load("res://Shaders/OscillatingRed.tres"))
 		player.take_damage(1 + int(player.health * 0.30), Vector2(0, 0))
 		enemies[randi() % enemies.size()].take_damage(1000000, Vector2(0, 0))
 
