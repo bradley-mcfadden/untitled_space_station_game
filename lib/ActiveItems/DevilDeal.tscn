@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://ActiveItems/Sprites/DevilsDeal.png" type="Texture" id=1]
+[ext_resource path="res://ActiveItems/Scripts/DevilDeal.gd" type="Script" id=2]
+
+[node name="DevilDeal" type="Sprite"]
+texture = ExtResource( 1 )
+script = ExtResource( 2 )
+

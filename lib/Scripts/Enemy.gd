@@ -16,12 +16,14 @@ onready var front_cast:RayCast2D
 onready var back_cast:RayCast2D
 onready var front_floor_cast:RayCast2D
 onready var back_floor_cast:RayCast2D
+onready var frozen:bool
 
 
 # Init
 func _ready():
 	connect("dropped_coins", get_parent().get_parent().get_parent().get_parent(), "_on_Drop_Coins")
 	material = get_parent().material
+	frozen = false
 
 
 # Setter for health, and handles knockback

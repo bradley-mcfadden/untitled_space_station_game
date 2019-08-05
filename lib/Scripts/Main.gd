@@ -1,4 +1,4 @@
-extends Node
+extends Node2D
 
 
 onready var player:KinematicBody2D
@@ -70,6 +70,18 @@ func update_tiles():
 func start_hall_timer():
 	$HallTimer.start()
 	player.toggle_damping()
+
+
+# You know what it does
+#	stop_time - Is time stopping or moving forward?
+func za_warudo(stop_time = true):
+	var player_room:int = world.find_player_index(player.position)
+	if player_room < 0:
+		return
+	if world.enemies[player_room] != null:
+		for enemy in world.enemies[player_room].get_children():
+			enemy.frozen = stop_time
+			enemy.sprite_anim.playing = !stop_time
 
 
 # Event handler for when hall time runs out.

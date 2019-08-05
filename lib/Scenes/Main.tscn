@@ -7,14 +7,17 @@
 [ext_resource path="res://Scenes/DeveloperGUI.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Guns/Pistol.tscn" type="PackedScene" id=6]
 
-[node name="Main" type="Node"]
+[node name="Main" type="Node2D"]
+use_parent_material = true
 script = ExtResource( 1 )
 
 [node name="RoomGenerator" parent="." instance=ExtResource( 2 )]
+use_parent_material = true
 cell_countw = 700
 desired_rooms = 10
 
 [node name="Coins" type="Node2D" parent="."]
+use_parent_material = true
 
 [node name="Player" parent="." instance=ExtResource( 3 )]
 position = Vector2( 748.694, 398.122 )

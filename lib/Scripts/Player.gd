@@ -169,7 +169,6 @@ func take_damage(damage:int, norm:Vector2):
 		get_parent().game_over()
 		$HUD/DeathLabel.visible = true
 		$HUD/RestartButton.visible = true
-		
 	else:
 		health -= damage
 	hud.health_update(health)

@@ -78,14 +78,7 @@ func isaac_generate():
 # Starting with a random room, create a spanning tree of rooms that 
 # is more weighted around the starting room. Edges never overlap.
 func prim_connect():
-	var weighted_matrix:Array = build_2d_array(room_instances.size(), room_instances.size())
-	for i in range(weighted_matrix.size()):
-		var r:Node = room_instances[i]
-		for j in range(weighted_matrix[i].size()):
-			if i == j:
-				weighted_matrix[i][j] = 1000000
-			else:
-				weighted_matrix[i][j] = r.dist_adjacency(room_instances[j])
+	var weighted_matrix:Array = fill_weighted_matrix()
 	var adjacency_matrix:Array = build_2d_array(room_instances.size(), room_instances.size())
 	var root:int = int(rand_range(0, room_instances.size()))
 	var tree:Array = []

@@ -40,6 +40,9 @@ func update_material(material:ShaderMaterial):
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #	delta - Time elapsed since previous frame
 func _physics_process(delta:float):
+	if frozen == true:
+		move_and_slide(Vector2(0, GRAVITY),Vector2(0, -1))
+		return
 	var coll:Object = front_cast.get_collider()
 	if (front_cast.is_colliding() && coll is TileMap) || !front_floor_cast.is_colliding():
 		direction *= -1
