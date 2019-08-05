@@ -17,6 +17,8 @@ onready var back_cast:RayCast2D
 onready var front_floor_cast:RayCast2D
 onready var back_floor_cast:RayCast2D
 onready var frozen:bool
+onready var stasis_velocity:Vector2
+onready var velocity:Vector2
 
 
 # Init
@@ -43,7 +45,15 @@ func take_damage(dmg:int, normal:Vector2):
 			get_parent().get_parent().cleared = true
 			get_parent().get_parent().get_parent().lock = false
 		queue_free()
+	if frozen == true:
+		stasis_velocity += normal
+		return
 	move_and_slide(normal, Vector2(0, -1))
+
+
+func end_stasis():
+	velocity = move_and_slide(stasis_velocity, Vector2(0, -1))
+	
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

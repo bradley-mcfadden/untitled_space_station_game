@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://Scripts/HUD.gd" type="Script" id=1]
 [ext_resource path="res://Fonts/CourierBoldItalic.tres" type="DynamicFont" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://Fonts/CourierBoldSmallest.tres" type="DynamicFont" id=4]
 [ext_resource path="res://UISprites/coins.png" type="Texture" id=5]
 [ext_resource path="res://Scripts/Inventory.gd" type="Script" id=6]
+[ext_resource path="res://Fonts/Courier Bold Italic.ttf" type="DynamicFontData" id=7]
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0.0862745, 0.0666667, 0.0666667, 1 )
@@ -1159,6 +1160,13 @@ WindowDialog/icons/close = null
 WindowDialog/icons/close_highlight = null
 WindowDialog/styles/panel = null
 
+[sub_resource type="DynamicFont" id=4]
+size = 50
+outline_size = 10
+outline_color = Color( 0, 0, 0, 1 )
+extra_spacing_top = 10
+font_data = ExtResource( 7 )
+
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource( 1 )
 
@@ -1297,7 +1305,6 @@ text = "Restart?"
 position = Vector2( 384, 32 )
 color = Color( 0.847059, 0.741176, 0.866667, 0.0980392 )
 invert_border = 0.1
-polygon = PoolVector2Array( 0, 0, 768, 0, 768, 128, 0, 128 )
 script = ExtResource( 6 )
 
 [node name="MessageLabel" type="Label" parent="."]
@@ -1322,24 +1329,33 @@ one_shot = true
 [node name="ActiveItemLabel" type="TextureRect" parent="."]
 margin_left = 112.0
 margin_top = 672.0
-margin_right = 208.0
-margin_bottom = 768.0
+margin_right = 216.0
+margin_bottom = 776.0
 expand = true
+stretch_mode = 6
+__meta__ = {
+"_edit_lock_": true
+}
 
 [node name="CDText" type="Label" parent="."]
-margin_left = 135.772
-margin_top = 683.0
-margin_right = 192.772
-margin_bottom = 716.0
-custom_fonts/font = ExtResource( 3 )
+margin_left = 116.0
+margin_top = 688.0
+margin_right = 204.0
+margin_bottom = 776.0
+custom_fonts/font = SubResource( 4 )
 align = 1
+valign = 1
 
 [node name="ActiveItem" type="Polygon2D" parent="."]
-position = Vector2( -8, -8 )
+position = Vector2( 8, -8 )
+scale = Vector2( 0.878676, 1 )
 color = Color( 1, 1, 1, 0.2 )
 invert_enable = true
 invert_border = 0.1
-polygon = PoolVector2Array( 104, 672, 104, 792, 168, 792, 240, 792, 240, 672 )
+polygon = PoolVector2Array( 109.255, 672, 245.824, 672, 245.824, 768, 245.824, 792, 109.255, 792 )
+__meta__ = {
+"_edit_lock_": true
+}
 
 [connection signal="timeout" from="FadingMessageTimer" to="." method="_on_Timer_timeout"]
 [connection signal="timeout" from="CDTimer" to="." method="_on_CDTimer_timeout"]

@@ -3,6 +3,7 @@ extends Enemy
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	velocity = Vector2(0, 0)
 	var enemyFrames:SpriteFrames = preload("res://Enemies/EnemySprites/Robot/Robot.tres")
 	sprite_anim = AnimatedSprite.new()
 	sprite_anim.set_sprite_frames(enemyFrames)
@@ -41,15 +42,15 @@ func update_material(material:ShaderMaterial):
 #	delta - Time elapsed since previous frame
 func _physics_process(delta:float):
 	if frozen == true:
-		move_and_slide(Vector2(0, GRAVITY),Vector2(0, -1))
 		return
 	var coll:Object = front_cast.get_collider()
 	if (front_cast.is_colliding() && coll is TileMap) || !front_floor_cast.is_colliding():
 		direction *= -1
 		scale.x *= -1
 	elif coll is Player:
-		coll.take_damage(damage, Vector2(direction * movespeed*damage, 0))
+		coll.take_damage(damage, Vector2(direction * movespeed * damage, 0))
 	if !is_on_floor():
-		move_and_slide(Vector2(0, GRAVITY),Vector2(0, -1))
-	else:
-		move_and_slide(Vector2(direction * movespeed, 0), Vector2(0, -1))
+		velocity.y += GRAVITY
+	#else:
+	velocity.x = direction * movespeed
+	velocity = move_and_slide(velocity, Vector2(0, 1))

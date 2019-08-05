@@ -5,7 +5,7 @@
 [node name="Robot" type="KinematicBody2D"]
 position = Vector2( 89.4737, 64.2105 )
 script = ExtResource( 1 )
-health = 400
+health = 40000
 damage = 10
 movespeed = 50
 value = 5

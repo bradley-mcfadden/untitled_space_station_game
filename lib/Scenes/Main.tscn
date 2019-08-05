@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://Scripts/Main.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/RoomGenerator.tscn" type="PackedScene" id=2]
@@ -6,15 +6,16 @@
 [ext_resource path="res://Scenes/HUD.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Scenes/DeveloperGUI.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Guns/Pistol.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Scripts/Map.gd" type="Script" id=7]
+[ext_resource path="res://Scripts/Drawing.gd" type="Script" id=8]
 
 [node name="Main" type="Node2D"]
-use_parent_material = true
 script = ExtResource( 1 )
 
 [node name="RoomGenerator" parent="." instance=ExtResource( 2 )]
 use_parent_material = true
 cell_countw = 700
-desired_rooms = 10
+desired_rooms = 30
 
 [node name="Coins" type="Node2D" parent="."]
 use_parent_material = true
@@ -31,6 +32,8 @@ margin_left = 1420.0
 margin_top = 2.0
 margin_right = -1.0
 margin_bottom = -727.0
+focus_mode = 1
+enabled_focus_mode = 1
 
 [node name="Pistol" parent="Player" instance=ExtResource( 6 )]
 
@@ -42,5 +45,12 @@ use_parent_material = true
 
 [node name="Bullets" type="Node2D" parent="."]
 use_parent_material = true
+
+[node name="Map" type="CanvasLayer" parent="."]
+script = ExtResource( 7 )
+
+[node name="Node2D" type="Node2D" parent="Map"]
+visible = false
+script = ExtResource( 8 )
 
 [connection signal="timeout" from="HallTimer" to="." method="_on_HallTimer_timeout"]

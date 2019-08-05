@@ -14,6 +14,7 @@ onready var dfs_spreadable_two:int
 onready var enemies:Array
 onready var room_children:Array = []
 onready var lock:bool = false
+onready var visited_rooms:UnsortedSet = UnsortedSet.new()
 const MIN_WIDTH = 15
 const MIN_HEIGHT = 15
 const MAX_WIDTH = 45
@@ -338,3 +339,27 @@ func fill_weighted_matrix() -> Array:
 			else:
 				weighted_matrix[i][j] = r.dist_adjacency(room_instances[j])
 	return weighted_matrix
+
+
+func minimal_corner() -> Vector2:
+	var min_x:float = room_instances[0].low.x
+	for room in room_instances:
+		if room.low.x <= min_x:
+			min_x = room.low.x
+	var min_y:float = room_instances[0].low.y
+	for room in room_instances:
+		if room.low.y <= min_y:
+			min_y = room.low.y
+	return Vector2(min_x, min_y)
+
+
+func maximal_corner() -> Vector2:
+	var max_x:float = room_instances[0].high.x
+	for room in room_instances:
+		if room.high.x >= max_x:
+			max_x = room.high.x
+	var max_y:float = room_instances[0].high.y
+	for room in room_instances:
+		if room.high.y >= max_y:
+			max_y = room.high.y
+	return Vector2(max_x, max_y)

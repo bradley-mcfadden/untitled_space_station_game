@@ -30,8 +30,8 @@ func _physics_process(delta:float):
 	if !result.empty():
 		# print(result)
 		if result["collider"] is Enemy && dead == false:
-			result["collider"].take_damage(damage * PlayerVariables.damage_multiplier,
-			damage * linear_velocity * delta * PlayerVariables.knockback_multiplier)
+			result["collider"].take_damage(PlayerVariables.damage_multiplier * damage,
+					Vector2(linear_velocity.x * delta * PlayerVariables.knockback_multiplier, linear_velocity.y))
 			dead = true
 		elif result["collider"] is TileMap:
 			dead = true

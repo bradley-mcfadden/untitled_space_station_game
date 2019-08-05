@@ -14,25 +14,28 @@ script = ExtResource( 1 )
 margin_right = 20.0
 margin_bottom = 20.0
 hide_on_checkable_item_selection = false
+hide_on_state_item_selection = true
 script = ExtResource( 2 )
 
 [node name="AddItems" type="PopupMenu" parent="Options"]
 margin_right = 20.0
 margin_bottom = 20.0
+hide_on_state_item_selection = true
 
 [node name="ActiveItems" type="PopupMenu" parent="Options/AddItems"]
 margin_right = 20.0
 margin_bottom = 20.0
-hide_on_item_selection = false
-hide_on_checkable_item_selection = false
+hide_on_state_item_selection = true
 
 [node name="Items" type="PopupMenu" parent="Options/AddItems"]
 margin_right = 20.0
 margin_bottom = 20.0
+hide_on_state_item_selection = true
 
 [node name="Guns" type="PopupMenu" parent="Options/AddItems"]
 margin_right = 20.0
 margin_bottom = 20.0
+hide_on_state_item_selection = true
 
 [connection signal="button_up" from="." to="." method="_on_Control_button_up"]
 [connection signal="index_pressed" from="Options" to="." method="_on_Options_index_pressed"]

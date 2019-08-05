@@ -4,7 +4,7 @@ extends ActiveItem
 # Set the title of the Active Item
 func _init():
 	title = "Broken Clock"
-	cooldown = 2
+	cooldown = 10
 	duration = 6.5
 	is_ready = true
 

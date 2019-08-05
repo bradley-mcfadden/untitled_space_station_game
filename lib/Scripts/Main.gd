@@ -12,6 +12,18 @@ func _ready():
 	player = $Player
 	world = $RoomGenerator
 	player.position = $RoomGenerator.spawn_room()
+	world.visited_rooms.add(world.room_instances[world.find_player_index(player.position)])
+	$Map.world = world
+	$Map.lowest_corner = world.minimal_corner()
+	$Map.highest_corner = world.maximal_corner()
+
+
+func _process(delta):
+	if Input.is_action_pressed("show_map"):
+		$Map/Node2D.visible = true
+		$Map/Node2D.update()
+	elif Input.is_action_just_released("show_map"):
+		$Map/Node2D.visible = false
 
 
 # Process physics of some world objects
@@ -82,6 +94,8 @@ func za_warudo(stop_time = true):
 		for enemy in world.enemies[player_room].get_children():
 			enemy.frozen = stop_time
 			enemy.sprite_anim.playing = !stop_time
+			if stop_time == false:
+				enemy.end_stasis()
 
 
 # Event handler for when hall time runs out.
@@ -93,6 +107,8 @@ func _on_HallTimer_timeout():
 		$RoomGenerator.close_doors()
 		player.toggle_damping()
 		$RoomGenerator.spawn_enemies(player_room)
+		world.visited_rooms.add(world.room_instances[world.find_player_index(player.position)])
+		$Map/Node2D.update()
 
 
 # Event handler for a chest being opened.
