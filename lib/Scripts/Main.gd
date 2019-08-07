@@ -16,6 +16,7 @@ func _ready():
 	$Map.world = world
 	$Map.lowest_corner = world.minimal_corner()
 	$Map.highest_corner = world.maximal_corner()
+	world.get_connected_neighbours(world.find_player_index(player.position))
 
 
 func _process(delta):
@@ -109,6 +110,7 @@ func _on_HallTimer_timeout():
 		$RoomGenerator.spawn_enemies(player_room)
 		world.visited_rooms.add(world.room_instances[world.find_player_index(player.position)])
 		$Map/Node2D.update()
+		world.get_connected_neighbours(world.find_player_index(player.position))
 
 
 # Event handler for a chest being opened.

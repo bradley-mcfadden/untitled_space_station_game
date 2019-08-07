@@ -15,6 +15,8 @@ onready var enemies:Array
 onready var room_children:Array = []
 onready var lock:bool = false
 onready var visited_rooms:UnsortedSet = UnsortedSet.new()
+onready var neighbour_visited_rooms:UnsortedSet = UnsortedSet.new()
+onready var visited_edges = UnsortedSet.new()
 const MIN_WIDTH = 15
 const MIN_HEIGHT = 15
 const MAX_WIDTH = 45
@@ -341,6 +343,8 @@ func fill_weighted_matrix() -> Array:
 	return weighted_matrix
 
 
+# Finds the lowest point on the grid in terms of x and y
+#	return - lowest point on the gird
 func minimal_corner() -> Vector2:
 	var min_x:float = room_instances[0].low.x
 	for room in room_instances:
@@ -353,6 +357,8 @@ func minimal_corner() -> Vector2:
 	return Vector2(min_x, min_y)
 
 
+# Finds the maximum point on the grid in terms of x and y
+#	return - the maximum point on the grid
 func maximal_corner() -> Vector2:
 	var max_x:float = room_instances[0].high.x
 	for room in room_instances:
@@ -363,3 +369,15 @@ func maximal_corner() -> Vector2:
 		if room.high.y >= max_y:
 			max_y = room.high.y
 	return Vector2(max_x, max_y)
+
+
+# Updates the neighbours_visited by adding all the neighbours of the current index
+#	index - Index to add neighbours of
+func get_connected_neighbours(index:int):
+	var current_room:Node = room_instances[index]
+	for edge in edge_set.data:
+		if edge.contains(current_room):
+			visited_edges.add(edge)
+			for room in room_instances:
+				if edge.contains(room):
+					neighbour_visited_rooms.add(room)
