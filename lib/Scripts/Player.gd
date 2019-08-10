@@ -31,6 +31,7 @@ onready var damage_timer:Timer
 onready var has_vegan_power:bool
 onready var has_iron_skin:bool
 onready var potential_purchase:Pickup
+onready var is_repelling:bool
 
 
 # Init
@@ -45,6 +46,7 @@ func _ready():
 #	start_position - Location player starts on respawn
 func start(start_position:Vector2):
 	active_item = null
+	is_repelling = false
 	has_vegan_power = false
 	gun_inventory = GunInventory.new()
 	complete_inventory = GunInventory.new()
@@ -113,6 +115,8 @@ func _process(delta:float):
 func _physics_process(delta:float):
 	if health <= 0:
 		return
+	if is_repelling == true:
+		do_repel()
 	if is_on_ladder == false:
 		if !is_on_floor():
 			if terminal_velocity < 5:
@@ -329,12 +333,20 @@ func control_sprinting():
 	equipped_gun.visible = false
 
 
+# Applies a repelling effect to enemies in current room
+func do_repel():
+	var current_room_index:int = get_parent().world.find_player_index(global_position)
+	if current_room_index == -1 || get_parent().world.room_children[current_room_index].has_child("Enemies") == false:
+		return
+	for enemy in get_parent().world.enemies[current_room_index]:
+		enemy.take_damage(0, -pull(enemy))
+
+
 # Event handler for when a player enters a ladder.
 func _on_Ladder_Entered():
 	is_on_ladder = true
 	animated_sprite.play("climb")
 	equipped_gun.visible = false
-	# print(Player.is_on_ladder)
 
 
 # Handler for when player exits a ladder.

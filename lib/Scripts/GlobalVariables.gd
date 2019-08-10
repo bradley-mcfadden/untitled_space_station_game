@@ -4,7 +4,8 @@ const GUNREF = [preload("res://Guns/SMG.tscn"),
 					  	preload("res://Guns/Shotgun.tscn"),
 					  	preload("res://Guns/Pistol.tscn")]
 const LOOT_POOL_ACTIVE = [preload("res://ActiveItems/IronSkin.tscn"), preload("res://ActiveItems/BrokenClock.tscn"),
-								preload("res://ActiveItems/DevilDeal.tscn")]
+								preload("res://ActiveItems/DevilDeal.tscn"), preload("res://ActiveItems/SpiritCamera.tscn"),
+								preload("res://ActiveItems/Repulsor.tscn")]
 const LOOT_POOL_WHITE = [preload("res://Items/TwoPercent.tscn"), preload("res://Items/Coffee.tscn"),
 								preload("res://Items/Grease.tscn"), preload("res://Items/TheChain.tscn"),
 					 			preload("res://Items/OldJersey.tscn"), preload("res://Items/BeyondMeat.tscn"),

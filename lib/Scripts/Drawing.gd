@@ -20,7 +20,7 @@ func _draw():
 					 - get_parent().lowest_corner + MAP_LOCATION, "S")
 		elif room.type == 1:
 			draw_string(load("res://Fonts/CourierBoldSmallest.tres"), 
-					Vector2(room.low.x + room.xsize / 3.2, room.low.y + room.ysize * 1.2)
+					Vector2(room.low.x + room.xsize / 3.2, room.low.y + room.ysize * 0.95)
 					 - get_parent().lowest_corner + MAP_LOCATION, "C")
 		elif room.type == 2:
 			draw_string(load("res://Fonts/CourierBoldSmallest.tres"), 
