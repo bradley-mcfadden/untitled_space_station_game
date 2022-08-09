@@ -1,4 +1,23 @@
 # Untitled Space Station Game
+
+![game screenshot](k1.png)
+
+![game screenshot 2](k2.png)
+
+![game screenshot 3](k3.png)
+
+1[game screenshot 4](k4.png)
+
+# 2022-08-09 Update
+This was a game that I made during my first year of university. At the time, we were only learning introductory Java concepts, but I had already learned Java in
+high school and wanted to do more. This game is a dungeon crawler that is a loose hybrid of both Risk of Rain and Enter the Gungeon. I had never coded a proper game
+before. I figured I would start with a dungeon crawler because I would learn about procedural generation, enemy AI, character movement controls, and adding 
+permanent and temporary effects to the player.
+
+Being my first project in Godot, there were many poorly thought out design choices. In particular, the game is a platformer, but the player does not necessarily spawn at the top. Instead of amending this poor design choice, I had implemented "vacuum tiles" that pull the player through doors. Originally, this game was supposed to generate rooms not necessarily on a grid, to allow for interesting room designs and dungeon layouts, but this ended up working poorly with the vacuum tiles, so it was dropped.
+
+I think that I stopped updating the game due to a lack of interesting ideas, as it was very derivative and had a lot of problems. Perhaps it was actually a scale issue instead. Roguelike games require a lot of enemy variety and items to keep players engaged, and that was a lot of work for a single developer.
+
 <h3>Game Identity:</h3>
   <p>32-bit plat-former/dungeon crawler about a soldier fighting through a labyrinth of machines sent to destroy him and all life on the ship he’s on.
 
