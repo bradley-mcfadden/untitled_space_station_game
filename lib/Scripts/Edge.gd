@@ -13,11 +13,11 @@ func _init(c:Rect, d:Rect):
 	var magA:float = sqrt((c.low.x * c.low.x) + (c.low.y * c.low.y))  
 	var magB:float = sqrt((d.low.x * d.low.x) + (d.low.y * d.low.y))  
 	if magB <= magA:
-      a = d.copy()
-      b = c.copy()
+		a = d.copy()
+		b = c.copy()
 	else:
-      a = c.copy()
-      b = d.copy()
+		a = c.copy()
+		b = d.copy()
 
 
 # Returns a copy

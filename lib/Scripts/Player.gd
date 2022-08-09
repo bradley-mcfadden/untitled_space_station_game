@@ -81,7 +81,7 @@ func _input(event:InputEvent):
 	if event.is_action_pressed("use_item"):
 		use_active_item(active_item)
 	elif ((event.is_action_pressed("reload") && equipped_gun.current_durability > 0) 
-    		&& equipped_gun.reload_timer.paused == false):
+		&& equipped_gun.reload_timer.paused == false):
 		equipped_gun.reload_timer.start()
 	elif event.is_action_pressed("switch_complete_guns"):
 		rotate_gun_list()

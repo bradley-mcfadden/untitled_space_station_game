@@ -33,6 +33,7 @@ texture = SubResource( 1 )
 [node name="AnimatedSprite" parent="." instance=ExtResource( 3 )]
 use_parent_material = true
 position = Vector2( 506, 315 )
+frame = 1
 playing = true
 
 [node name="Pickup" parent="." instance=ExtResource( 4 )]
@@ -59,4 +60,3 @@ cost = 10
 position = Vector2( 320, 336 )
 random = true
 cost = 10
-

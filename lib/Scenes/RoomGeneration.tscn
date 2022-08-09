@@ -3,8 +3,6 @@
 [ext_resource path="res://Scenes/ScrollingCamera.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Scenes/RoomGenerator.tscn" type="PackedScene" id=2]
 
-
-
 [node name="RoomGeneration" type="Node2D"]
 
 [node name="ScrollingCamera" parent="." instance=ExtResource( 1 )]
@@ -13,4 +11,3 @@ scale = Vector2( 2, 2 )
 [node name="RoomGenerator" parent="." instance=ExtResource( 2 )]
 cell_countw = 200
 cell_counth = 200
-

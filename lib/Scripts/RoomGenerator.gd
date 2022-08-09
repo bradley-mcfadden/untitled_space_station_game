@@ -126,7 +126,7 @@ func prim_connect():
 	# Add in back edges
 	weighted_matrix = build_2d_array(room_instances.size(), room_instances.size())
 	for i in range(weighted_matrix.size()):
-		var r:Node = room_instances[i]
+		var r = room_instances[i]
 		for j in range(weighted_matrix.size()):
 			if i == j:
 				weighted_matrix[i][j] = 100000
@@ -233,7 +233,7 @@ func open_doors(position:Vector2):
 	pushers = []
 	$Effects.clear()
 	var current_room_index:int = find_player_index(position)
-	var current_room:Node = room_instances[current_room_index]
+	var current_room = room_instances[current_room_index]
 	var d:Array = []
 	var dn:Array = []
 	for edge in edge_set.data:
@@ -317,8 +317,8 @@ func kill_enemies(room_index:int):
 #	height - Number of cols in array
 #	return - 2d filled with 0
 func build_2d_array(width:int, height:int) -> Array:
-	assert width > 0 
-	assert height > 0
+	#assert width > 0 
+	#assert height > 0
 	var arr:Array = []
 	#warning-ignore:unused_variable
 	for i in range(width):
@@ -334,7 +334,7 @@ func build_2d_array(width:int, height:int) -> Array:
 func fill_weighted_matrix() -> Array:
 	var weighted_matrix:Array = build_2d_array(room_instances.size(), room_instances.size())
 	for i in range(weighted_matrix.size()):
-		var r:Node = room_instances[i]
+		var r = room_instances[i]
 		for j in range(weighted_matrix[i].size()):
 			if i == j:
 				weighted_matrix[i][j] = 1000000
@@ -374,7 +374,7 @@ func maximal_corner() -> Vector2:
 # Updates the neighbours_visited by adding all the neighbours of the current index
 #	index - Index to add neighbours of
 func get_connected_neighbours(index:int):
-	var current_room:Node = room_instances[index]
+	var current_room = room_instances[index]
 	for edge in edge_set.data:
 		if edge.contains(current_room):
 			visited_edges.add(edge)

@@ -32,6 +32,7 @@ func _ready():
 #	dmg - Amount of damage to take
 #	normal - Direction damage is coming from	
 func take_damage(dmg:int, normal:Vector2):
+	print("Taking damage %d %d" % [dmg, health])
 	health -= dmg
 	# If I'm dead
 	if health <= 0:

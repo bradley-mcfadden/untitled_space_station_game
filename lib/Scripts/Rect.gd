@@ -65,17 +65,17 @@ func dist(r) -> float:
 #	return - GlobalVariables.BORDER if adjacent; else dist(r) 
 func dist_adjacency(r) -> float:
 	if equals(r):
-      return 100000.0
+		return 100000.0
 	if low.x == r.low.x:
-      if low.y < r.low.y:
-        return r.low.y - high.y  
-      elif low.y > r.low.y:
-        return low.y - r.high.y
+		if low.y < r.low.y:
+			return r.low.y - high.y  
+		elif low.y > r.low.y:
+			return low.y - r.high.y
 	elif low.y == r.low.y:
-      if low.x < r.low.x:
-        return r.low.x - high.x
-      elif low.x > r.low.x:
-        return low.x - r.high.x
+		if low.x < r.low.x:
+			return r.low.x - high.x
+		elif low.x > r.low.x:
+			return low.x - r.high.x
 	var deltax = low.x + (xsize / 2) - r.low.x + (r.xsize / 2)
 	var deltay = low.y + (ysize / 2) - r.low.y + (r.ysize / 2)
 	return float(sqrt((deltax * deltax) + (deltay * deltay)))
@@ -86,25 +86,25 @@ func dist_adjacency(r) -> float:
 #	return - Whether or not the rects overlap
 func is_inside(r) -> bool:
 	if !border:
-	    if ( 
-        		!(!(low.x >= r.low.x && high.y <= r.high.y && low.x <= r.high.x && low.y >= r.high.y) 
-        		&& !(low.x >= r.low.x && high.y <= r.high.y && high.x <= r.high.x && low.y >= r.low.y)
-        		&& !(low.x >= r.low.x && low.y >= r.low.y && low.x <= r.high.x && low.y <= r.high.y)
-        		&& !(high.y <= r.high.y && high.y >= r.low.y && high.x <= r.high.x && high.x >= r.low.x)
-        		&& !(low.y <= r.low.y && high.y >= r.low.y && low.x >= r.low.x && low.x <= r.high.x))
-        ):
-    		return true;
+		if ( 
+				!(!(low.x >= r.low.x && high.y <= r.high.y && low.x <= r.high.x && low.y >= r.high.y) 
+				&& !(low.x >= r.low.x && high.y <= r.high.y && high.x <= r.high.x && low.y >= r.low.y)
+				&& !(low.x >= r.low.x && low.y >= r.low.y && low.x <= r.high.x && low.y <= r.high.y)
+				&& !(high.y <= r.high.y && high.y >= r.low.y && high.x <= r.high.x && high.x >= r.low.x)
+				&& !(low.y <= r.low.y && high.y >= r.low.y && low.x >= r.low.x && low.x <= r.high.x))
+		):
+			return true;
 	high.x  += GlobalVariables.BORDER
 	high.y += GlobalVariables.BORDER
 	r.high.x += GlobalVariables.BORDER
 	r.high.y += GlobalVariables.BORDER
 	if ( 
-    !(!(low.x >= r.low.x && high.y <= r.high.y && low.x <= r.high.x && low.y >= r.high.y) 
-    && !(low.x >= r.low.x && high.y <= r.high.y && high.x <= r.high.x && low.y >= r.low.y)
-    && !(low.x >= r.low.x && low.y >= r.low.y && low.x <= r.high.x && low.y <= r.high.y)
-    && !(high.y <= r.high.y && high.y >= r.low.y && high.x <= r.high.x && high.x >= r.low.x)
-    && !(low.y <= r.low.y && high.y >= r.low.y && low.x >= r.low.x && low.x <= r.high.x))
-    ):
+	!(!(low.x >= r.low.x && high.y <= r.high.y && low.x <= r.high.x && low.y >= r.high.y) 
+	&& !(low.x >= r.low.x && high.y <= r.high.y && high.x <= r.high.x && low.y >= r.low.y)
+	&& !(low.x >= r.low.x && low.y >= r.low.y && low.x <= r.high.x && low.y <= r.high.y)
+	&& !(high.y <= r.high.y && high.y >= r.low.y && high.x <= r.high.x && high.x >= r.low.x)
+	&& !(low.y <= r.low.y && high.y >= r.low.y && low.x >= r.low.x && low.x <= r.high.x))
+	):
 		high.x -= GlobalVariables.BORDER
 		high.y -= GlobalVariables.BORDER
 		r.high.x -= GlobalVariables.BORDER
